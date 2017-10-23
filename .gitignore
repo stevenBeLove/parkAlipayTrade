@@ -1,0 +1,8 @@
+/.settings/
+/target/
+.classpath
+.project
+/.git/
+abatorConfig.xml
+/bin/
+.externalToolBuilders

@@ -1,0 +1,529 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qt.sales.dao.Qt1tblAgencyMapper">
+  <resultMap id="BaseResultMap" type="com.qt.sales.model.Qt1tblAgency">
+    <id column="AGENCY_ID" jdbcType="VARCHAR" property="agencyId" />
+    <id column="SYSTEMID" jdbcType="VARCHAR" property="systemid" />
+    <result column="CONTACTSNAME" jdbcType="VARCHAR" property="contactsname" />
+    <result column="COMPANYNAME" jdbcType="VARCHAR" property="companyname" />
+    <result column="COMPANYPHONE" jdbcType="VARCHAR" property="companyphone" />
+    <result column="COMPANYEMAIL" jdbcType="VARCHAR" property="companyemail" />
+    <result column="COMPANYADDR" jdbcType="VARCHAR" property="companyaddr" />
+    <result column="CERTIFICATES" jdbcType="VARCHAR" property="certificates" />
+    <result column="LEGAL_INFO" jdbcType="VARCHAR" property="legalInfo" />
+    <result column="ORGANIZATIONCODE" jdbcType="VARCHAR" property="organizationcode" />
+    <result column="AGREEMENTCODE" jdbcType="VARCHAR" property="agreementcode" />
+    <result column="PROVINCEID" jdbcType="VARCHAR" property="provinceid" />
+    <result column="CITYID" jdbcType="VARCHAR" property="cityid" />
+    <result column="ONLINECHANNEL" jdbcType="VARCHAR" property="onlinechannel" />
+    <result column="VESTAGENCY" jdbcType="VARCHAR" property="vestagency" />
+    <result column="AGENCY_STATUS" jdbcType="VARCHAR" property="agencyStatus" />
+    <result column="ACCOUNTBANK" jdbcType="VARCHAR" property="accountbank" />
+    <result column="BANKID" jdbcType="VARCHAR" property="bankid" />
+    <result column="ACCOUNTNAME" jdbcType="VARCHAR" property="accountname" />
+    <result column="BANKCODE" jdbcType="VARCHAR" property="bankcode" />
+    <result column="CREATEID" jdbcType="VARCHAR" property="createid" />
+    <result column="CREATEDT" jdbcType="VARCHAR" property="createdt" />
+    <result column="AGENCYDESC" jdbcType="VARCHAR" property="agencydesc" />
+    <result column="COMPANYBRIEFNAME" jdbcType="VARCHAR" property="companybriefname" />
+    <result column="VESTBRAND" jdbcType="VARCHAR" property="vestbrand" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    AGENCY_ID, SYSTEMID, CONTACTSNAME, COMPANYNAME, COMPANYPHONE, COMPANYEMAIL, COMPANYADDR, 
+    CERTIFICATES, LEGAL_INFO, ORGANIZATIONCODE, AGREEMENTCODE, PROVINCEID, CITYID, ONLINECHANNEL, 
+    VESTAGENCY, AGENCY_STATUS, ACCOUNTBANK, BANKID, ACCOUNTNAME, BANKCODE, CREATEID, 
+    CREATEDT, AGENCYDESC, COMPANYBRIEFNAME, VESTBRAND
+  </sql>
+  <select id="selectByExample" parameterType="com.qt.sales.model.Qt1tblAgencyExample" resultMap="BaseResultMap">
+   select * from ( select tmp_page.*, rownum row_id from ( 
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from qtfr2.QT1TBLAGENCY
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+     ) tmp_page where rownum <![CDATA[ <= ${end} ]]>  ) where row_id <![CDATA[  > ${start} ]]>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from qtfr2.QT1TBLAGENCY
+    where AGENCY_ID = #{agencyId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="com.qt.sales.model.Qt1tblAgencyKey">
+    delete from QT1TBLAGENCY
+    where AGENCY_ID = #{agencyId,jdbcType=VARCHAR}
+      and SYSTEMID = #{systemid,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.qt.sales.model.Qt1tblAgencyExample">
+    delete from QT1TBLAGENCY
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.qt.sales.model.Qt1tblAgency">
+    insert into qtfr2.QT1TBLAGENCY (AGENCY_ID, SYSTEMID, CONTACTSNAME, 
+      COMPANYNAME, COMPANYPHONE, COMPANYEMAIL, 
+      COMPANYADDR, CERTIFICATES, LEGAL_INFO, 
+      ORGANIZATIONCODE, AGREEMENTCODE, PROVINCEID, 
+      CITYID, ONLINECHANNEL, VESTAGENCY, 
+      AGENCY_STATUS, ACCOUNTBANK, BANKID, 
+      ACCOUNTNAME, BANKCODE, CREATEID, 
+      CREATEDT, AGENCYDESC, COMPANYBRIEFNAME, 
+      VESTBRAND)
+    values (#{agencyId,jdbcType=VARCHAR}, #{systemid,jdbcType=VARCHAR}, #{contactsname,jdbcType=VARCHAR}, 
+      #{companyname,jdbcType=VARCHAR}, #{companyphone,jdbcType=VARCHAR}, #{companyemail,jdbcType=VARCHAR}, 
+      #{companyaddr,jdbcType=VARCHAR}, #{certificates,jdbcType=VARCHAR}, #{legalInfo,jdbcType=VARCHAR}, 
+      #{organizationcode,jdbcType=VARCHAR}, #{agreementcode,jdbcType=VARCHAR}, #{provinceid,jdbcType=VARCHAR}, 
+      #{cityid,jdbcType=VARCHAR}, #{onlinechannel,jdbcType=VARCHAR}, #{vestagency,jdbcType=VARCHAR}, 
+      #{agencyStatus,jdbcType=VARCHAR}, #{accountbank,jdbcType=VARCHAR}, #{bankid,jdbcType=VARCHAR}, 
+      #{accountname,jdbcType=VARCHAR}, #{bankcode,jdbcType=VARCHAR}, #{createid,jdbcType=VARCHAR}, 
+      #{createdt,jdbcType=VARCHAR}, #{agencydesc,jdbcType=VARCHAR}, #{companybriefname,jdbcType=VARCHAR}, 
+      #{vestbrand,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.qt.sales.model.Qt1tblAgency">
+    insert into QT1TBLAGENCY
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="agencyId != null">
+        AGENCY_ID,
+      </if>
+      <if test="systemid != null">
+        SYSTEMID,
+      </if>
+      <if test="contactsname != null">
+        CONTACTSNAME,
+      </if>
+      <if test="companyname != null">
+        COMPANYNAME,
+      </if>
+      <if test="companyphone != null">
+        COMPANYPHONE,
+      </if>
+      <if test="companyemail != null">
+        COMPANYEMAIL,
+      </if>
+      <if test="companyaddr != null">
+        COMPANYADDR,
+      </if>
+      <if test="certificates != null">
+        CERTIFICATES,
+      </if>
+      <if test="legalInfo != null">
+        LEGAL_INFO,
+      </if>
+      <if test="organizationcode != null">
+        ORGANIZATIONCODE,
+      </if>
+      <if test="agreementcode != null">
+        AGREEMENTCODE,
+      </if>
+      <if test="provinceid != null">
+        PROVINCEID,
+      </if>
+      <if test="cityid != null">
+        CITYID,
+      </if>
+      <if test="onlinechannel != null">
+        ONLINECHANNEL,
+      </if>
+      <if test="vestagency != null">
+        VESTAGENCY,
+      </if>
+      <if test="agencyStatus != null">
+        AGENCY_STATUS,
+      </if>
+      <if test="accountbank != null">
+        ACCOUNTBANK,
+      </if>
+      <if test="bankid != null">
+        BANKID,
+      </if>
+      <if test="accountname != null">
+        ACCOUNTNAME,
+      </if>
+      <if test="bankcode != null">
+        BANKCODE,
+      </if>
+      <if test="createid != null">
+        CREATEID,
+      </if>
+      <if test="createdt != null">
+        CREATEDT,
+      </if>
+      <if test="agencydesc != null">
+        AGENCYDESC,
+      </if>
+      <if test="companybriefname != null">
+        COMPANYBRIEFNAME,
+      </if>
+      <if test="vestbrand != null">
+        VESTBRAND,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="agencyId != null">
+        #{agencyId,jdbcType=VARCHAR},
+      </if>
+      <if test="systemid != null">
+        #{systemid,jdbcType=VARCHAR},
+      </if>
+      <if test="contactsname != null">
+        #{contactsname,jdbcType=VARCHAR},
+      </if>
+      <if test="companyname != null">
+        #{companyname,jdbcType=VARCHAR},
+      </if>
+      <if test="companyphone != null">
+        #{companyphone,jdbcType=VARCHAR},
+      </if>
+      <if test="companyemail != null">
+        #{companyemail,jdbcType=VARCHAR},
+      </if>
+      <if test="companyaddr != null">
+        #{companyaddr,jdbcType=VARCHAR},
+      </if>
+      <if test="certificates != null">
+        #{certificates,jdbcType=VARCHAR},
+      </if>
+      <if test="legalInfo != null">
+        #{legalInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="organizationcode != null">
+        #{organizationcode,jdbcType=VARCHAR},
+      </if>
+      <if test="agreementcode != null">
+        #{agreementcode,jdbcType=VARCHAR},
+      </if>
+      <if test="provinceid != null">
+        #{provinceid,jdbcType=VARCHAR},
+      </if>
+      <if test="cityid != null">
+        #{cityid,jdbcType=VARCHAR},
+      </if>
+      <if test="onlinechannel != null">
+        #{onlinechannel,jdbcType=VARCHAR},
+      </if>
+      <if test="vestagency != null">
+        #{vestagency,jdbcType=VARCHAR},
+      </if>
+      <if test="agencyStatus != null">
+        #{agencyStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="accountbank != null">
+        #{accountbank,jdbcType=VARCHAR},
+      </if>
+      <if test="bankid != null">
+        #{bankid,jdbcType=VARCHAR},
+      </if>
+      <if test="accountname != null">
+        #{accountname,jdbcType=VARCHAR},
+      </if>
+      <if test="bankcode != null">
+        #{bankcode,jdbcType=VARCHAR},
+      </if>
+      <if test="createid != null">
+        #{createid,jdbcType=VARCHAR},
+      </if>
+      <if test="createdt != null">
+        #{createdt,jdbcType=VARCHAR},
+      </if>
+      <if test="agencydesc != null">
+        #{agencydesc,jdbcType=VARCHAR},
+      </if>
+      <if test="companybriefname != null">
+        #{companybriefname,jdbcType=VARCHAR},
+      </if>
+      <if test="vestbrand != null">
+        #{vestbrand,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.qt.sales.model.Qt1tblAgencyExample" resultType="java.lang.Integer">
+    select count(*) from QT1TBLAGENCY
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update QT1TBLAGENCY
+    <set>
+      <if test="record.agencyId != null">
+        AGENCY_ID = #{record.agencyId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.systemid != null">
+        SYSTEMID = #{record.systemid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.contactsname != null">
+        CONTACTSNAME = #{record.contactsname,jdbcType=VARCHAR},
+      </if>
+      <if test="record.companyname != null">
+        COMPANYNAME = #{record.companyname,jdbcType=VARCHAR},
+      </if>
+      <if test="record.companyphone != null">
+        COMPANYPHONE = #{record.companyphone,jdbcType=VARCHAR},
+      </if>
+      <if test="record.companyemail != null">
+        COMPANYEMAIL = #{record.companyemail,jdbcType=VARCHAR},
+      </if>
+      <if test="record.companyaddr != null">
+        COMPANYADDR = #{record.companyaddr,jdbcType=VARCHAR},
+      </if>
+      <if test="record.certificates != null">
+        CERTIFICATES = #{record.certificates,jdbcType=VARCHAR},
+      </if>
+      <if test="record.legalInfo != null">
+        LEGAL_INFO = #{record.legalInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.organizationcode != null">
+        ORGANIZATIONCODE = #{record.organizationcode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.agreementcode != null">
+        AGREEMENTCODE = #{record.agreementcode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.provinceid != null">
+        PROVINCEID = #{record.provinceid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.cityid != null">
+        CITYID = #{record.cityid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.onlinechannel != null">
+        ONLINECHANNEL = #{record.onlinechannel,jdbcType=VARCHAR},
+      </if>
+      <if test="record.vestagency != null">
+        VESTAGENCY = #{record.vestagency,jdbcType=VARCHAR},
+      </if>
+      <if test="record.agencyStatus != null">
+        AGENCY_STATUS = #{record.agencyStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="record.accountbank != null">
+        ACCOUNTBANK = #{record.accountbank,jdbcType=VARCHAR},
+      </if>
+      <if test="record.bankid != null">
+        BANKID = #{record.bankid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.accountname != null">
+        ACCOUNTNAME = #{record.accountname,jdbcType=VARCHAR},
+      </if>
+      <if test="record.bankcode != null">
+        BANKCODE = #{record.bankcode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createid != null">
+        CREATEID = #{record.createid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createdt != null">
+        CREATEDT = #{record.createdt,jdbcType=VARCHAR},
+      </if>
+      <if test="record.agencydesc != null">
+        AGENCYDESC = #{record.agencydesc,jdbcType=VARCHAR},
+      </if>
+      <if test="record.companybriefname != null">
+        COMPANYBRIEFNAME = #{record.companybriefname,jdbcType=VARCHAR},
+      </if>
+      <if test="record.vestbrand != null">
+        VESTBRAND = #{record.vestbrand,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update QT1TBLAGENCY
+    set AGENCY_ID = #{record.agencyId,jdbcType=VARCHAR},
+      SYSTEMID = #{record.systemid,jdbcType=VARCHAR},
+      CONTACTSNAME = #{record.contactsname,jdbcType=VARCHAR},
+      COMPANYNAME = #{record.companyname,jdbcType=VARCHAR},
+      COMPANYPHONE = #{record.companyphone,jdbcType=VARCHAR},
+      COMPANYEMAIL = #{record.companyemail,jdbcType=VARCHAR},
+      COMPANYADDR = #{record.companyaddr,jdbcType=VARCHAR},
+      CERTIFICATES = #{record.certificates,jdbcType=VARCHAR},
+      LEGAL_INFO = #{record.legalInfo,jdbcType=VARCHAR},
+      ORGANIZATIONCODE = #{record.organizationcode,jdbcType=VARCHAR},
+      AGREEMENTCODE = #{record.agreementcode,jdbcType=VARCHAR},
+      PROVINCEID = #{record.provinceid,jdbcType=VARCHAR},
+      CITYID = #{record.cityid,jdbcType=VARCHAR},
+      ONLINECHANNEL = #{record.onlinechannel,jdbcType=VARCHAR},
+      VESTAGENCY = #{record.vestagency,jdbcType=VARCHAR},
+      AGENCY_STATUS = #{record.agencyStatus,jdbcType=VARCHAR},
+      ACCOUNTBANK = #{record.accountbank,jdbcType=VARCHAR},
+      BANKID = #{record.bankid,jdbcType=VARCHAR},
+      ACCOUNTNAME = #{record.accountname,jdbcType=VARCHAR},
+      BANKCODE = #{record.bankcode,jdbcType=VARCHAR},
+      CREATEID = #{record.createid,jdbcType=VARCHAR},
+      CREATEDT = #{record.createdt,jdbcType=VARCHAR},
+      AGENCYDESC = #{record.agencydesc,jdbcType=VARCHAR},
+      COMPANYBRIEFNAME = #{record.companybriefname,jdbcType=VARCHAR},
+      VESTBRAND = #{record.vestbrand,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.qt.sales.model.Qt1tblAgency">
+    update QT1TBLAGENCY
+    <set>
+      <if test="contactsname != null">
+        CONTACTSNAME = #{contactsname,jdbcType=VARCHAR},
+      </if>
+      <if test="companyname != null">
+        COMPANYNAME = #{companyname,jdbcType=VARCHAR},
+      </if>
+      <if test="companyphone != null">
+        COMPANYPHONE = #{companyphone,jdbcType=VARCHAR},
+      </if>
+      <if test="companyemail != null">
+        COMPANYEMAIL = #{companyemail,jdbcType=VARCHAR},
+      </if>
+      <if test="companyaddr != null">
+        COMPANYADDR = #{companyaddr,jdbcType=VARCHAR},
+      </if>
+      <if test="certificates != null">
+        CERTIFICATES = #{certificates,jdbcType=VARCHAR},
+      </if>
+      <if test="legalInfo != null">
+        LEGAL_INFO = #{legalInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="organizationcode != null">
+        ORGANIZATIONCODE = #{organizationcode,jdbcType=VARCHAR},
+      </if>
+      <if test="agreementcode != null">
+        AGREEMENTCODE = #{agreementcode,jdbcType=VARCHAR},
+      </if>
+      <if test="provinceid != null">
+        PROVINCEID = #{provinceid,jdbcType=VARCHAR},
+      </if>
+      <if test="cityid != null">
+        CITYID = #{cityid,jdbcType=VARCHAR},
+      </if>
+      <if test="onlinechannel != null">
+        ONLINECHANNEL = #{onlinechannel,jdbcType=VARCHAR},
+      </if>
+      <if test="vestagency != null">
+        VESTAGENCY = #{vestagency,jdbcType=VARCHAR},
+      </if>
+      <if test="agencyStatus != null">
+        AGENCY_STATUS = #{agencyStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="accountbank != null">
+        ACCOUNTBANK = #{accountbank,jdbcType=VARCHAR},
+      </if>
+      <if test="bankid != null">
+        BANKID = #{bankid,jdbcType=VARCHAR},
+      </if>
+      <if test="accountname != null">
+        ACCOUNTNAME = #{accountname,jdbcType=VARCHAR},
+      </if>
+      <if test="bankcode != null">
+        BANKCODE = #{bankcode,jdbcType=VARCHAR},
+      </if>
+      <if test="createid != null">
+        CREATEID = #{createid,jdbcType=VARCHAR},
+      </if>
+      <if test="createdt != null">
+        CREATEDT = #{createdt,jdbcType=VARCHAR},
+      </if>
+      <if test="agencydesc != null">
+        AGENCYDESC = #{agencydesc,jdbcType=VARCHAR},
+      </if>
+      <if test="companybriefname != null">
+        COMPANYBRIEFNAME = #{companybriefname,jdbcType=VARCHAR},
+      </if>
+      <if test="vestbrand != null">
+        VESTBRAND = #{vestbrand,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where AGENCY_ID = #{agencyId,jdbcType=VARCHAR}
+      and SYSTEMID = #{systemid,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.qt.sales.model.Qt1tblAgency">
+    update QT1TBLAGENCY
+    set CONTACTSNAME = #{contactsname,jdbcType=VARCHAR},
+      COMPANYNAME = #{companyname,jdbcType=VARCHAR},
+      COMPANYPHONE = #{companyphone,jdbcType=VARCHAR},
+      COMPANYEMAIL = #{companyemail,jdbcType=VARCHAR},
+      COMPANYADDR = #{companyaddr,jdbcType=VARCHAR},
+      CERTIFICATES = #{certificates,jdbcType=VARCHAR},
+      LEGAL_INFO = #{legalInfo,jdbcType=VARCHAR},
+      ORGANIZATIONCODE = #{organizationcode,jdbcType=VARCHAR},
+      AGREEMENTCODE = #{agreementcode,jdbcType=VARCHAR},
+      PROVINCEID = #{provinceid,jdbcType=VARCHAR},
+      CITYID = #{cityid,jdbcType=VARCHAR},
+      ONLINECHANNEL = #{onlinechannel,jdbcType=VARCHAR},
+      VESTAGENCY = #{vestagency,jdbcType=VARCHAR},
+      AGENCY_STATUS = #{agencyStatus,jdbcType=VARCHAR},
+      ACCOUNTBANK = #{accountbank,jdbcType=VARCHAR},
+      BANKID = #{bankid,jdbcType=VARCHAR},
+      ACCOUNTNAME = #{accountname,jdbcType=VARCHAR},
+      BANKCODE = #{bankcode,jdbcType=VARCHAR},
+      CREATEID = #{createid,jdbcType=VARCHAR},
+      CREATEDT = #{createdt,jdbcType=VARCHAR},
+      AGENCYDESC = #{agencydesc,jdbcType=VARCHAR},
+      COMPANYBRIEFNAME = #{companybriefname,jdbcType=VARCHAR},
+      VESTBRAND = #{vestbrand,jdbcType=VARCHAR}
+    where AGENCY_ID = #{agencyId,jdbcType=VARCHAR}
+      and SYSTEMID = #{systemid,jdbcType=VARCHAR}
+  </update>
+</mapper>

@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qt.sales.dao.BusinessTypeMapper" >
+  <resultMap id="BaseResultMap" type="com.qt.sales.model.BusinessType" >
+    <id column="BUSINESS_TYPE" property="businessType" jdbcType="VARCHAR" />
+    <result column="BUSINESS_NAME" property="businessName" jdbcType="VARCHAR" />
+    <result column="BUSINESS_DESC" property="businessDesc" jdbcType="VARCHAR" />
+    <result column="BUSINESS_SCENARIO" property="businessScenario" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    BUSINESS_TYPE, BUSINESS_NAME, BUSINESS_DESC, BUSINESS_SCENARIO
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.qt.sales.model.BusinessTypeExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from TB_PRD_BUSINESS_TYPE
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from TB_PRD_BUSINESS_TYPE
+    where BUSINESS_TYPE = #{businessType,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from TB_PRD_BUSINESS_TYPE
+    where BUSINESS_TYPE = #{businessType,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.qt.sales.model.BusinessTypeExample" >
+    delete from TB_PRD_BUSINESS_TYPE
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.qt.sales.model.BusinessType" >
+    insert into TB_PRD_BUSINESS_TYPE (BUSINESS_TYPE, BUSINESS_NAME, BUSINESS_DESC, 
+      BUSINESS_SCENARIO)
+    values (#{businessType,jdbcType=VARCHAR}, #{businessName,jdbcType=VARCHAR}, #{businessDesc,jdbcType=VARCHAR}, 
+      #{businessScenario,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.qt.sales.model.BusinessType" >
+    insert into TB_PRD_BUSINESS_TYPE
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="businessType != null" >
+        BUSINESS_TYPE,
+      </if>
+      <if test="businessName != null" >
+        BUSINESS_NAME,
+      </if>
+      <if test="businessDesc != null" >
+        BUSINESS_DESC,
+      </if>
+      <if test="businessScenario != null" >
+        BUSINESS_SCENARIO,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="businessType != null" >
+        #{businessType,jdbcType=VARCHAR},
+      </if>
+      <if test="businessName != null" >
+        #{businessName,jdbcType=VARCHAR},
+      </if>
+      <if test="businessDesc != null" >
+        #{businessDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="businessScenario != null" >
+        #{businessScenario,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.qt.sales.model.BusinessTypeExample" resultType="java.lang.Integer" >
+    select count(*) from TB_PRD_BUSINESS_TYPE
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update TB_PRD_BUSINESS_TYPE
+    <set >
+      <if test="record.businessType != null" >
+        BUSINESS_TYPE = #{record.businessType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.businessName != null" >
+        BUSINESS_NAME = #{record.businessName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.businessDesc != null" >
+        BUSINESS_DESC = #{record.businessDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="record.businessScenario != null" >
+        BUSINESS_SCENARIO = #{record.businessScenario,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update TB_PRD_BUSINESS_TYPE
+    set BUSINESS_TYPE = #{record.businessType,jdbcType=VARCHAR},
+      BUSINESS_NAME = #{record.businessName,jdbcType=VARCHAR},
+      BUSINESS_DESC = #{record.businessDesc,jdbcType=VARCHAR},
+      BUSINESS_SCENARIO = #{record.businessScenario,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.qt.sales.model.BusinessType" >
+    update TB_PRD_BUSINESS_TYPE
+    <set >
+      <if test="businessName != null" >
+        BUSINESS_NAME = #{businessName,jdbcType=VARCHAR},
+      </if>
+      <if test="businessDesc != null" >
+        BUSINESS_DESC = #{businessDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="businessScenario != null" >
+        BUSINESS_SCENARIO = #{businessScenario,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where BUSINESS_TYPE = #{businessType,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.qt.sales.model.BusinessType" >
+    update TB_PRD_BUSINESS_TYPE
+    set BUSINESS_NAME = #{businessName,jdbcType=VARCHAR},
+      BUSINESS_DESC = #{businessDesc,jdbcType=VARCHAR},
+      BUSINESS_SCENARIO = #{businessScenario,jdbcType=VARCHAR}
+    where BUSINESS_TYPE = #{businessType,jdbcType=VARCHAR}
+  </update>
+  
+</mapper>

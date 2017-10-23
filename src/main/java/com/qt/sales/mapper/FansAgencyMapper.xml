@@ -1,0 +1,395 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qt.sales.dao.FansAgencyMapper" >
+  <resultMap id="BaseResultMap" type="com.qt.sales.model.FansAgency" >
+    <id column="AGENCY_ID" property="agencyId" jdbcType="VARCHAR" />
+    <result column="SYSTEMID" property="systemid" jdbcType="VARCHAR" />
+    <result column="AGENCY_NAME" property="agencyName" jdbcType="VARCHAR" />
+    <result column="NAME" property="name" jdbcType="VARCHAR" />
+    <result column="MOBILE" property="mobile" jdbcType="VARCHAR" />
+    <result column="BANKNAME" property="bankname" jdbcType="VARCHAR" />
+    <result column="ACCOUNTNO" property="accountno" jdbcType="VARCHAR" />
+    <result column="PARENT_ID" property="parentId" jdbcType="VARCHAR" />
+    <result column="PARENT_NAME" property="parentName" jdbcType="VARCHAR" />
+    <result column="ISSPECIAL" property="isspecial" jdbcType="VARCHAR" />
+    <result column="LAYER" property="layer" jdbcType="VARCHAR" />
+    <result column="STATUS" property="status" jdbcType="VARCHAR" />
+    <result column="REMARK" property="remark" jdbcType="VARCHAR" />
+    <result column="USERID" property="userid" jdbcType="VARCHAR" />
+    <result column="DATETIME" property="datetime" jdbcType="VARCHAR" />
+    <result column="IDCARDNUM" property="idCardNum" jdbcType="VARCHAR" />
+    <result column="USERNAME" property="username" />
+    <result column="SYSTEMNAME" property="systemName" jdbcType="VARCHAR" />
+    
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    AGENCY_ID, SYSTEMID, AGENCY_NAME, NAME, MOBILE, BANKNAME, ACCOUNTNO, PARENT_ID, PARENT_NAME, 
+    ISSPECIAL, LAYER, STATUS, REMARK, USERID, DATETIME, IDCARDNUM
+  </sql>
+  <sql id="Base_Column_List_Join" >
+    AGENCY_ID, TB_FANS_AGENCY.SYSTEMID,s.systemname SYSTEMNAME, AGENCY_NAME, NAME, MOBILE, BANKNAME, ACCOUNTNO, PARENT_ID, PARENT_NAME, 
+    ISSPECIAL, LAYER, STATUS, REMARK, USERID, U.NICKNAME USERNAME, DATETIME, IDCARDNUM
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.qt.sales.model.FansAgencyExample" >
+    select * from ( select tmp_page.*, rownum row_id from ( 
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List_Join" />
+    from TB_FANS_AGENCY LEFT JOIN TB_FANS_SYS_USER U ON TB_FANS_AGENCY.USERID = U.ID 
+    left join qt1tblsystem s on s.systemid = TB_FANS_AGENCY.systemid
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+    ) tmp_page where rownum <![CDATA[ <= ${end} ]]>  ) where row_id <![CDATA[  > ${start} ]]>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List_Join" />
+    from TB_FANS_AGENCY LEFT JOIN TB_FANS_SYS_USER U ON TB_FANS_AGENCY.USERID = U.ID 
+    left join qt1tblsystem s on s.systemid = TB_FANS_AGENCY.systemid
+    where AGENCY_ID = #{agencyId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from TB_FANS_AGENCY
+    where AGENCY_ID = #{agencyId,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.qt.sales.model.FansAgencyExample" >
+    delete from TB_FANS_AGENCY
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.qt.sales.model.FansAgency" >
+    insert into TB_FANS_AGENCY (AGENCY_ID, SYSTEMID, AGENCY_NAME, 
+      NAME, MOBILE, BANKNAME, 
+      ACCOUNTNO, PARENT_ID, PARENT_NAME, 
+      ISSPECIAL, LAYER, STATUS, 
+      REMARK, USERID, DATETIME, IDCARDNUM
+      )
+    values (#{agencyId,jdbcType=VARCHAR}, #{systemid,jdbcType=VARCHAR}, #{agencyName,jdbcType=VARCHAR}, 
+      #{name,jdbcType=VARCHAR}, #{mobile,jdbcType=VARCHAR}, #{bankname,jdbcType=VARCHAR}, 
+      #{accountno,jdbcType=VARCHAR}, #{parentId,jdbcType=VARCHAR}, #{parentName,jdbcType=VARCHAR}, 
+      #{isspecial,jdbcType=VARCHAR}, #{layer,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, 
+      #{remark,jdbcType=VARCHAR}, #{userid,jdbcType=VARCHAR}, #{datetime,jdbcType=VARCHAR}, 
+      #{idCardNum,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.qt.sales.model.FansAgency" >
+    insert into TB_FANS_AGENCY
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="agencyId != null" >
+        AGENCY_ID,
+      </if>
+      <if test="systemid != null" >
+        SYSTEMID,
+      </if>
+      <if test="agencyName != null" >
+        AGENCY_NAME,
+      </if>
+      <if test="name != null" >
+        NAME,
+      </if>
+      <if test="mobile != null" >
+        MOBILE,
+      </if>
+      <if test="bankname != null" >
+        BANKNAME,
+      </if>
+      <if test="accountno != null" >
+        ACCOUNTNO,
+      </if>
+      <if test="parentId != null" >
+        PARENT_ID,
+      </if>
+      <if test="parentName != null" >
+        PARENT_NAME,
+      </if>
+      <if test="isspecial != null" >
+        ISSPECIAL,
+      </if>
+      <if test="layer != null" >
+        LAYER,
+      </if>
+      <if test="status != null" >
+        STATUS,
+      </if>
+      <if test="remark != null" >
+        REMARK,
+      </if>
+      <if test="userid != null" >
+        USERID,
+      </if>
+      <if test="datetime != null" >
+        DATETIME,
+      </if>
+      <if test="idCardNum != null" >
+        IDCARDNUM,
+      </if>
+      
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="agencyId != null" >
+        #{agencyId,jdbcType=VARCHAR},
+      </if>
+      <if test="systemid != null" >
+        #{systemid,jdbcType=VARCHAR},
+      </if>
+      <if test="agencyName != null" >
+        #{agencyName,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="mobile != null" >
+        #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="bankname != null" >
+        #{bankname,jdbcType=VARCHAR},
+      </if>
+      <if test="accountno != null" >
+        #{accountno,jdbcType=VARCHAR},
+      </if>
+      <if test="parentId != null" >
+        #{parentId,jdbcType=VARCHAR},
+      </if>
+      <if test="parentName != null" >
+        #{parentName,jdbcType=VARCHAR},
+      </if>
+      <if test="isspecial != null" >
+        #{isspecial,jdbcType=VARCHAR},
+      </if>
+      <if test="layer != null" >
+        #{layer,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="userid != null" >
+        #{userid,jdbcType=VARCHAR},
+      </if>
+      <if test="datetime != null" >
+        #{datetime,jdbcType=VARCHAR},
+      </if>
+       <if test="idCardNum != null" >
+        #{idCardNum,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.qt.sales.model.FansAgencyExample" resultType="java.lang.Integer" >
+    select count(*) from TB_FANS_AGENCY
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update TB_FANS_AGENCY
+    <set >
+      <if test="record.agencyId != null" >
+        AGENCY_ID = #{record.agencyId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.systemid != null" >
+        SYSTEMID = #{record.systemid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.agencyName != null" >
+        AGENCY_NAME = #{record.agencyName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.name != null" >
+        NAME = #{record.name,jdbcType=VARCHAR},
+      </if>
+      <if test="record.mobile != null" >
+        MOBILE = #{record.mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="record.bankname != null" >
+        BANKNAME = #{record.bankname,jdbcType=VARCHAR},
+      </if>
+      <if test="record.accountno != null" >
+        ACCOUNTNO = #{record.accountno,jdbcType=VARCHAR},
+      </if>
+      <if test="record.parentId != null" >
+        PARENT_ID = #{record.parentId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.parentName != null" >
+        PARENT_NAME = #{record.parentName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.isspecial != null" >
+        ISSPECIAL = #{record.isspecial,jdbcType=VARCHAR},
+      </if>
+      <if test="record.layer != null" >
+        LAYER = #{record.layer,jdbcType=VARCHAR},
+      </if>
+      <if test="record.status != null" >
+        STATUS = #{record.status,jdbcType=VARCHAR},
+      </if>
+      <if test="record.remark != null" >
+        REMARK = #{record.remark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userid != null" >
+        USERID = #{record.userid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.datetime != null" >
+        DATETIME = #{record.datetime,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update TB_FANS_AGENCY
+    set AGENCY_ID = #{record.agencyId,jdbcType=VARCHAR},
+      SYSTEMID = #{record.systemid,jdbcType=VARCHAR},
+      AGENCY_NAME = #{record.agencyName,jdbcType=VARCHAR},
+      NAME = #{record.name,jdbcType=VARCHAR},
+      MOBILE = #{record.mobile,jdbcType=VARCHAR},
+      BANKNAME = #{record.bankname,jdbcType=VARCHAR},
+      ACCOUNTNO = #{record.accountno,jdbcType=VARCHAR},
+      PARENT_ID = #{record.parentId,jdbcType=VARCHAR},
+      PARENT_NAME = #{record.parentName,jdbcType=VARCHAR},
+      ISSPECIAL = #{record.isspecial,jdbcType=VARCHAR},
+      LAYER = #{record.layer,jdbcType=VARCHAR},
+      STATUS = #{record.status,jdbcType=VARCHAR},
+      REMARK = #{record.remark,jdbcType=VARCHAR},
+      USERID = #{record.userid,jdbcType=VARCHAR},
+      DATETIME = #{record.datetime,jdbcType=VARCHAR},
+      IDCARDNUM = #{record.idCardNum,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.qt.sales.model.FansAgency" >
+    update TB_FANS_AGENCY
+    <set >
+      <if test="systemid != null" >
+        SYSTEMID = #{systemid,jdbcType=VARCHAR},
+      </if>
+      <if test="agencyName != null" >
+        AGENCY_NAME = #{agencyName,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        NAME = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="mobile != null" >
+        MOBILE = #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="bankname != null" >
+        BANKNAME = #{bankname,jdbcType=VARCHAR},
+      </if>
+      <if test="accountno != null" >
+        ACCOUNTNO = #{accountno,jdbcType=VARCHAR},
+      </if>
+      <if test="parentId != null" >
+        PARENT_ID = #{parentId,jdbcType=VARCHAR},
+      </if>
+      <if test="parentName != null" >
+        PARENT_NAME = #{parentName,jdbcType=VARCHAR},
+      </if>
+      <if test="isspecial != null" >
+        ISSPECIAL = #{isspecial,jdbcType=VARCHAR},
+      </if>
+      <if test="layer != null" >
+        LAYER = #{layer,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        STATUS = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        REMARK = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="userid != null" >
+        USERID = #{userid,jdbcType=VARCHAR},
+      </if>
+      <if test="datetime != null" >
+        DATETIME = #{datetime,jdbcType=VARCHAR},
+      </if>
+      <if test="idCardNum != null" >
+        IDCARDNUM = #{idCardNum,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where AGENCY_ID = #{agencyId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.qt.sales.model.FansAgency" >
+    update TB_FANS_AGENCY
+    set SYSTEMID = #{systemid,jdbcType=VARCHAR},
+      AGENCY_NAME = #{agencyName,jdbcType=VARCHAR},
+      NAME = #{name,jdbcType=VARCHAR},
+      MOBILE = #{mobile,jdbcType=VARCHAR},
+      BANKNAME = #{bankname,jdbcType=VARCHAR},
+      ACCOUNTNO = #{accountno,jdbcType=VARCHAR},
+      PARENT_ID = #{parentId,jdbcType=VARCHAR},
+      PARENT_NAME = #{parentName,jdbcType=VARCHAR},
+      ISSPECIAL = #{isspecial,jdbcType=VARCHAR},
+      LAYER = #{layer,jdbcType=VARCHAR},
+      STATUS = #{status,jdbcType=VARCHAR},
+      REMARK = #{remark,jdbcType=VARCHAR},
+      USERID = #{userid,jdbcType=VARCHAR},
+      DATETIME = #{datetime,jdbcType=VARCHAR},
+      IDCARDNUM = #{idCardNum,jdbcType=VARCHAR}
+    where AGENCY_ID = #{agencyId,jdbcType=VARCHAR}
+  </update>
+</mapper>

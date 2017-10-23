@@ -1,0 +1,350 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qt.sales.dao.FansAgencyScaleMapper" >
+  <resultMap id="BaseResultMap" type="com.qt.sales.model.FansAgencyScale" >
+    <id column="ID" property="id" jdbcType="VARCHAR" />
+    <result column="AGENCY_ID" property="agencyId" jdbcType="VARCHAR" />
+    <result column="MYCOST" property="mycost" jdbcType="DECIMAL" />
+    <result column="FINAL_RATE" property="finalRate" jdbcType="DECIMAL" />
+    <result column="SECOND_RATE" property="secondRate" jdbcType="DECIMAL" />
+    <result column="NEXT_RATE" property="nextRate" jdbcType="DECIMAL" />
+    <result column="BEGINDATE" property="begindate" jdbcType="VARCHAR" />
+    <result column="ENDDATE" property="enddate" jdbcType="VARCHAR" />
+    <result column="BUSINESS_TYPE" property="businessType" jdbcType="VARCHAR" />
+    <result column="USERID" property="userid" jdbcType="VARCHAR" />
+    <result column="DATETIME" property="datetime" jdbcType="VARCHAR" />
+    <result column="BUSINESSNAME" property="businessName" jdbcType="VARCHAR" />
+    <result column="USERNAMES" property="userNames" jdbcType="VARCHAR" />
+    <result column="AUDITSTATUS" property="auditStatus" jdbcType="VARCHAR" />
+    
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    TB_FANS_AGENCY_SCALE.ID, AGENCY_ID, MYCOST, FINAL_RATE, SECOND_RATE, NEXT_RATE, BEGINDATE, ENDDATE, TB_FANS_AGENCY_SCALE.BUSINESS_TYPE BUSINESS_TYPE, 
+    TB_FANS_AGENCY_SCALE.USERID USERID, u.NICKNAME USERNAMES,  DATETIME, prd.BUSINESS_NAME BUSINESSNAME,AUDITSTATUS
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.qt.sales.model.FansAgencyScaleExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from TB_FANS_AGENCY_SCALE left join qtpay.TB_PRD_BUSINESS_TYPE prd on TB_FANS_AGENCY_SCALE.BUSINESS_TYPE = prd.BUSINESS_TYPE 
+    left join tb_fans_sys_user u on TB_FANS_AGENCY_SCALE.USERID = u.id
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+      order by TB_FANS_AGENCY_SCALE.BUSINESS_TYPE ASC, BEGINDATE  ASC
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from TB_FANS_AGENCY_SCALE left join qtpay.TB_PRD_BUSINESS_TYPE prd on TB_FANS_AGENCY_SCALE.BUSINESS_TYPE = prd.BUSINESS_TYPE 
+    left join tb_fans_sys_user u on TB_FANS_AGENCY_SCALE.USERID = u.id
+    where TB_FANS_AGENCY_SCALE.ID = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from TB_FANS_AGENCY_SCALE
+    where ID = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.qt.sales.model.FansAgencyScaleExample" >
+    delete from TB_FANS_AGENCY_SCALE
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.qt.sales.model.FansAgencyScale" >
+    insert into TB_FANS_AGENCY_SCALE (ID, AGENCY_ID, MYCOST, 
+      FINAL_RATE, SECOND_RATE, NEXT_RATE, 
+      BEGINDATE, ENDDATE, BUSINESS_TYPE, 
+      USERID,DATETIME,AUDITSTATUS)
+    values (seq_scale.nextval, #{agencyId,jdbcType=VARCHAR}, #{mycost,jdbcType=DECIMAL}, 
+      #{finalRate,jdbcType=DECIMAL}, #{secondRate,jdbcType=DECIMAL}, #{nextRate,jdbcType=DECIMAL}, 
+      #{begindate,jdbcType=VARCHAR}, #{enddate,jdbcType=VARCHAR}, #{businessType,jdbcType=VARCHAR}, 
+      #{userid,jdbcType=VARCHAR}, #{datetime,jdbcType=VARCHAR}, #{auditStatus,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.qt.sales.model.FansAgencyScale" >
+    insert into TB_FANS_AGENCY_SCALE
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="agencyId != null" >
+        AGENCY_ID,
+      </if>
+      <if test="mycost != null" >
+        MYCOST,
+      </if>
+      <if test="finalRate != null" >
+        FINAL_RATE,
+      </if>
+      <if test="secondRate != null" >
+        SECOND_RATE,
+      </if>
+      <if test="nextRate != null" >
+        NEXT_RATE,
+      </if>
+      <if test="begindate != null" >
+        BEGINDATE,
+      </if>
+      <if test="enddate != null" >
+        ENDDATE,
+      </if>
+      <if test="businessType != null" >
+        BUSINESS_TYPE,
+      </if>
+      <if test="userid != null" >
+        USERID,
+      </if>
+      <if test="datetime != null" >
+        DATETIME,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="agencyId != null" >
+        #{agencyId,jdbcType=VARCHAR},
+      </if>
+      <if test="mycost != null" >
+        #{mycost,jdbcType=DECIMAL},
+      </if>
+      <if test="finalRate != null" >
+        #{finalRate,jdbcType=DECIMAL},
+      </if>
+      <if test="secondRate != null" >
+        #{secondRate,jdbcType=DECIMAL},
+      </if>
+      <if test="nextRate != null" >
+        #{nextRate,jdbcType=DECIMAL},
+      </if>
+      <if test="begindate != null" >
+        #{begindate,jdbcType=VARCHAR},
+      </if>
+      <if test="enddate != null" >
+        #{enddate,jdbcType=VARCHAR},
+      </if>
+      <if test="businessType != null" >
+        #{businessType,jdbcType=VARCHAR},
+      </if>
+      <if test="userid != null" >
+        #{userid,jdbcType=VARCHAR},
+      </if>
+       <if test="datetime != null" >
+        #{datetime,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.qt.sales.model.FansAgencyScaleExample" resultType="java.lang.Integer" >
+    select count(*) from TB_FANS_AGENCY_SCALE
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update TB_FANS_AGENCY_SCALE
+    <set >
+      <if test="record.id != null" >
+        ID = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.agencyId != null" >
+        AGENCY_ID = #{record.agencyId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.mycost != null" >
+        MYCOST = #{record.mycost,jdbcType=DECIMAL},
+      </if>
+      <if test="record.finalRate != null" >
+        FINAL_RATE = #{record.finalRate,jdbcType=DECIMAL},
+      </if>
+      <if test="record.secondRate != null" >
+        SECOND_RATE = #{record.secondRate,jdbcType=DECIMAL},
+      </if>
+      <if test="record.nextRate != null" >
+        NEXT_RATE = #{record.nextRate,jdbcType=DECIMAL},
+      </if>
+      <if test="record.begindate != null" >
+        BEGINDATE = #{record.begindate,jdbcType=VARCHAR},
+      </if>
+      <if test="record.enddate != null" >
+        ENDDATE = #{record.enddate,jdbcType=VARCHAR},
+      </if>
+      <if test="record.businessType != null" >
+        BUSINESS_TYPE = #{record.businessType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userid != null" >
+        USERID = #{record.userid,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update TB_FANS_AGENCY_SCALE
+    set ID = #{record.id,jdbcType=VARCHAR},
+      AGENCY_ID = #{record.agencyId,jdbcType=VARCHAR},
+      MYCOST = #{record.mycost,jdbcType=DECIMAL},
+      FINAL_RATE = #{record.finalRate,jdbcType=DECIMAL},
+      SECOND_RATE = #{record.secondRate,jdbcType=DECIMAL},
+      NEXT_RATE = #{record.nextRate,jdbcType=DECIMAL},
+      BEGINDATE = #{record.begindate,jdbcType=VARCHAR},
+      ENDDATE = #{record.enddate,jdbcType=VARCHAR},
+      BUSINESS_TYPE = #{record.businessType,jdbcType=VARCHAR},
+      USERID = #{record.userid,jdbcType=VARCHAR},
+      AUDITSTATUS = #{record.auditStatus,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.qt.sales.model.FansAgencyScale" >
+    update TB_FANS_AGENCY_SCALE
+    <set >
+      <if test="agencyId != null" >
+        AGENCY_ID = #{agencyId,jdbcType=VARCHAR},
+      </if>
+      <if test="mycost != null" >
+        MYCOST = #{mycost,jdbcType=DECIMAL},
+      </if>
+      <if test="finalRate != null" >
+        FINAL_RATE = #{finalRate,jdbcType=DECIMAL},
+      </if>
+      <if test="secondRate != null" >
+        SECOND_RATE = #{secondRate,jdbcType=DECIMAL},
+      </if>
+      <if test="nextRate != null" >
+        NEXT_RATE = #{nextRate,jdbcType=DECIMAL},
+      </if>
+      <if test="begindate != null" >
+        BEGINDATE = #{begindate,jdbcType=VARCHAR},
+      </if>
+      <if test="enddate != null" >
+        ENDDATE = #{enddate,jdbcType=VARCHAR},
+      </if>
+      <if test="businessType != null" >
+        BUSINESS_TYPE = #{businessType,jdbcType=VARCHAR},
+      </if>
+      <if test="userid != null" >
+        USERID = #{userid,jdbcType=VARCHAR},
+      </if>
+      <if test="auditStatus != null" >
+        AUDITSTATUS = #{auditStatus,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.qt.sales.model.FansAgencyScale" >
+    update TB_FANS_AGENCY_SCALE
+    set AGENCY_ID = #{agencyId,jdbcType=VARCHAR},
+      MYCOST = #{mycost,jdbcType=DECIMAL},
+      FINAL_RATE = #{finalRate,jdbcType=DECIMAL},
+      SECOND_RATE = #{secondRate,jdbcType=DECIMAL},
+      NEXT_RATE = #{nextRate,jdbcType=DECIMAL},
+      BEGINDATE = #{begindate,jdbcType=VARCHAR},
+      ENDDATE = #{enddate,jdbcType=VARCHAR},
+      BUSINESS_TYPE = #{businessType,jdbcType=VARCHAR},
+      USERID = #{userid,jdbcType=VARCHAR},
+      DATETIME = #{datetime,jdbcType=VARCHAR},
+      AUDITSTATUS = #{auditStatus,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+  
+    <update id="updateEndTimesetNull" parameterType="com.qt.sales.model.FansAgencyScale" >
+    update TB_FANS_AGENCY_SCALE
+    set 
+      ENDDATE = null
+    where BUSINESS_TYPE = #{businessType,jdbcType=VARCHAR} and  AGENCY_ID = #{agencyId,jdbcType=VARCHAR}
+  </update>
+
+	<select id="selectMaxBegindateScale" parameterType="com.qt.sales.model.FansAgencyScale" resultMap="BaseResultMap" >
+		select * from tb_fans_agency_scale t1 inner join (
+		select agency_id,business_type,max(begindate) begindate from
+		tb_fans_agency_scale s where s.business_type = #{businessType,jdbcType=VARCHAR} and s.agency_id
+		= #{agencyId,jdbcType=VARCHAR} and s.auditstatus = '00'
+		group by agency_id,business_type
+		) t2 on t1.begindate=t2.begindate and t1.agency_id=t2.agency_id and
+		t1.business_type=t2.business_type
+	</select>
+	
+	<select id="selectMaxEndDateScale" parameterType="com.qt.sales.model.FansAgencyScale" resultMap="BaseResultMap" >
+		select * from tb_fans_agency_scale t1 inner join (
+		select agency_id,business_type,max(enddate) enddate from
+		tb_fans_agency_scale s where s.business_type = #{businessType,jdbcType=VARCHAR} and s.agency_id
+		= #{agencyId,jdbcType=VARCHAR}
+		group by agency_id,business_type
+		) t2 on t1.enddate=t2.enddate and t1.agency_id=t2.agency_id and
+		t1.business_type=t2.business_type
+	</select>
+	
+	<select id="queryScaleCountWithAgencyId" parameterType="java.lang.String" resultType="int">
+	select count(*) from TB_FANS_AGENCY_SCALE where agency_id = #{agencyId,jdbcType=VARCHAR} and enddate is null
+	</select>
+	
+	<select id="selectBussinessTypeCountByAgencyId" parameterType="java.lang.String" resultType="int">
+	   select count(*) from (select count(*),business_type from tb_fans_agency_scale s where s.agency_id =  #{agencyId,jdbcType=VARCHAR}  group by  s.business_type) 
+    </select>
+    
+    <select id="selectParentScale" parameterType="map" resultType="com.qt.sales.model.FansAgencyScale">
+   	 	select agency_id agencyId,business_type businessType,mycost, next_rate nextRate,second_rate secondRate,final_rate finalRate  
+   	 	from vw_fans_agency_scale v where v.agency_id = #{agencyId,jdbcType=VARCHAR}  and v.business_type = #{businessType,jdbcType=VARCHAR}
+    </select>
+	
+  
+</mapper>

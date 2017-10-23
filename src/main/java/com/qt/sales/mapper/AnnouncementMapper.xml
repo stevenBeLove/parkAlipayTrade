@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qt.sales.dao.AnnouncementMapper" >
+  <resultMap id="BaseResultMap" type="com.qt.sales.model.Announcement" >
+    <id column="ID" property="id" jdbcType="VARCHAR" />
+    <result column="TITLE" property="title" jdbcType="VARCHAR" />
+    <result column="NOTICE_CONTENT" property="noticeContent" jdbcType="VARCHAR" />
+    <result column="EFFECT_TIME" property="effectTime" jdbcType="VARCHAR" />
+    <result column="DISABLED_TIME" property="disabledTime" jdbcType="VARCHAR" />
+    <result column="APPUSER" property="appuser" jdbcType="VARCHAR" />
+    <result column="STATUS" property="status" jdbcType="VARCHAR" />
+    <result column="CREATEID" property="createid" jdbcType="VARCHAR" />
+    <result column="CREATEDT" property="createdt" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    ID, TITLE, NOTICE_CONTENT, EFFECT_TIME, DISABLED_TIME, APPUSER, STATUS, CREATEID, 
+    CREATEDT
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.qt.sales.model.AnnouncementExample" >
+     select * from ( select tmp_page.*, rownum row_id from ( 
+    
+    select
+    
+    
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from TB_FANS_SYS_NOTICE
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+     ) tmp_page where rownum <![CDATA[ <= ${end} ]]>  ) where row_id <![CDATA[  > ${start} ]]>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from TB_FANS_SYS_NOTICE
+    where ID = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from TB_FANS_SYS_NOTICE
+    where ID = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.qt.sales.model.AnnouncementExample" >
+    delete from TB_FANS_SYS_NOTICE
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.qt.sales.model.Announcement" >
+    insert into TB_FANS_SYS_NOTICE (ID, TITLE, NOTICE_CONTENT, 
+      EFFECT_TIME, DISABLED_TIME, APPUSER, 
+      STATUS, CREATEID, CREATEDT
+      )
+    values (qtfans.seq_SEQ_FANS_SYS_NOTICE.nextval, #{title,jdbcType=VARCHAR}, #{noticeContent,jdbcType=VARCHAR}, 
+      #{effectTime,jdbcType=VARCHAR}, #{disabledTime,jdbcType=VARCHAR}, #{appuser,jdbcType=VARCHAR}, 
+      #{status,jdbcType=VARCHAR}, #{createid,jdbcType=VARCHAR}, #{createdt,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.qt.sales.model.Announcement" >
+    insert into TB_FANS_SYS_NOTICE
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="title != null" >
+        TITLE,
+      </if>
+      <if test="noticeContent != null" >
+        NOTICE_CONTENT,
+      </if>
+      <if test="effectTime != null" >
+        EFFECT_TIME,
+      </if>
+      <if test="disabledTime != null" >
+        DISABLED_TIME,
+      </if>
+      <if test="appuser != null" >
+        APPUSER,
+      </if>
+      <if test="status != null" >
+        STATUS,
+      </if>
+      <if test="createid != null" >
+        CREATEID,
+      </if>
+      <if test="createdt != null" >
+        CREATEDT,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="title != null" >
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="noticeContent != null" >
+        #{noticeContent,jdbcType=VARCHAR},
+      </if>
+      <if test="effectTime != null" >
+        #{effectTime,jdbcType=VARCHAR},
+      </if>
+      <if test="disabledTime != null" >
+        #{disabledTime,jdbcType=VARCHAR},
+      </if>
+      <if test="appuser != null" >
+        #{appuser,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="createid != null" >
+        #{createid,jdbcType=VARCHAR},
+      </if>
+      <if test="createdt != null" >
+        #{createdt,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.qt.sales.model.AnnouncementExample" resultType="java.lang.Integer" >
+    select count(*) from TB_FANS_SYS_NOTICE
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update TB_FANS_SYS_NOTICE
+    <set >
+      <if test="record.id != null" >
+        ID = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.title != null" >
+        TITLE = #{record.title,jdbcType=VARCHAR},
+      </if>
+      <if test="record.noticeContent != null" >
+        NOTICE_CONTENT = #{record.noticeContent,jdbcType=VARCHAR},
+      </if>
+      <if test="record.effectTime != null" >
+        EFFECT_TIME = #{record.effectTime,jdbcType=VARCHAR},
+      </if>
+      <if test="record.disabledTime != null" >
+        DISABLED_TIME = #{record.disabledTime,jdbcType=VARCHAR},
+      </if>
+      <if test="record.appuser != null" >
+        APPUSER = #{record.appuser,jdbcType=VARCHAR},
+      </if>
+      <if test="record.status != null" >
+        STATUS = #{record.status,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createid != null" >
+        CREATEID = #{record.createid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createdt != null" >
+        CREATEDT = #{record.createdt,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update TB_FANS_SYS_NOTICE
+    set ID = #{record.id,jdbcType=VARCHAR},
+      TITLE = #{record.title,jdbcType=VARCHAR},
+      NOTICE_CONTENT = #{record.noticeContent,jdbcType=VARCHAR},
+      EFFECT_TIME = #{record.effectTime,jdbcType=VARCHAR},
+      DISABLED_TIME = #{record.disabledTime,jdbcType=VARCHAR},
+      APPUSER = #{record.appuser,jdbcType=VARCHAR},
+      STATUS = #{record.status,jdbcType=VARCHAR},
+      CREATEID = #{record.createid,jdbcType=VARCHAR},
+      CREATEDT = #{record.createdt,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.qt.sales.model.Announcement" >
+    update TB_FANS_SYS_NOTICE
+    <set >
+      <if test="title != null" >
+        TITLE = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="noticeContent != null" >
+        NOTICE_CONTENT = #{noticeContent,jdbcType=VARCHAR},
+      </if>
+      <if test="effectTime != null" >
+        EFFECT_TIME = #{effectTime,jdbcType=VARCHAR},
+      </if>
+      <if test="disabledTime != null" >
+        DISABLED_TIME = #{disabledTime,jdbcType=VARCHAR},
+      </if>
+      <if test="appuser != null" >
+        APPUSER = #{appuser,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        STATUS = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="createid != null" >
+        CREATEID = #{createid,jdbcType=VARCHAR},
+      </if>
+      <if test="createdt != null" >
+        CREATEDT = #{createdt,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.qt.sales.model.Announcement" >
+    update TB_FANS_SYS_NOTICE
+    set TITLE = #{title,jdbcType=VARCHAR},
+      NOTICE_CONTENT = #{noticeContent,jdbcType=VARCHAR},
+      EFFECT_TIME = #{effectTime,jdbcType=VARCHAR},
+      DISABLED_TIME = #{disabledTime,jdbcType=VARCHAR},
+      APPUSER = #{appuser,jdbcType=VARCHAR},
+      STATUS = #{status,jdbcType=VARCHAR},
+      CREATEID = #{createid,jdbcType=VARCHAR},
+      CREATEDT = #{createdt,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

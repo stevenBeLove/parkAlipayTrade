@@ -35,23 +35,29 @@
 	</bean>		
 		
 		
-    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
-		<property name="url" value="jdbc:mysql://47.104.4.207:3306/sharpPark" />  
-        <property name="username" value="root" />  
-        <property name="password" value="changeit" />  
-        <property name="maxActive" value="20" />  
-        <property name="initialSize" value="1" />  
-        <property name="maxWait" value="60000" />  
-        <property name="minIdle" value="1" />  
-        <property name="timeBetweenEvictionRunsMillis" value="3000" />  
-        <property name="minEvictableIdleTimeMillis" value="300000" />  
-        <property name="validationQuery" value="SELECT 'x' FROM DUAL" />  
-        <property name="testWhileIdle" value="true" />  
-        <property name="testOnBorrow" value="false" />  
-        <property name="testOnReturn" value="false" />  
-        <!-- 开启Druid的监控统计功能 -->  
-        <property name="filters" value="stat" />  
-	</bean>
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+			<property name="driverClassName" value="${common.db.driverClassName}" />
+	        <property name="url" value="${park.db.url}" />
+		    <property name="username" value="${park.db.username}" />
+			<property name="password" value="${park.db.password}" />	  
+			<property name="initialSize" value="${park.database.connection.idle}" />  
+			<property name="maxActive" value="${park.database.connection.max}" />
+			<property name="maxIdle" value="300" />
+			<property name="maxWait" value="60000" />
+			<property name="testWhileIdle" value="true" />
+			<property name="testOnBorrow" value="true" />
+	        <!--removeAbandoned: 是否自动回收超时连接-->    
+	        <property name="removeAbandoned"  value="true"/>  
+	        <!--removeAbandonedTimeout: 超时时间(以秒数为单位)-->    
+	        <property name="removeAbandonedTimeout" value="10"/>  
+	        <!-- 在空闲连接回收器线程运行期间休眠的时间值,以毫秒为单位. -->  
+	        <property name="timeBetweenEvictionRunsMillis" value="10000"/>  
+	        <!--  在每次空闲连接回收器线程(如果有)运行时检查的连接数量 -->  
+	        <property name="numTestsPerEvictionRun" value="10"/>  
+	        <!-- 1000 * 60 * 30  连接在池中保持空闲而不被空闲连接回收器线程-->  
+	        <property name="minEvictableIdleTimeMillis" value="10000"/>  
+		</bean>
+	
 	
 	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 		<property name="dataSource" ref="dataSource" />

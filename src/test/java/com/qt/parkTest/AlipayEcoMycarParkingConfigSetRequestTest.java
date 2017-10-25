@@ -50,7 +50,7 @@ public class AlipayEcoMycarParkingConfigSetRequestTest {
         try {
             response = alipayClient.execute(request, APP_AUTH_TOKEN);
             if (response.isSuccess()) {
-                System.out.println(response.getBody());
+                System.out.println("---"+response.getBody());
                 System.out.println("调用成功");
             } else {
                 System.out.println("调用失败");
@@ -65,7 +65,7 @@ public class AlipayEcoMycarParkingConfigSetRequestTest {
     public static String getBizContent(){
         String interface_url = "https%3a%2f%2fkangguole.com.cn%2fparkAlipayTrade%2falipay";
         JSONObject data = new JSONObject();
-        data.put("merchant_name", "杭州立方");
+        data.put("merchant_name", "杭州立方kanghao123");
         data.put("merchant_service_phone", "021-25413215");
         data.put("account_no", "qcxdac2965@sandbox.com");
 //        data.put("merchant_logo", getImageStr());

@@ -26,8 +26,6 @@ import com.qt.sales.model.FansAgency;
 import com.qt.sales.model.FansAgencyExample;
 import com.qt.sales.model.FansAgencyScale;
 import com.qt.sales.model.FansAgencyScaleExample;
-import com.qt.sales.pub.PropertiesConfig;
-import com.qt.sales.pub.PubTibcoSend;
 import com.qt.sales.service.FansAgencyScaleService;
 import com.qt.sales.service.FansAgencyService;
 import com.qt.sales.utils.DateUtil;
@@ -161,16 +159,16 @@ public class FansAgencyServiceImpl implements FansAgencyService {
         String retcp = properties.get("sale.tibco.retcp").toString();
         JSONObject receiveJson = null;
         int serverTimeOut = 30000;
-        try {
-            receiveJson = PubTibcoSend.sendCoreInfo(url, encode, user, password, "QueueConnectionFactory", sendtcp, retcp, serverTimeOut, sendData, true);
-        } catch (QTException e) {
-            LogPay.error(e.getMessage(), e);
-            if (receiveJson == null) {
-                receiveJson = new JSONObject();
-            }
-            receiveJson.put("P_MSG_CODE", "99999");
-            receiveJson.put("P_MSG_TEXT", e.getRespMsg());
-        }
+//        try {
+////            receiveJson = PubTibcoSend.sendCoreInfo(url, encode, user, password, "QueueConnectionFactory", sendtcp, retcp, serverTimeOut, sendData, true);
+//        } catch (QTException e) {
+//            LogPay.error(e.getMessage(), e);
+//            if (receiveJson == null) {
+//                receiveJson = new JSONObject();
+//            }
+//            receiveJson.put("P_MSG_CODE", "99999");
+//            receiveJson.put("P_MSG_TEXT", e.getRespMsg());
+//        }
         return receiveJson;
     }
     

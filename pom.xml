@@ -2,8 +2,8 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.imobpay</groupId>
-	<artifactId>sales</artifactId>
+	<groupId>com.shandian</groupId>
+	<artifactId>parkAlipayTrade</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
 	<name>sales project</name>
@@ -227,18 +227,12 @@
 			<version>${commons-pool.version}</version>
 		</dependency>
 
-		<dependency>
-			<groupId>ojdbc6</groupId>
-			<artifactId>ojdbc6</artifactId>
-			<version>${ojdbc6.version}</version>
-		</dependency>
 
 		<dependency>
 			<groupId>org.mybatis</groupId>
 			<artifactId>mybatis-spring</artifactId>
 			<version>${mybatis-spring.version}</version>
 		</dependency>
-
 
 
 
@@ -362,12 +356,6 @@
 		  <version>1.1-rev-1</version>
 		</dependency>
 		
-		<!-- 队列 -->
-		<dependency>
-			<groupId>tibjms</groupId>
-			<artifactId>tibjms</artifactId>
-			<version>${tibjms.version}</version>
-		</dependency>
 
 		<dependency>
 			<groupId>javax.jms</groupId>
@@ -375,11 +363,6 @@
 			<version>${jms-api_version}</version>
 		</dependency>
 
-		<dependency>
-			<groupId>com.imobpay.base</groupId>
-			<artifactId>imob_platform</artifactId>
-			<version>2.2</version>
-		</dependency>
 		
 		<dependency>
 		  <groupId>net.sf.jxls</groupId>
@@ -410,14 +393,12 @@
             <artifactId>org.apache.oltu.oauth2.resourceserver</artifactId>
             <version>1.0.2</version>
         </dependency>
-        
-	<!-- 	<dependency>
-		    <groupId>commons-codec</groupId>
-		    <artifactId>commons-codec</artifactId>
-		    <version>1.10</version>
-		</dependency> -->
-        
 		
+		<dependency>
+		    <groupId>oracle</groupId>
+		    <artifactId>ojdbc6</artifactId>
+		    <version>11.2.0.3</version>
+		</dependency>
 
 	</dependencies>
 	<build>

@@ -6,7 +6,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
-<title>缴费</title>
+<title>车牌查询</title>
 <%@ include file="../head.jsp"%>
 
 <script src="${ctx}/js/suggest/src/bootstrap-suggest.js"></script>

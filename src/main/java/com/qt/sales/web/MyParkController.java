@@ -25,9 +25,9 @@ import com.qt.sales.utils.LogPay;
 public class MyParkController extends BaseController {
 
     
-    @RequestMapping(value = "/parkHome", method = RequestMethod.GET)
+    @RequestMapping(value = "/notify", method = RequestMethod.GET)
     public String showList(Model model) {
-        return "park/payment";
+        return "park/notify";
     }
     
     

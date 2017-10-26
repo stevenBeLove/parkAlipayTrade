@@ -25,10 +25,8 @@ body.bootstrap-admin-with-small-navbar {
 </head>
 <body  class="bootstrap-admin-with-small-navbar">
 	 
-	 <h1>缴费页面</h1>
-	 请输入车牌号： <input type="text" value="沪ABCD">
-	<input type="button" value="绑定车牌">
-	<input type="button" value="确定">
+	 <h1>车牌查询</h1>
+	 <h2>沪A6B521</h2>
 
 </body>
 </html>

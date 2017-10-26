@@ -43,8 +43,6 @@ public class AlipayEcoMycarParkingConfigQueryRequestTest {
     static String ALIPAY_PUBLIC_KEY = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAtyoGBcNgmEzskZx8BN8LHTaeH65HHac3g7lsqS2N06Tk1oDpuMw4GMTBEMtDDbycUu76vfOifpf4vco3dyRijEpMAcEObhPR/6XylNf1d1ZHPmyCI8QBX0B6p32kh0KU2G0l//fuPUYyvjkb59kD44OQGmNcdt64ENzL7/HSZjP+DvcvOidwPoOg5xEC9nOJM8/c2Esb2Gn3nq+yrEx5w6Wr3aJyxt39ydcg+4MNxcG0uTveEYBbJuU8WY9euYXB+WjiDMFwmHBL1Td/OlxZfjK78XwwBk+ZI5L9v1K8aP1BWBpgnBFIDJz/Hk3Qq32zgAOkcmHWZHCiFJ/bLu9S5wIDAQAB";
     static String sign_type = "RSA2";
     static String APP_AUTH_TOKEN = "201710BBb26773c515324b6fb642004cab7d1X63";
-    static String interface_url = "https%3a%2f%2fkangguole.com.cn%2fparkAlipayTrade%2falipay";
-    
     // 编码格式
     static String charset = "UTF-8";
     // 支付宝沙箱网关

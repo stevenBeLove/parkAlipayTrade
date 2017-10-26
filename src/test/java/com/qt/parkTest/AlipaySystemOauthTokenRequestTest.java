@@ -1,35 +1,25 @@
-/** 
- * 包名: package com.qt.parkTest; <br/> 
- * 添加时间: 2017年10月25日 上午11:40:30 <br/> 
- */
 package com.qt.parkTest;
+
+import java.util.Map;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
 import com.alipay.api.DefaultAlipayClient;
-import com.alipay.api.request.AlipayEcoMycarParkingParkinglotinfoCreateRequest;
-import com.alipay.api.response.AlipayEcoMycarParkingParkinglotinfoCreateResponse;
+import com.alipay.api.request.AlipayEcoMycarParkingVehicleQueryRequest;
+import com.alipay.api.request.AlipaySystemOauthTokenRequest;
+import com.alipay.api.response.AlipayEcoMycarParkingVehicleQueryResponse;
+import com.alipay.api.response.AlipaySystemOauthTokenResponse;
 
-/** 
- * 类名: AlipayEcoMycarParkingParkinglotinfoCreateRequestTest <br/> 
- * 作用：录入停车场信息<br/> 
- * 创建者: zhangyinghui. <br/> 
- * 添加时间: 2017年10月25日 上午11:40:30 <br/> 
- * 版本： JDK 1.6 parkAlipayTrade 1.0
- 
-  "alipay_eco_mycar_parking_parkinglotinfo_create_response": {
-        "parking_id": "PI1508920124535365768",
-        "code": "10000",
-        "msg": "Success"
-    },
- 
- 
- * 
+/***
+ * 获取车牌
+ * @author 张英辉
+ *
  */
-public class AlipayEcoMycarParkingParkinglotinfoCreateRequestTest {
+public class AlipaySystemOauthTokenRequestTest {
 
+	
     static String APP_ID = "2016080700191244";
     static String APP_PRIVATE_KEY = "MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCbqs+RfKI6CDpQBp87XpBQyrDX/9Rl4hZ0EJncJS0pa0Q+b4k/MHQRR9gNj8nuyBesla1plGPKo8/7Br95MFPNfMUaTd+P6x+1fb3xRn2LFzvQGzt9VgpNuIEDIgGfSJkB8eXFUzpDCacqJiwP6yV9JpfVIqBg2iqMAreeBAs7p53ElmqxIOdvHNPn4mYVl0jnUonYZ6vndN/D74YqgnX/bzvnjoFYhiQ6WjhhBS6/jxFQ2z58KztJSmtRgHPuCcp7es2CVUmHVHtPKdB5TM+3MLaOnZ3VIN9pQFHNzmfK8mFy7QQv7vSibMySsogzW7s4T0bVb64SCaDj1qUOicn5AgMBAAECggEANBu/k+H2pBpw+qzczJDhGkpfXE7FGL3P6lZMSscfEQhZNdU8Siy8DbTQ++kwHYBZfGo2PGtx5Dllu5AMtFKbGuQzTpTWy2RXnvdSh9ui1taWLRmQlmog1Nd4SEYv6NPydBY3ZhBwJlSq4o8YnNOIHxa2KKCIsyMUrv2R3ZFY+USirb1mKGNeg6kfyJZBr2CiHmOObCXddCywjdS07ePqB1NY8XnPGV4rfMGww4We6zDHLRz1eA7k4wsQZyIrHib/GnDsyjT64mrV01BTofN+HcqirhePmGJwoO6CO9OJnzbdzdjEGDmSxoFLPtukIW9opwyaboMB/qP70kbp48cJoQKBgQDWPj/2Ih3M5EZkj/7q77ArjyJYC8lmyJxPbIhwlkiJw50CjmB+Lbfy0iEdOPQG8nqaEc7cMQfOCc7RwcrXfXL6LUsc9lLzr7oY7SqxpepNohkEzXnSQDkgsGgWTxRHkPzSV6BikXCm3AZkDcqtXdK6jW+10N4fCN0CdB2a+bmFPQKBgQC6AeQNGf+XpeQkIG+UMc089MsbJBxlWboxIzn2TGdjGwO4ylDlj20eQjzSj0PvVfa6cGhgpd/N2MVJNGETfFmy58zKQLLO7er+Hm4Jiasu9YG9LoxDE05gO1ccN6/07Ln2xJcU8khPaGRJkg7pdG3V5+99SKdN5vXWigRH36M7bQKBgQDFHDCsu2a/g6ZgDztx22QyL1ZhuzZpIljtmeVN8HZ8iUSDfYq5jEaZWUquICAj5CN4bLntTA7qOYvW4H1HFVwbYGCjHN3k5eBJ3qpRF10iX+i0yncyQXRN5v9cxxTZY0O4InalOTpzyir3EtlN9+xRRp9on+o8k2MDRuGWG/vb4QKBgBVgmkEXN9TJ8Apm3+v8PUZALAeWgtzzDv8OuV6hMVCmjirytZFshnHv0uWwKXKcQpryyEwzRCF4RFRBfNasd/KjyVmFTgeSOGu0O5lFBTOEa8C+VMhws5VDvKM1kzdm7Yh615JEtiLKMJxz+NrD0su+uDuB2hiN7rsVaaCJB02RAoGBAJGgzEsyzaV6YPHb0JIXioBflaBBX+VrGsUZMfb2lCCvpKGFleiD3VfXg4EeBfYnfa0OD0kwiJyhqj6CmugTJr0Yzqv4CrazKTnxc9uqA26OFzqrGkJuHA/cP8GsbQ5oHUj3FslcRnJzFabiq3pNdp+yURevXk73Dg6lJAWVm4ok";
     static String ALIPAY_PUBLIC_KEY = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAtyoGBcNgmEzskZx8BN8LHTaeH65HHac3g7lsqS2N06Tk1oDpuMw4GMTBEMtDDbycUu76vfOifpf4vco3dyRijEpMAcEObhPR/6XylNf1d1ZHPmyCI8QBX0B6p32kh0KU2G0l//fuPUYyvjkb59kD44OQGmNcdt64ENzL7/HSZjP+DvcvOidwPoOg5xEC9nOJM8/c2Esb2Gn3nq+yrEx5w6Wr3aJyxt39ydcg+4MNxcG0uTveEYBbJuU8WY9euYXB+WjiDMFwmHBL1Td/OlxZfjK78XwwBk+ZI5L9v1K8aP1BWBpgnBFIDJz/Hk3Qq32zgAOkcmHWZHCiFJ/bLu9S5wIDAQAB";
@@ -40,56 +30,75 @@ public class AlipayEcoMycarParkingParkinglotinfoCreateRequestTest {
     // 支付宝沙箱网关
     static String gatewayUrl = "https://openapi.alipaydev.com/gateway.do";
     public static void main(String[] args) {
-        AlipayClient alipayClient = new DefaultAlipayClient(gatewayUrl, APP_ID, APP_PRIVATE_KEY, "json", "GBK", 
+        AlipayClient alipayClient = new DefaultAlipayClient(gatewayUrl, APP_ID, APP_PRIVATE_KEY, "json", charset, 
                 ALIPAY_PUBLIC_KEY, sign_type);
-        AlipayEcoMycarParkingParkinglotinfoCreateRequest request = new AlipayEcoMycarParkingParkinglotinfoCreateRequest();
-        request.setBizContent("{" + "\"city_id\":\"310000\"," 
-                + "\"equipment_name\":\"杭州立方kanghao123\"," 
-                + "\"out_parking_id\":\"189001108899\"," 
-                + "\"parking_address\":\"上海市区\","
-                +"\"longitude\":\"121.535344\"," 
-                +"\"latitude\":\"31.213259\"," 
-                + "\"parking_start_time\":\"09:00:00\"," 
-                + "\"parking_end_time\":\"18:00:00\"," 
-                + "\"parking_number\":\"1000\","
-                + "\"parking_lot_type\":\"1\"," 
-                + "\"parking_type\":\"2\"," 
-                + "\"payment_mode\":\"1\"," 
-                + "\"pay_type\":\"1\"," 
-                + "\"parking_name\":\"杭州立方kanghao1235\"" 
-                + "}");// 业务数据
-        AlipayEcoMycarParkingParkinglotinfoCreateResponse   response;
+        AlipaySystemOauthTokenRequest request = new AlipaySystemOauthTokenRequest();
+        request.setGrantType("authorization_code"); 
+      //授权设置 
+        request.setGrantType("authorization_code"); 
+        //auth_code设置,从alipay.eco.mycar.parking.userpage.query页面接口中可以获取到该值 
+        request.setCode("5771c3da73e1485d857a60944966WX72"); 
+        
+        
         try {
-            response = alipayClient.execute(request, APP_AUTH_TOKEN);
-            if (response.isSuccess()) {
-                System.out.println(response.getBody());
-                System.out.println("调用成功");
-            } else {
-                System.out.println("调用失败");
-            }
-        } catch (AlipayApiException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+			//换取调用 
+			AlipaySystemOauthTokenResponse response = alipayClient.execute(request); 
+			if(response.isSuccess()){ 
+				System.out.println(response.getBody());
+				
+			    //调用成功 
+			    String uid = response.getUserId(); 
+			    System.out.println("uid="+uid);
+			    //取得令牌 
+			    String access_token = response.getAccessToken(); 
+			    //通过授权令牌调用获取用户车牌信息接口 alipay.eco.mycar.parking.vehicle.query 
+			    AlipayEcoMycarParkingVehicleQueryRequest requestBiz = new AlipayEcoMycarParkingVehicleQueryRequest(); 
+			    //SDK已经封装掉了公共参数，这里只需要传入业务参数 
+			    //此次只是参数展示，未进行字符串转义，实际情况下请转义
+
+			    requestBiz.setBizContent("{" +
+						"\"car_id\":\"201605061278654\"" +
+						"}");//业务数据
+				
+				AlipayEcoMycarParkingVehicleQueryResponse responseBiz = alipayClient.execute(requestBiz,access_token); 
+				//判断调用是否成功
+				if(responseBiz.isSuccess()){
+					//获取相应数据
+					Map<String,String> responseParams = responseBiz.getParams();
+					//通过返回数据进行业务处理，可以通过responseParams获取到返回的键值数据
+					System.out.println(responseBiz.getBody());
+				}else{
+					//调用失败处理逻辑
+					System.out.println(responseBiz.getBody());
+				}
+				
+			} else {
+			 //换取令牌失败逻辑处理
+			}
+		} catch (AlipayApiException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }
 
     
     public static String getBizContent(){
         JSONObject data = new JSONObject();
+        data.put("parking_id", "2014072300007148");
         data.put("city_id", "110101");
-        data.put("equipment_name", "杭州立方kanghao123");
-        data.put("out_parking_id", "10000110001");
+        data.put("equipment_name", "杭州立方");
+        data.put("out_parking_id", "10000110002");
         data.put("parking_address", "浙江省杭州市古墩路与疏港公路的交汇处");
         data.put("longitude", "114.266418");
         data.put("latitude", "30.548828");
         data.put("parking_start_time", "07:00:00");
-        data.put("parking_end_time", "18:07:50");
+        data.put("parking_end_time", "03:07:50");
         data.put("parking_number", "10000");
         data.put("parking_lot_type","1");
         data.put("parking_type","2");
         data.put("payment_mode","1");
         data.put("pay_type","2");
-//        data.put("shopingmall_id","100001008");
+        data.put("shopingmall_id","100001008");
         data.put("parking_fee_description","小车一小时10元");
 //        data.put("contact_name","张三");
 //        data.put("contact_mobile","189xxxxxxxx");
@@ -97,11 +106,11 @@ public class AlipayEcoMycarParkingParkinglotinfoCreateRequestTest {
 //        data.put("contact_emali","alipay@alipay.com");
 //        data.put("contact_weixin","923422342");
 //        data.put("contact_alipay","189xxxxxxxx");
-        data.put("parking_name","杭州立方kanghao123");
-//        data.put("time_out","13");
+        data.put("parking_name","城西停车场");
+        data.put("time_out","13");
         String jsonStr = JSON.toJSONString(data);
         System.out.println(jsonStr);
         return jsonStr;
-    }
+    }	
+	
 }
-

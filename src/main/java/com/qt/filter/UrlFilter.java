@@ -1,6 +1,9 @@
 package com.qt.filter;
 
 import java.io.IOException;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -25,9 +28,8 @@ public class UrlFilter  implements Filter {
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain filter) throws IOException, ServletException {
         HttpServletRequest r = (HttpServletRequest) request;
         System.out.println("--------------------------------------------");
-        System.out.println(r.getRequestURI());
-        System.out.println(r.getContextPath());
         System.out.println(r.getRequestURL());
+        System.out.println(r.getQueryString());
         System.out.println("--------------------------------------------");
         filter.doFilter(request, response);
     }

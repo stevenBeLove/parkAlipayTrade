@@ -33,11 +33,10 @@ public class AlipaySystemOauthTokenRequestTest {
         AlipayClient alipayClient = new DefaultAlipayClient(gatewayUrl, APP_ID, APP_PRIVATE_KEY, "json", charset, 
                 ALIPAY_PUBLIC_KEY, sign_type);
         AlipaySystemOauthTokenRequest request = new AlipaySystemOauthTokenRequest();
-        request.setGrantType("authorization_code"); 
-      //授权设置 
+        //授权设置 
         request.setGrantType("authorization_code"); 
         //auth_code设置,从alipay.eco.mycar.parking.userpage.query页面接口中可以获取到该值 
-        request.setCode("5771c3da73e1485d857a60944966WX72"); 
+        request.setCode("0ec7e8a59b3c4f64b59bec143360VX72"); 
         
         
         try {
@@ -45,21 +44,15 @@ public class AlipaySystemOauthTokenRequestTest {
 			AlipaySystemOauthTokenResponse response = alipayClient.execute(request); 
 			if(response.isSuccess()){ 
 				System.out.println(response.getBody());
-				
-			    //调用成功 
 			    String uid = response.getUserId(); 
-			    System.out.println("uid="+uid);
 			    //取得令牌 
 			    String access_token = response.getAccessToken(); 
-			    //通过授权令牌调用获取用户车牌信息接口 alipay.eco.mycar.parking.vehicle.query 
+			    //通过授权令牌调用获取用户车牌信息接口
 			    AlipayEcoMycarParkingVehicleQueryRequest requestBiz = new AlipayEcoMycarParkingVehicleQueryRequest(); 
 			    //SDK已经封装掉了公共参数，这里只需要传入业务参数 
-			    //此次只是参数展示，未进行字符串转义，实际情况下请转义
-
-			    requestBiz.setBizContent("{" +
-						"\"car_id\":\"201605061278654\"" +
-						"}");//业务数据
-				
+			    JSONObject data = new JSONObject();
+		        data.put("car_id", "201605061278654");
+			    requestBiz.setBizContent(JSON.toJSONString(data));//业务数据
 				AlipayEcoMycarParkingVehicleQueryResponse responseBiz = alipayClient.execute(requestBiz,access_token); 
 				//判断调用是否成功
 				if(responseBiz.isSuccess()){
@@ -82,35 +75,5 @@ public class AlipaySystemOauthTokenRequestTest {
     }
 
     
-    public static String getBizContent(){
-        JSONObject data = new JSONObject();
-        data.put("parking_id", "2014072300007148");
-        data.put("city_id", "110101");
-        data.put("equipment_name", "杭州立方");
-        data.put("out_parking_id", "10000110002");
-        data.put("parking_address", "浙江省杭州市古墩路与疏港公路的交汇处");
-        data.put("longitude", "114.266418");
-        data.put("latitude", "30.548828");
-        data.put("parking_start_time", "07:00:00");
-        data.put("parking_end_time", "03:07:50");
-        data.put("parking_number", "10000");
-        data.put("parking_lot_type","1");
-        data.put("parking_type","2");
-        data.put("payment_mode","1");
-        data.put("pay_type","2");
-        data.put("shopingmall_id","100001008");
-        data.put("parking_fee_description","小车一小时10元");
-//        data.put("contact_name","张三");
-//        data.put("contact_mobile","189xxxxxxxx");
-//        data.put("contact_tel","0571xxxxxxxx");
-//        data.put("contact_emali","alipay@alipay.com");
-//        data.put("contact_weixin","923422342");
-//        data.put("contact_alipay","189xxxxxxxx");
-        data.put("parking_name","城西停车场");
-        data.put("time_out","13");
-        String jsonStr = JSON.toJSONString(data);
-        System.out.println(jsonStr);
-        return jsonStr;
-    }	
 	
 }

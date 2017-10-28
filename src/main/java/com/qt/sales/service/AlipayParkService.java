@@ -12,5 +12,6 @@ package com.qt.sales.service;
  */
 public interface AlipayParkService {
 
+    
 }
 

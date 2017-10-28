@@ -24,7 +24,7 @@ public class ResourceDaoImpl implements ResourceDao {
     private JdbcTemplate jdbcTemplate;
     
     public Resource createResource(final Resource resource) {
-        final String sql = "insert into tb_fans_sys_resource(id,name, type, url, permission, parent_id, parent_ids, available,icon ) values(seq_SEQ_FANS_SYS_NOTICE.nextval,?,?,?,?,?,?,?,?)";
+        final String sql = "insert into tb_fans_sys_resource(id,name, type, url, permission, parent_id, parent_ids, available,icon ) values(parkpay.seq_SEQ_FANS_SYS_NOTICE.nextval,?,?,?,?,?,?,?,?)";
 
         GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(new PreparedStatementCreator() {

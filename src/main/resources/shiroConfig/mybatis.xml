@@ -44,5 +44,7 @@
 			<mapper resource="com/qt/sales/mapper/BusinessTypeMapper.xml" /> 
 			<mapper resource="com/qt/sales/mapper/AnnouncementMapper.xml" /> 
 			<mapper resource="com/qt/sales/mapper/BusinessTypeMapper.xml" />  -->
+			
+			<mapper resource="com/qt/sales/mapper/PaymerchantMapper.xml" />
 		</mappers>
 </configuration> 

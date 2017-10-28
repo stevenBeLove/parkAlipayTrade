@@ -28,7 +28,7 @@ public class ClientDaoImpl implements ClientDao {
     private JdbcTemplate jdbcTemplate;
     
     public Client createClient(final Client client) {
-        final String sql = "insert into oauth2_client(id,client_name, client_id, client_secret, clientUri, clientIcon ) values(seq_seq_fans_sys_notice.nextval,?,?,?,?,?)";
+        final String sql = "insert into oauth2_client(id,client_name, client_id, client_secret, clientUri, clientIcon ) values(parkpay.seq_SEQ_FANS_SYS_NOTICE.nextval,?,?,?,?,?)";
 
         GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(new PreparedStatementCreator() {

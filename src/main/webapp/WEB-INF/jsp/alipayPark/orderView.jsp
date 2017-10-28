@@ -11,7 +11,7 @@
 	
 </head>
 <body>
-		查询订单：
-	${ app_id} | ${ source}  |  ${ scope} | ${auth_code }
+		车牌：
+	<h1>${ car_number} </h1>
 </body>
 </html>

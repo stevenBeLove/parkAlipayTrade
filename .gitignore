@@ -6,3 +6,5 @@
 abatorConfig.xml
 /bin/
 .externalToolBuilders
+/target/
+/target/

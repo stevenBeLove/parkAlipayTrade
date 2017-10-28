@@ -138,7 +138,7 @@ public class SystemManagementSqlProvider {
         StringBuffer sb = null;
         sb = new StringBuffer();
         sb.append("   insert into TB_FANS_PARAM ( id,PAR_NO,par_min,par_max,par_name,par_remark,status,createDate)");
-        sb.append(" values( qtfans.seq_SEQ_FANS_SYS_NOTICE.nextval, ");
+        sb.append(" values( parkpay.seq_SEQ_FANS_SYS_NOTICE.nextval, ");
         sb.append("#{parNo,javaType=string,jdbcType=VARCHAR},   ");
         sb.append("#{parMin,javaType=int,jdbcType=INTEGER},   ");
         sb.append("#{parMax,javaType=int,jdbcType=INTEGER},   ");

@@ -38,8 +38,8 @@
 	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
 			<property name="driverClassName" value="${common.db.driverClassName}" />
 	        <property name="url" value="${park.db.url}" />
-		    <property name="username" value="${park.db.username}" />
-			<property name="password" value="${park.db.password}" />	  
+		    <property name="username" value="${parkpay.db.username}" />
+			<property name="password" value="${parkpay.db.password}" />	  
 			<property name="initialSize" value="${park.database.connection.idle}" />  
 			<property name="maxActive" value="${park.database.connection.max}" />
 			<property name="maxIdle" value="300" />

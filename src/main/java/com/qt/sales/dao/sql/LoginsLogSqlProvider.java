@@ -115,7 +115,7 @@ public class LoginsLogSqlProvider {
         StringBuffer sb = null;
         sb = new StringBuffer();
         sb.append("   insert into TB_FANS_SYS_LOGIN_LOG" + "   (" + "id," + "username," + "logindate," + "outdate," + "status ) values(   ");
-        sb.append("qtfans.seq_SEQ_FANS_SYS_NOTICE.nextval,   ");
+        sb.append("parkpay.seq_SEQ_FANS_SYS_NOTICE.nextval,   ");
         sb.append("#{userName ,javaType=string,jdbcType=VARCHAR},   ");
         sb.append("#{loginDate ,javaType=string,jdbcType=VARCHAR},   ");
         sb.append("#{outDate ,javaType=string,jdbcType=VARCHAR},   ");

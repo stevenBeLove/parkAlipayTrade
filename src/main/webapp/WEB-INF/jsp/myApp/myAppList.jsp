@@ -29,7 +29,7 @@ body.bootstrap-admin-with-small-navbar {
 			<h3>我的应用</h3>
 		</div>
 		<div class="row">
-			
+			<%-- 
 			<c:forEach items="${clientList}" var="client">
 				<div class="col-sm-3 col-md-2">
 					<a href="${client.clientId}" target="_blank" class="thumbnail" > <img
@@ -38,7 +38,7 @@ body.bootstrap-admin-with-small-navbar {
 					<p class="navbar-left">${client.clientName} </p>
 				</div>
 			</c:forEach>
-			
+			--%>
 		</div>
 	</div>
 

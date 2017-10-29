@@ -1,0 +1,648 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qt.sales.dao.ParkBeanMapper" >
+  <resultMap id="BaseResultMap" type="com.qt.sales.model.ParkBean" >
+    <id column="OUT_PARKING_ID" property="outParkingId" jdbcType="VARCHAR" />
+    <result column="MERCHANT_NAME" property="merchantName" jdbcType="VARCHAR" />
+    <result column="MERCHANT_SERVICE_PHONE" property="merchantServicePhone" jdbcType="VARCHAR" />
+    <result column="ACCOUNT_NO" property="accountNo" jdbcType="VARCHAR" />
+    <result column="CITY_ID" property="cityId" jdbcType="VARCHAR" />
+    <result column="EQUIPMENT_NAME" property="equipmentName" jdbcType="VARCHAR" />
+    <result column="PARKING_ADDRESS" property="parkingAddress" jdbcType="VARCHAR" />
+    <result column="LONGITUDE" property="longitude" jdbcType="VARCHAR" />
+    <result column="LATITUDE" property="latitude" jdbcType="VARCHAR" />
+    <result column="PARKING_START_TIME" property="parkingStartTime" jdbcType="VARCHAR" />
+    <result column="PARKING_END_TIME" property="parkingEndTime" jdbcType="VARCHAR" />
+    <result column="PARKING_NUMBER" property="parkingNumber" jdbcType="VARCHAR" />
+    <result column="PARKING_LOT_TYPE" property="parkingLotType" jdbcType="VARCHAR" />
+    <result column="PARKING_TYPE" property="parkingType" jdbcType="VARCHAR" />
+    <result column="PAYMENT_MODE" property="paymentMode" jdbcType="VARCHAR" />
+    <result column="PAY_TYPE" property="payType" jdbcType="VARCHAR" />
+    <result column="SHOPINGMALL_ID" property="shopingmallId" jdbcType="VARCHAR" />
+    <result column="PARKING_FEE_DESCRIPTION" property="parkingFeeDescription" jdbcType="VARCHAR" />
+    <result column="CONTACT_NAME" property="contactName" jdbcType="VARCHAR" />
+    <result column="CONTACT_MOBILE" property="contactMobile" jdbcType="VARCHAR" />
+    <result column="CONTACT_TEL" property="contactTel" jdbcType="VARCHAR" />
+    <result column="CONTACT_EMALI" property="contactEmali" jdbcType="VARCHAR" />
+    <result column="CONTACT_WEIXIN" property="contactWeixin" jdbcType="VARCHAR" />
+    <result column="CONTACT_ALIPAY" property="contactAlipay" jdbcType="VARCHAR" />
+    <result column="PARKING_NAME" property="parkingName" jdbcType="VARCHAR" />
+    <result column="TIME_OUT" property="timeOut" jdbcType="VARCHAR" />
+    <result column="CREATE_USERID" property="createUserid" jdbcType="VARCHAR" />
+    <result column="MODIFY_USERID" property="modifyUserid" jdbcType="VARCHAR" />
+    <result column="CREATE_DATETIME" property="createDatetime" jdbcType="TIMESTAMP" />
+    <result column="MODIFY_DATETIME" property="modifyDatetime" jdbcType="TIMESTAMP" />
+    <result column="STATUS" property="status" jdbcType="VARCHAR" />
+     <result column="APP_AUTH_TOKEN" property="appAuthToken" jdbcType="VARCHAR" />
+    <result column="EXPIRES_IN" property="expiresIn" jdbcType="VARCHAR" />
+    <result column="PARKING_ID" property="parkingId" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+  OUT_PARKING_ID, MERCHANT_NAME, MERCHANT_SERVICE_PHONE, ACCOUNT_NO, CITY_ID, EQUIPMENT_NAME, 
+    PARKING_ADDRESS, LONGITUDE, LATITUDE, PARKING_START_TIME, PARKING_END_TIME, PARKING_NUMBER, 
+    PARKING_LOT_TYPE, PARKING_TYPE, PAYMENT_MODE, PAY_TYPE, SHOPINGMALL_ID, PARKING_FEE_DESCRIPTION, 
+    CONTACT_NAME, CONTACT_MOBILE, CONTACT_TEL, CONTACT_EMALI, CONTACT_WEIXIN, CONTACT_ALIPAY, 
+    PARKING_NAME, TIME_OUT, CREATE_USERID, MODIFY_USERID, CREATE_DATETIME, MODIFY_DATETIME, 
+    STATUS, PARKING_ID, APP_AUTH_TOKEN, EXPIRES_IN, PARKING_ID
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.qt.sales.model.ParkBeanExample" >
+    select * from ( select tmp_page.*, rownum row_id from ( 
+    
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from park.TB_PARK
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+     ) tmp_page where rownum <![CDATA[ <= ${end} ]]>  ) where row_id <![CDATA[  > ${start} ]]>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from TB_PARK
+    where OUT_PARKING_ID = #{outParkingId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from TB_PARK
+    where OUT_PARKING_ID = #{outParkingId,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.qt.sales.model.ParkBeanExample" >
+    delete from TB_PARK
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.qt.sales.model.ParkBean" >
+    insert into park.TB_PARK (OUT_PARKING_ID, MERCHANT_NAME, MERCHANT_SERVICE_PHONE, 
+      ACCOUNT_NO, CITY_ID, EQUIPMENT_NAME, 
+      PARKING_ADDRESS, LONGITUDE, LATITUDE, 
+      PARKING_START_TIME, PARKING_END_TIME, PARKING_NUMBER, 
+      PARKING_LOT_TYPE, PARKING_TYPE, PAYMENT_MODE, 
+      PAY_TYPE, SHOPINGMALL_ID, PARKING_FEE_DESCRIPTION, 
+      CONTACT_NAME, CONTACT_MOBILE, CONTACT_TEL, 
+      CONTACT_EMALI, CONTACT_WEIXIN, CONTACT_ALIPAY, 
+      PARKING_NAME, TIME_OUT, CREATE_USERID, 
+      MODIFY_USERID, CREATE_DATETIME, MODIFY_DATETIME, 
+      STATUS, PARKING_ID, APP_AUTH_TOKEN, 
+      EXPIRES_IN, MERCHANT_LOGO)
+    values (#{outParkingId,jdbcType=VARCHAR}, #{merchantName,jdbcType=VARCHAR}, #{merchantServicePhone,jdbcType=VARCHAR}, 
+      #{accountNo,jdbcType=VARCHAR}, #{cityId,jdbcType=VARCHAR}, #{equipmentName,jdbcType=VARCHAR}, 
+      #{parkingAddress,jdbcType=VARCHAR}, #{longitude,jdbcType=VARCHAR}, #{latitude,jdbcType=VARCHAR}, 
+      #{parkingStartTime,jdbcType=VARCHAR}, #{parkingEndTime,jdbcType=VARCHAR}, #{parkingNumber,jdbcType=VARCHAR}, 
+      #{parkingLotType,jdbcType=VARCHAR}, #{parkingType,jdbcType=VARCHAR}, #{paymentMode,jdbcType=VARCHAR}, 
+      #{payType,jdbcType=VARCHAR}, #{shopingmallId,jdbcType=VARCHAR}, #{parkingFeeDescription,jdbcType=VARCHAR}, 
+      #{contactName,jdbcType=VARCHAR}, #{contactMobile,jdbcType=VARCHAR}, #{contactTel,jdbcType=VARCHAR}, 
+      #{contactEmali,jdbcType=VARCHAR}, #{contactWeixin,jdbcType=VARCHAR}, #{contactAlipay,jdbcType=VARCHAR}, 
+      #{parkingName,jdbcType=VARCHAR}, #{timeOut,jdbcType=VARCHAR}, #{createUserid,jdbcType=VARCHAR}, 
+      #{modifyUserid,jdbcType=VARCHAR}, #{createDatetime,jdbcType=TIMESTAMP}, #{modifyDatetime,jdbcType=TIMESTAMP}, 
+      #{status,jdbcType=VARCHAR}, #{parkingId,jdbcType=VARCHAR}, #{appAuthToken,jdbcType=VARCHAR}, 
+      #{expiresIn,jdbcType=VARCHAR}, #{merchantLogo,jdbcType=BLOB})
+  </insert>
+  <insert id="insertSelective" parameterType="com.qt.sales.model.ParkBean" >
+    insert into TB_PARK
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="outParkingId != null" >
+        OUT_PARKING_ID,
+      </if>
+      <if test="merchantName != null" >
+        MERCHANT_NAME,
+      </if>
+      <if test="merchantServicePhone != null" >
+        MERCHANT_SERVICE_PHONE,
+      </if>
+      <if test="accountNo != null" >
+        ACCOUNT_NO,
+      </if>
+      <if test="cityId != null" >
+        CITY_ID,
+      </if>
+      <if test="equipmentName != null" >
+        EQUIPMENT_NAME,
+      </if>
+      <if test="parkingAddress != null" >
+        PARKING_ADDRESS,
+      </if>
+      <if test="longitude != null" >
+        LONGITUDE,
+      </if>
+      <if test="latitude != null" >
+        LATITUDE,
+      </if>
+      <if test="parkingStartTime != null" >
+        PARKING_START_TIME,
+      </if>
+      <if test="parkingEndTime != null" >
+        PARKING_END_TIME,
+      </if>
+      <if test="parkingNumber != null" >
+        PARKING_NUMBER,
+      </if>
+      <if test="parkingLotType != null" >
+        PARKING_LOT_TYPE,
+      </if>
+      <if test="parkingType != null" >
+        PARKING_TYPE,
+      </if>
+      <if test="paymentMode != null" >
+        PAYMENT_MODE,
+      </if>
+      <if test="payType != null" >
+        PAY_TYPE,
+      </if>
+      <if test="shopingmallId != null" >
+        SHOPINGMALL_ID,
+      </if>
+      <if test="parkingFeeDescription != null" >
+        PARKING_FEE_DESCRIPTION,
+      </if>
+      <if test="contactName != null" >
+        CONTACT_NAME,
+      </if>
+      <if test="contactMobile != null" >
+        CONTACT_MOBILE,
+      </if>
+      <if test="contactTel != null" >
+        CONTACT_TEL,
+      </if>
+      <if test="contactEmali != null" >
+        CONTACT_EMALI,
+      </if>
+      <if test="contactWeixin != null" >
+        CONTACT_WEIXIN,
+      </if>
+      <if test="contactAlipay != null" >
+        CONTACT_ALIPAY,
+      </if>
+      <if test="parkingName != null" >
+        PARKING_NAME,
+      </if>
+      <if test="timeOut != null" >
+        TIME_OUT,
+      </if>
+      <if test="createUserid != null" >
+        CREATE_USERID,
+      </if>
+      <if test="modifyUserid != null" >
+        MODIFY_USERID,
+      </if>
+      <if test="createDatetime != null" >
+        CREATE_DATETIME,
+      </if>
+      <if test="modifyDatetime != null" >
+        MODIFY_DATETIME,
+      </if>
+      <if test="status != null" >
+        STATUS,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="outParkingId != null" >
+        #{outParkingId,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantName != null" >
+        #{merchantName,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantServicePhone != null" >
+        #{merchantServicePhone,jdbcType=VARCHAR},
+      </if>
+      <if test="accountNo != null" >
+        #{accountNo,jdbcType=VARCHAR},
+      </if>
+      <if test="cityId != null" >
+        #{cityId,jdbcType=VARCHAR},
+      </if>
+      <if test="equipmentName != null" >
+        #{equipmentName,jdbcType=VARCHAR},
+      </if>
+      <if test="parkingAddress != null" >
+        #{parkingAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="longitude != null" >
+        #{longitude,jdbcType=VARCHAR},
+      </if>
+      <if test="latitude != null" >
+        #{latitude,jdbcType=VARCHAR},
+      </if>
+      <if test="parkingStartTime != null" >
+        #{parkingStartTime,jdbcType=VARCHAR},
+      </if>
+      <if test="parkingEndTime != null" >
+        #{parkingEndTime,jdbcType=VARCHAR},
+      </if>
+      <if test="parkingNumber != null" >
+        #{parkingNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="parkingLotType != null" >
+        #{parkingLotType,jdbcType=VARCHAR},
+      </if>
+      <if test="parkingType != null" >
+        #{parkingType,jdbcType=VARCHAR},
+      </if>
+      <if test="paymentMode != null" >
+        #{paymentMode,jdbcType=VARCHAR},
+      </if>
+      <if test="payType != null" >
+        #{payType,jdbcType=VARCHAR},
+      </if>
+      <if test="shopingmallId != null" >
+        #{shopingmallId,jdbcType=VARCHAR},
+      </if>
+      <if test="parkingFeeDescription != null" >
+        #{parkingFeeDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="contactName != null" >
+        #{contactName,jdbcType=VARCHAR},
+      </if>
+      <if test="contactMobile != null" >
+        #{contactMobile,jdbcType=VARCHAR},
+      </if>
+      <if test="contactTel != null" >
+        #{contactTel,jdbcType=VARCHAR},
+      </if>
+      <if test="contactEmali != null" >
+        #{contactEmali,jdbcType=VARCHAR},
+      </if>
+      <if test="contactWeixin != null" >
+        #{contactWeixin,jdbcType=VARCHAR},
+      </if>
+      <if test="contactAlipay != null" >
+        #{contactAlipay,jdbcType=VARCHAR},
+      </if>
+      <if test="parkingName != null" >
+        #{parkingName,jdbcType=VARCHAR},
+      </if>
+      <if test="timeOut != null" >
+        #{timeOut,jdbcType=VARCHAR},
+      </if>
+      <if test="createUserid != null" >
+        #{createUserid,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyUserid != null" >
+        #{modifyUserid,jdbcType=VARCHAR},
+      </if>
+      <if test="createDatetime != null" >
+        #{createDatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyDatetime != null" >
+        #{modifyDatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.qt.sales.model.ParkBeanExample" resultType="java.lang.Integer" >
+    select count(*) from park.TB_PARK
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update park.TB_PARK
+    <set >
+      <if test="record.outParkingId != null" >
+        OUT_PARKING_ID = #{record.outParkingId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.merchantName != null" >
+        MERCHANT_NAME = #{record.merchantName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.merchantServicePhone != null" >
+        MERCHANT_SERVICE_PHONE = #{record.merchantServicePhone,jdbcType=VARCHAR},
+      </if>
+      <if test="record.accountNo != null" >
+        ACCOUNT_NO = #{record.accountNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.cityId != null" >
+        CITY_ID = #{record.cityId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.equipmentName != null" >
+        EQUIPMENT_NAME = #{record.equipmentName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.parkingAddress != null" >
+        PARKING_ADDRESS = #{record.parkingAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="record.longitude != null" >
+        LONGITUDE = #{record.longitude,jdbcType=VARCHAR},
+      </if>
+      <if test="record.latitude != null" >
+        LATITUDE = #{record.latitude,jdbcType=VARCHAR},
+      </if>
+      <if test="record.parkingStartTime != null" >
+        PARKING_START_TIME = #{record.parkingStartTime,jdbcType=VARCHAR},
+      </if>
+      <if test="record.parkingEndTime != null" >
+        PARKING_END_TIME = #{record.parkingEndTime,jdbcType=VARCHAR},
+      </if>
+      <if test="record.parkingNumber != null" >
+        PARKING_NUMBER = #{record.parkingNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="record.parkingLotType != null" >
+        PARKING_LOT_TYPE = #{record.parkingLotType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.parkingType != null" >
+        PARKING_TYPE = #{record.parkingType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.paymentMode != null" >
+        PAYMENT_MODE = #{record.paymentMode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.payType != null" >
+        PAY_TYPE = #{record.payType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.shopingmallId != null" >
+        SHOPINGMALL_ID = #{record.shopingmallId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.parkingFeeDescription != null" >
+        PARKING_FEE_DESCRIPTION = #{record.parkingFeeDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="record.contactName != null" >
+        CONTACT_NAME = #{record.contactName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.contactMobile != null" >
+        CONTACT_MOBILE = #{record.contactMobile,jdbcType=VARCHAR},
+      </if>
+      <if test="record.contactTel != null" >
+        CONTACT_TEL = #{record.contactTel,jdbcType=VARCHAR},
+      </if>
+      <if test="record.contactEmali != null" >
+        CONTACT_EMALI = #{record.contactEmali,jdbcType=VARCHAR},
+      </if>
+      <if test="record.contactWeixin != null" >
+        CONTACT_WEIXIN = #{record.contactWeixin,jdbcType=VARCHAR},
+      </if>
+      <if test="record.contactAlipay != null" >
+        CONTACT_ALIPAY = #{record.contactAlipay,jdbcType=VARCHAR},
+      </if>
+      <if test="record.parkingName != null" >
+        PARKING_NAME = #{record.parkingName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.timeOut != null" >
+        TIME_OUT = #{record.timeOut,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createUserid != null" >
+        CREATE_USERID = #{record.createUserid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.modifyUserid != null" >
+        MODIFY_USERID = #{record.modifyUserid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createDatetime != null" >
+        CREATE_DATETIME = #{record.createDatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.modifyDatetime != null" >
+        MODIFY_DATETIME = #{record.modifyDatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.status != null" >
+        STATUS = #{record.status,jdbcType=VARCHAR},
+      </if>
+        <if test="record.expiresIn != null" >
+        EXPIRES_IN = #{record.expiresIn,jdbcType=VARCHAR},
+      </if>
+      <if test="record.merchantLogo != null" >
+        MERCHANT_LOGO = #{record.merchantLogo,jdbcType=BLOB},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update park.TB_PARK
+    set OUT_PARKING_ID = #{record.outParkingId,jdbcType=VARCHAR},
+      MERCHANT_NAME = #{record.merchantName,jdbcType=VARCHAR},
+      MERCHANT_SERVICE_PHONE = #{record.merchantServicePhone,jdbcType=VARCHAR},
+      ACCOUNT_NO = #{record.accountNo,jdbcType=VARCHAR},
+      CITY_ID = #{record.cityId,jdbcType=VARCHAR},
+      EQUIPMENT_NAME = #{record.equipmentName,jdbcType=VARCHAR},
+      PARKING_ADDRESS = #{record.parkingAddress,jdbcType=VARCHAR},
+      LONGITUDE = #{record.longitude,jdbcType=VARCHAR},
+      LATITUDE = #{record.latitude,jdbcType=VARCHAR},
+      PARKING_START_TIME = #{record.parkingStartTime,jdbcType=VARCHAR},
+      PARKING_END_TIME = #{record.parkingEndTime,jdbcType=VARCHAR},
+      PARKING_NUMBER = #{record.parkingNumber,jdbcType=VARCHAR},
+      PARKING_LOT_TYPE = #{record.parkingLotType,jdbcType=VARCHAR},
+      PARKING_TYPE = #{record.parkingType,jdbcType=VARCHAR},
+      PAYMENT_MODE = #{record.paymentMode,jdbcType=VARCHAR},
+      PAY_TYPE = #{record.payType,jdbcType=VARCHAR},
+      SHOPINGMALL_ID = #{record.shopingmallId,jdbcType=VARCHAR},
+      PARKING_FEE_DESCRIPTION = #{record.parkingFeeDescription,jdbcType=VARCHAR},
+      CONTACT_NAME = #{record.contactName,jdbcType=VARCHAR},
+      CONTACT_MOBILE = #{record.contactMobile,jdbcType=VARCHAR},
+      CONTACT_TEL = #{record.contactTel,jdbcType=VARCHAR},
+      CONTACT_EMALI = #{record.contactEmali,jdbcType=VARCHAR},
+      CONTACT_WEIXIN = #{record.contactWeixin,jdbcType=VARCHAR},
+      CONTACT_ALIPAY = #{record.contactAlipay,jdbcType=VARCHAR},
+      PARKING_NAME = #{record.parkingName,jdbcType=VARCHAR},
+      TIME_OUT = #{record.timeOut,jdbcType=VARCHAR},
+      CREATE_USERID = #{record.createUserid,jdbcType=VARCHAR},
+      MODIFY_USERID = #{record.modifyUserid,jdbcType=VARCHAR},
+      CREATE_DATETIME = #{record.createDatetime,jdbcType=TIMESTAMP},
+      MODIFY_DATETIME = #{record.modifyDatetime,jdbcType=TIMESTAMP},
+      STATUS = #{record.status,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.qt.sales.model.ParkBean" >
+    update park.TB_PARK
+    <set >
+      <if test="merchantName != null" >
+        MERCHANT_NAME = #{merchantName,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantServicePhone != null" >
+        MERCHANT_SERVICE_PHONE = #{merchantServicePhone,jdbcType=VARCHAR},
+      </if>
+      <if test="accountNo != null" >
+        ACCOUNT_NO = #{accountNo,jdbcType=VARCHAR},
+      </if>
+      <if test="cityId != null" >
+        CITY_ID = #{cityId,jdbcType=VARCHAR},
+      </if>
+      <if test="equipmentName != null" >
+        EQUIPMENT_NAME = #{equipmentName,jdbcType=VARCHAR},
+      </if>
+      <if test="parkingAddress != null" >
+        PARKING_ADDRESS = #{parkingAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="longitude != null" >
+        LONGITUDE = #{longitude,jdbcType=VARCHAR},
+      </if>
+      <if test="latitude != null" >
+        LATITUDE = #{latitude,jdbcType=VARCHAR},
+      </if>
+      <if test="parkingStartTime != null" >
+        PARKING_START_TIME = #{parkingStartTime,jdbcType=VARCHAR},
+      </if>
+      <if test="parkingEndTime != null" >
+        PARKING_END_TIME = #{parkingEndTime,jdbcType=VARCHAR},
+      </if>
+      <if test="parkingNumber != null" >
+        PARKING_NUMBER = #{parkingNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="parkingLotType != null" >
+        PARKING_LOT_TYPE = #{parkingLotType,jdbcType=VARCHAR},
+      </if>
+      <if test="parkingType != null" >
+        PARKING_TYPE = #{parkingType,jdbcType=VARCHAR},
+      </if>
+      <if test="paymentMode != null" >
+        PAYMENT_MODE = #{paymentMode,jdbcType=VARCHAR},
+      </if>
+      <if test="payType != null" >
+        PAY_TYPE = #{payType,jdbcType=VARCHAR},
+      </if>
+      <if test="shopingmallId != null" >
+        SHOPINGMALL_ID = #{shopingmallId,jdbcType=VARCHAR},
+      </if>
+      <if test="parkingFeeDescription != null" >
+        PARKING_FEE_DESCRIPTION = #{parkingFeeDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="contactName != null" >
+        CONTACT_NAME = #{contactName,jdbcType=VARCHAR},
+      </if>
+      <if test="contactMobile != null" >
+        CONTACT_MOBILE = #{contactMobile,jdbcType=VARCHAR},
+      </if>
+      <if test="contactTel != null" >
+        CONTACT_TEL = #{contactTel,jdbcType=VARCHAR},
+      </if>
+      <if test="contactEmali != null" >
+        CONTACT_EMALI = #{contactEmali,jdbcType=VARCHAR},
+      </if>
+      <if test="contactWeixin != null" >
+        CONTACT_WEIXIN = #{contactWeixin,jdbcType=VARCHAR},
+      </if>
+      <if test="contactAlipay != null" >
+        CONTACT_ALIPAY = #{contactAlipay,jdbcType=VARCHAR},
+      </if>
+      <if test="parkingName != null" >
+        PARKING_NAME = #{parkingName,jdbcType=VARCHAR},
+      </if>
+      <if test="timeOut != null" >
+        TIME_OUT = #{timeOut,jdbcType=VARCHAR},
+      </if>
+      <if test="createUserid != null" >
+        CREATE_USERID = #{createUserid,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyUserid != null" >
+        MODIFY_USERID = #{modifyUserid,jdbcType=VARCHAR},
+      </if>
+      <if test="createDatetime != null" >
+        CREATE_DATETIME = #{createDatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyDatetime != null" >
+        MODIFY_DATETIME = #{modifyDatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null" >
+        STATUS = #{status,jdbcType=VARCHAR},
+      </if>
+       <if test="appAuthToken != null" >
+        APP_AUTH_TOKEN = #{appAuthToken,jdbcType=VARCHAR},
+      </if>
+      <if test="expiresIn != null" >
+        EXPIRES_IN = #{expiresIn,jdbcType=VARCHAR},
+      </if>
+      <if test="parkingId != null" >
+        PARKING_ID = #{parkingId,jdbcType=VARCHAR},
+      </if>
+      
+    </set>
+    where OUT_PARKING_ID = #{outParkingId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.qt.sales.model.ParkBean" >
+    update park.TB_PARK
+    set MERCHANT_NAME = #{merchantName,jdbcType=VARCHAR},
+      MERCHANT_SERVICE_PHONE = #{merchantServicePhone,jdbcType=VARCHAR},
+      ACCOUNT_NO = #{accountNo,jdbcType=VARCHAR},
+      CITY_ID = #{cityId,jdbcType=VARCHAR},
+      EQUIPMENT_NAME = #{equipmentName,jdbcType=VARCHAR},
+      PARKING_ADDRESS = #{parkingAddress,jdbcType=VARCHAR},
+      LONGITUDE = #{longitude,jdbcType=VARCHAR},
+      LATITUDE = #{latitude,jdbcType=VARCHAR},
+      PARKING_START_TIME = #{parkingStartTime,jdbcType=VARCHAR},
+      PARKING_END_TIME = #{parkingEndTime,jdbcType=VARCHAR},
+      PARKING_NUMBER = #{parkingNumber,jdbcType=VARCHAR},
+      PARKING_LOT_TYPE = #{parkingLotType,jdbcType=VARCHAR},
+      PARKING_TYPE = #{parkingType,jdbcType=VARCHAR},
+      PAYMENT_MODE = #{paymentMode,jdbcType=VARCHAR},
+      PAY_TYPE = #{payType,jdbcType=VARCHAR},
+      SHOPINGMALL_ID = #{shopingmallId,jdbcType=VARCHAR},
+      PARKING_FEE_DESCRIPTION = #{parkingFeeDescription,jdbcType=VARCHAR},
+      CONTACT_NAME = #{contactName,jdbcType=VARCHAR},
+      CONTACT_MOBILE = #{contactMobile,jdbcType=VARCHAR},
+      CONTACT_TEL = #{contactTel,jdbcType=VARCHAR},
+      CONTACT_EMALI = #{contactEmali,jdbcType=VARCHAR},
+      CONTACT_WEIXIN = #{contactWeixin,jdbcType=VARCHAR},
+      CONTACT_ALIPAY = #{contactAlipay,jdbcType=VARCHAR},
+      PARKING_NAME = #{parkingName,jdbcType=VARCHAR},
+      TIME_OUT = #{timeOut,jdbcType=VARCHAR},
+      CREATE_USERID = #{createUserid,jdbcType=VARCHAR},
+      MODIFY_USERID = #{modifyUserid,jdbcType=VARCHAR},
+      CREATE_DATETIME = #{createDatetime,jdbcType=TIMESTAMP},
+      MODIFY_DATETIME = #{modifyDatetime,jdbcType=TIMESTAMP},
+      STATUS = #{status,jdbcType=VARCHAR}
+    where OUT_PARKING_ID = #{outParkingId,jdbcType=VARCHAR}
+  </update>
+</mapper>

@@ -6,12 +6,18 @@ package com.qt.sales.web;
 
 import java.util.Map;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
@@ -22,6 +28,9 @@ import com.alipay.api.request.AlipayEcoMycarParkingVehicleQueryRequest;
 import com.alipay.api.request.AlipaySystemOauthTokenRequest;
 import com.alipay.api.response.AlipayEcoMycarParkingVehicleQueryResponse;
 import com.alipay.api.response.AlipaySystemOauthTokenResponse;
+import com.qt.sales.model.ParkBean;
+import com.qt.sales.service.ParkService;
+import com.qt.sales.utils.LogPay;
 
 /** 
  * 类名: AlipayParkController <br/> 
@@ -34,6 +43,8 @@ import com.alipay.api.response.AlipaySystemOauthTokenResponse;
 @RequestMapping("/alipayPark")
 public class AlipayParkController{
     
+    protected final Logger       logger = LoggerFactory.getLogger(this.getClass());  
+    
     private static AlipayClient alipayClient;
     private static final String APP_ID = "2016080700191244";
     private static final String APP_PRIVATE_KEY = "MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCbqs+RfKI6CDpQBp87XpBQyrDX/9Rl4hZ0EJncJS0pa0Q+b4k/MHQRR9gNj8nuyBesla1plGPKo8/7Br95MFPNfMUaTd+P6x+1fb3xRn2LFzvQGzt9VgpNuIEDIgGfSJkB8eXFUzpDCacqJiwP6yV9JpfVIqBg2iqMAreeBAs7p53ElmqxIOdvHNPn4mYVl0jnUonYZ6vndN/D74YqgnX/bzvnjoFYhiQ6WjhhBS6/jxFQ2z58KztJSmtRgHPuCcp7es2CVUmHVHtPKdB5TM+3MLaOnZ3VIN9pQFHNzmfK8mFy7QQv7vSibMySsogzW7s4T0bVb64SCaDj1qUOicn5AgMBAAECggEANBu/k+H2pBpw+qzczJDhGkpfXE7FGL3P6lZMSscfEQhZNdU8Siy8DbTQ++kwHYBZfGo2PGtx5Dllu5AMtFKbGuQzTpTWy2RXnvdSh9ui1taWLRmQlmog1Nd4SEYv6NPydBY3ZhBwJlSq4o8YnNOIHxa2KKCIsyMUrv2R3ZFY+USirb1mKGNeg6kfyJZBr2CiHmOObCXddCywjdS07ePqB1NY8XnPGV4rfMGww4We6zDHLRz1eA7k4wsQZyIrHib/GnDsyjT64mrV01BTofN+HcqirhePmGJwoO6CO9OJnzbdzdjEGDmSxoFLPtukIW9opwyaboMB/qP70kbp48cJoQKBgQDWPj/2Ih3M5EZkj/7q77ArjyJYC8lmyJxPbIhwlkiJw50CjmB+Lbfy0iEdOPQG8nqaEc7cMQfOCc7RwcrXfXL6LUsc9lLzr7oY7SqxpepNohkEzXnSQDkgsGgWTxRHkPzSV6BikXCm3AZkDcqtXdK6jW+10N4fCN0CdB2a+bmFPQKBgQC6AeQNGf+XpeQkIG+UMc089MsbJBxlWboxIzn2TGdjGwO4ylDlj20eQjzSj0PvVfa6cGhgpd/N2MVJNGETfFmy58zKQLLO7er+Hm4Jiasu9YG9LoxDE05gO1ccN6/07Ln2xJcU8khPaGRJkg7pdG3V5+99SKdN5vXWigRH36M7bQKBgQDFHDCsu2a/g6ZgDztx22QyL1ZhuzZpIljtmeVN8HZ8iUSDfYq5jEaZWUquICAj5CN4bLntTA7qOYvW4H1HFVwbYGCjHN3k5eBJ3qpRF10iX+i0yncyQXRN5v9cxxTZY0O4InalOTpzyir3EtlN9+xRRp9on+o8k2MDRuGWG/vb4QKBgBVgmkEXN9TJ8Apm3+v8PUZALAeWgtzzDv8OuV6hMVCmjirytZFshnHv0uWwKXKcQpryyEwzRCF4RFRBfNasd/KjyVmFTgeSOGu0O5lFBTOEa8C+VMhws5VDvKM1kzdm7Yh615JEtiLKMJxz+NrD0su+uDuB2hiN7rsVaaCJB02RAoGBAJGgzEsyzaV6YPHb0JIXioBflaBBX+VrGsUZMfb2lCCvpKGFleiD3VfXg4EeBfYnfa0OD0kwiJyhqj6CmugTJr0Yzqv4CrazKTnxc9uqA26OFzqrGkJuHA/cP8GsbQ5oHUj3FslcRnJzFabiq3pNdp+yURevXk73Dg6lJAWVm4ok";
@@ -43,11 +54,18 @@ public class AlipayParkController{
     private static final String charset = "UTF-8";
     //支付宝沙箱网关
     private static final String gatewayUrl = "https://openapi.alipaydev.com/gateway.do";
+    static String VEHICLE_URL = "https%3a%2f%2fwww.kangguole.com.cn%2fparkAlipayTrade%2falipayPark%2fgetVehicleToken";    
+    
+    
 	
     static {
         alipayClient = new DefaultAlipayClient(gatewayUrl, APP_ID, APP_PRIVATE_KEY, "json", charset, 
             ALIPAY_PUBLIC_KEY, sign_type);
     }
+    
+    @Resource
+    private ParkService parkService;
+    
     /**
      * 跳转到列表页
      * @param model
@@ -64,6 +82,70 @@ public class AlipayParkController{
     	return "alipayPark/orderView";
     }
     
+    
+    @RequestMapping(value = "/responseCarAuth/{outParkingId}", method = RequestMethod.GET)
+    public String  responseCarAuth(HttpServletRequest request,@PathVariable("outParkingId") String outParkingId) {
+      String url = "https://openauth.alipaydev.com/oauth2/publicAppAuthorize.htm?app_id="+APP_ID+"&scope=auth_user&redirect_uri="+VEHICLE_URL+"&state="+outParkingId;
+      logger.debug(url);
+      return "redirect:"+url;
+    }
+    
+    /**
+     * 获取停车场令牌
+     */
+    @RequestMapping(value = "/getVehicleToken", method = RequestMethod.GET)
+    public String getVehicleToken(HttpServletRequest request){
+        String source = request.getParameter("source");
+        String scope = request.getParameter("scope");
+        String auth_code = request.getParameter("auth_code");
+        String state = request.getParameter("state");
+        AlipaySystemOauthTokenRequest tokenRequest = new AlipaySystemOauthTokenRequest();
+        tokenRequest.setGrantType("authorization_code");
+        // 授权设置
+        tokenRequest.setCode(auth_code);
+        try {
+            // 换取调用
+            AlipaySystemOauthTokenResponse response = alipayClient.execute(tokenRequest);
+            System.out.println(response.getBody());
+            if (response.isSuccess()) {
+                // 调用成功
+                String uid = response.getUserId();
+                System.out.println(uid);
+                // 取得令牌
+                String access_token = response.getAccessToken();
+                System.out.println(access_token);
+              
+            } else {
+                // 换取令牌失败逻辑处理
+            }
+        } catch (AlipayApiException e) {
+
+            e.printStackTrace();
+        }
+        
+        
+        
+        return "";
+    }
+    
+    /**
+     * 添加停车场
+     */
+    @RequestMapping(value = "/parkingConfigSet/{outParkingId}", method = RequestMethod.GET)
+    @ResponseBody
+    public AjaxReturnInfo parkingConfigSet(@PathVariable("outParkingId") String outParkingId){
+        AjaxReturnInfo ajaxinfo = new AjaxReturnInfo();
+        try {
+           boolean  result = parkService.parkingConfigSetRequest(alipayClient, outParkingId);
+           if(result){
+               ajaxinfo.setSuccess(AjaxReturnInfo.TURE_RESULT);
+               ajaxinfo.setMessage("添加成功！");
+           }
+        } catch (Exception e) {
+            LogPay.error(e.getMessage(), e);
+        }
+        return ajaxinfo;
+    }    
     /**
      * 【方法名】    : (获取车牌). <br/> 
      * 【作者】: yinghui zhang .<br/>
@@ -78,13 +160,13 @@ public class AlipayParkController{
      * <p/>
      */
     public void ecoMycarParkingVehicleQueryRequest(String app_auth_token,String code,String car_id,Model model) {
-        AlipaySystemOauthTokenRequest request = new AlipaySystemOauthTokenRequest();
-        request.setGrantType("authorization_code");
+        AlipaySystemOauthTokenRequest tokenRequest = new AlipaySystemOauthTokenRequest();
+        tokenRequest.setGrantType("authorization_code");
         // 授权设置
-        request.setCode(code);
+        tokenRequest.setCode(code);
         try {
             // 换取调用
-            AlipaySystemOauthTokenResponse response = alipayClient.execute(request);
+            AlipaySystemOauthTokenResponse response = alipayClient.execute(tokenRequest);
             if (response.isSuccess()) {
                 // 调用成功
                 String uid = response.getUserId();
@@ -93,7 +175,7 @@ public class AlipayParkController{
                 System.out.println(access_token);
                 // 通过授权令牌调用获取用户车牌信息接口
                 AlipayEcoMycarParkingVehicleQueryRequest requestBiz = new AlipayEcoMycarParkingVehicleQueryRequest();
-                request.putOtherTextParam("app_auth_token",APP_AUTH_TOKEN);
+                tokenRequest.putOtherTextParam("app_auth_token",APP_AUTH_TOKEN);
                 JSONObject data = new JSONObject();
                 data.put("car_id", car_id);
                 requestBiz.setBizContent(JSON.toJSONString(data));// 业务数据
@@ -119,21 +201,9 @@ public class AlipayParkController{
 
     }
     
-    @RequestMapping(value = "/getCode", method = RequestMethod.GET)
-    public String getAuthCode(HttpServletRequest request, Model model) {
-      String url = "https://openauth.alipaydev.com/oauth2/publicAppAuthorize.htm?app_id=2016080700191244&scope=auth_user&redirect_uri=https%3a%2f%2fwww.kangguole.com.cn%2fparkAlipayTrade%2falipayPark%2fgetCode";
-      String app_id = request.getParameter("app_id");
-      String source = request.getParameter("source");
-      String scope = request.getParameter("scope");
-      String auth_code = request.getParameter("auth_code");
-      System.out.println("auth_code:"+ auth_code);
-      model.addAttribute("app_id", app_id);
-      model.addAttribute("source", source);
-      model.addAttribute("scope", scope);
-      model.addAttribute("auth_code", auth_code);
-
-        return "alipayPark/view";
-    }
+    
+   
+  
     
     
 }

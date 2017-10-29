@@ -37,8 +37,11 @@
 	
 	
 		<mappers>
-		<mapper resource="com/qt/sales/mapper/FansAgencyMapper.xml" /> 
-		<mapper resource="com/qt/sales/mapper/FansAgencyScaleMapper.xml" />
+			<mapper resource="com/qt/sales/mapper/FansAgencyMapper.xml" /> 
+			<mapper resource="com/qt/sales/mapper/FansAgencyScaleMapper.xml" />
+			<mapper resource="com/qt/sales/mapper/ParkBeanMapper.xml" />
+		
+		
 			<!-- <mapper resource="com/qt/sales/mapper/CustomerMapper.xml" /> 
 			<mapper resource="com/qt/sales/mapper/Qt1tblAgencyMapper.xml" /> 
 			<mapper resource="com/qt/sales/mapper/FansAgencyScaleMapper.xml" /> 

@@ -29,7 +29,6 @@ import com.qt.sales.model.FansAgencyScaleExample;
 import com.qt.sales.service.FansAgencyScaleService;
 import com.qt.sales.service.FansAgencyService;
 import com.qt.sales.utils.DateUtil;
-import com.qt.sales.utils.LogPay;
 import com.qt.sales.utils.PropertyPlaceholderConfigurerExt;
 import com.qt.sales.web.AjaxReturnInfo;
 

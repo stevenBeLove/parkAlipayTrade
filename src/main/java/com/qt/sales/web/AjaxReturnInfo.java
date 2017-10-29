@@ -15,6 +15,10 @@ import org.springframework.util.StringUtils;
  * </pre>
  */
 public class AjaxReturnInfo {
+    
+    public static final String TURE_RESULT = "true";
+    public static final String FALSE_RESULT = "false";
+    
     /**
      * true
      */

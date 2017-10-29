@@ -127,11 +127,11 @@ public class FansAgencyController{
         try {
             //验证三要素
             JSONObject validateJson = fansAgencyService.validateFourElement(fanceAgency.getAccountno(), fanceAgency.getName(), fanceAgency.getIdCardNum());
-            if (!(RSConsts.RESP_CODE_00_SUCCESS.equals(validateJson.get("P_MSG_CODE")) && RSConsts.RESP_3ELEMENT_FALG.equals(validateJson.get("VERFLAG")))) {
-//                redirectAttributes.addFlashAttribute("danger", "新增失败!三要素认证失败信息为："+validateJson.get("P_MSG_TEXT"));
-                redirectAttributes.addFlashAttribute("danger", "新增失败，四要素验证失败！");
-                return "redirect:create";
-            }
+//            if (!(RSConsts.RESP_CODE_00_SUCCESS.equals(validateJson.get("P_MSG_CODE")) && RSConsts.RESP_3ELEMENT_FALG.equals(validateJson.get("VERFLAG")))) {
+////                redirectAttributes.addFlashAttribute("danger", "新增失败!三要素认证失败信息为："+validateJson.get("P_MSG_TEXT"));
+//                redirectAttributes.addFlashAttribute("danger", "新增失败，四要素验证失败！");
+//                return "redirect:create";
+//            }
             FansAgency agency = null;
             if (!StringUtils.isEmpty(fanceAgency.getAgencyId())) {
                 agency = fansAgencyService.selectByPrimaryKey(fanceAgency.getAgencyId());
@@ -176,13 +176,13 @@ public class FansAgencyController{
         try {
             //验证三要素
             JSONObject validateJson = fansAgencyService.validateFourElement(fanceAgency.getAccountno(), fanceAgency.getName(), fanceAgency.getIdCardNum());
-            if (!(RSConsts.RESP_CODE_00_SUCCESS.equals(validateJson.get("P_MSG_CODE")) && RSConsts.RESP_3ELEMENT_FALG.equals(validateJson.get("VERFLAG")))) {
-                ajaxinfo.setSuccess("false");
-                ajaxinfo.setMessage("四要素认证失败："+validateJson.get("P_MSG_TEXT"));
-            } else {
-                ajaxinfo.setSuccess("true");
-                ajaxinfo.setMessage("四要素认证成功："+validateJson.get("P_MSG_TEXT"));
-            }
+//            if (!(RSConsts.RESP_CODE_00_SUCCESS.equals(validateJson.get("P_MSG_CODE")) && RSConsts.RESP_3ELEMENT_FALG.equals(validateJson.get("VERFLAG")))) {
+//                ajaxinfo.setSuccess("false");
+//                ajaxinfo.setMessage("四要素认证失败："+validateJson.get("P_MSG_TEXT"));
+//            } else {
+//                ajaxinfo.setSuccess("true");
+//                ajaxinfo.setMessage("四要素认证成功："+validateJson.get("P_MSG_TEXT"));
+//            }
         } catch (QTException e) {
             LogPay.error(e.getMessage(), e);
         } catch (Exception e) {
@@ -237,10 +237,10 @@ public class FansAgencyController{
         try {
             //验证三要素
             JSONObject validateJson = fansAgencyService.validateFourElement(fanceAgency.getAccountno(), fanceAgency.getName(), fanceAgency.getIdCardNum());
-            if (!(RSConsts.RESP_CODE_00_SUCCESS.equals(validateJson.get("P_MSG_CODE")) && RSConsts.RESP_3ELEMENT_FALG.equals(validateJson.get("VERFLAG")))) {
-                redirectAttributes.addFlashAttribute("danger", "修改失败，四要素验证失败！");
-                return "redirect:listPage";
-            }
+//            if (!(RSConsts.RESP_CODE_00_SUCCESS.equals(validateJson.get("P_MSG_CODE")) && RSConsts.RESP_3ELEMENT_FALG.equals(validateJson.get("VERFLAG")))) {
+//                redirectAttributes.addFlashAttribute("danger", "修改失败，四要素验证失败！");
+//                return "redirect:listPage";
+//            }
             fanceAgency.setStatus(FlowNodeStatus.waiting_process.getVal());
             fanceAgency.setDatetime(DateUtil.getCurrDateAndTime());
             fansAgencyService.updateByPrimaryKey(fanceAgency);

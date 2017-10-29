@@ -111,7 +111,7 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from qtfr2.QT1TBLAGENCY
+    from QT1TBLAGENCY
     where AGENCY_ID = #{agencyId,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="com.qt.sales.model.Qt1tblAgencyKey">
@@ -126,7 +126,7 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.qt.sales.model.Qt1tblAgency">
-    insert into qtfr2.QT1TBLAGENCY (AGENCY_ID, SYSTEMID, CONTACTSNAME, 
+    insert into QT1TBLAGENCY (AGENCY_ID, SYSTEMID, CONTACTSNAME, 
       COMPANYNAME, COMPANYPHONE, COMPANYEMAIL, 
       COMPANYADDR, CERTIFICATES, LEGAL_INFO, 
       ORGANIZATIONCODE, AGREEMENTCODE, PROVINCEID, 

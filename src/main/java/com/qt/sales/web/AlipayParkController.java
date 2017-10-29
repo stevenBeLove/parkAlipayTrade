@@ -32,8 +32,7 @@ import com.alipay.api.response.AlipaySystemOauthTokenResponse;
  */
 @Controller
 @RequestMapping("/alipayPark")
-public class AlipayParkController  extends BaseController {
-	
+public class AlipayParkController{
     
     private static AlipayClient alipayClient;
     private static final String APP_ID = "2016080700191244";

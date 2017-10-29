@@ -16,6 +16,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.qt.sales.model.LoginsLogVO;
 import com.qt.sales.service.LoginsLogService;
@@ -33,7 +34,7 @@ import com.qt.sales.utils.ResultList;
  */
 @Controller
 @RequestMapping("/loginsLog")
-public class LoginsLogController extends BaseController {
+public class LoginsLogController{
 
 
     /**
@@ -82,7 +83,8 @@ public class LoginsLogController extends BaseController {
      * <p/>
      */
     @RequestMapping(value = "/list")
-    public void getLoginsLog(@RequestParam(value = "limit", required = true) int pageSize, @RequestParam(value = "offset", required = true) int offset, LoginsLogVO loginsLogVO,
+    @ResponseBody
+    public ResultList getLoginsLog(@RequestParam(value = "limit", required = true) int pageSize, @RequestParam(value = "offset", required = true) int offset, LoginsLogVO loginsLogVO,
             HttpServletRequest request, HttpServletResponse response, ModelMap model) throws Exception {
         if (offset == 0) {
             loginsLogVO.setStart(0);
@@ -99,7 +101,7 @@ public class LoginsLogController extends BaseController {
         ResultList res = new ResultList();
         res.setRows(list);
         res.setTotal(totalRowCount);
-        outPrint(resultToJson(res), response);
+        return res;
     }
 
 

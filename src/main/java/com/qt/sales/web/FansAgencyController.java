@@ -40,8 +40,6 @@ import com.qt.sales.model.FansAgencyScale;
 import com.qt.sales.model.FansAgencyScaleExample;
 import com.qt.sales.model.Qt1tblAgency;
 import com.qt.sales.model.Qt1tblAgencyExample;
-import com.qt.sales.model.SelectFansAgency;
-import com.qt.sales.model.SelectModel;
 import com.qt.sales.service.FansAgencyScaleService;
 import com.qt.sales.service.FansAgencyService;
 import com.qt.sales.service.Qt1tblAgencyService;
@@ -58,7 +56,7 @@ import com.qt.sales.utils.ResultList;
  */
 @Controller
 @RequestMapping("/agency")
-public class FansAgencyController extends BaseController {
+public class FansAgencyController{
 
     /**
      * 机构service接口
@@ -302,9 +300,10 @@ public class FansAgencyController extends BaseController {
      *             异常类
      */
     @RequestMapping(value = "/select", method = RequestMethod.GET)
-    public void select(String param, HttpServletRequest request, HttpServletResponse response) throws Exception {
+    @ResponseBody
+    public List<Qt1tblAgency> select(String param, HttpServletRequest request, HttpServletResponse response) throws Exception {
         if (StringUtils.isEmpty(request.getParameter("param"))){
-            return;
+            return null;
         }
         //非空判断
         LogPay.info("request.getParameter(param)======"+request.getParameter("param"));
@@ -330,53 +329,9 @@ public class FansAgencyController extends BaseController {
             example.or(cr2);
         }
         List<Qt1tblAgency> list = qt1tblAgencyService.selectByExample(example);
-        SelectModel modelList = new SelectModel("", list);
-        outPrint(objectPaseJson(modelList), response);
+        return list;
     }
 
-    /**
-     * 查询上级机构
-     * 
-     * @param param
-     *            参数
-     * @param request
-     *            request
-     * @param response
-     *            response
-     * @throws Exception
-     *             异常
-     */
-    @RequestMapping(value = "/selectParentId", method = RequestMethod.GET)
-    public void selectParentId(String param, HttpServletRequest request, HttpServletResponse response) throws Exception {
-        if (StringUtils.isEmpty(request.getParameter("param"))){
-            return;
-        }
-        String textValue = new String(request.getParameter("param").getBytes("ISO-8859-1"), "UTF-8");
-        String value = java.net.URLDecoder.decode(textValue,   "utf-8"); 
-        FansAgencyExample example = new FansAgencyExample();
-        int offset = 0;
-        int pageSize = 15;
-        if (offset == 0) {
-            example.setStart(0);
-            example.setEnd(pageSize + offset);
-        } else {
-            example.setStart(offset);
-            example.setEnd(offset + pageSize);
-        }
-        com.qt.sales.model.FansAgencyExample.Criteria cr = example.createCriteria();
-        com.qt.sales.model.FansAgencyExample.Criteria cr2 = example.createCriteria();
-        if (!StringUtils.isEmpty(value)) {
-            cr.andAgencyIdLike("%" + value + "%");
-            cr.andStatusEqualTo(FlowNodeStatus.approved.getVal());
-            cr2.andAgencyNameLike("%" + value + "%");
-            cr2.andStatusEqualTo(FlowNodeStatus.approved.getVal());
-            example.or(cr2);
-        }
-        List<FansAgency> list = fansAgencyService.selectByExample(example);
-        SelectFansAgency modelList = new SelectFansAgency("", list);
-        outPrint(objectPaseJson(modelList), response);
-    }
-    
 
     /**
      * 搜索查询机构信息
@@ -391,9 +346,10 @@ public class FansAgencyController extends BaseController {
      *             异常
      */
     @RequestMapping(value = "/selectListSelectAgency", method = RequestMethod.GET)
-    public void selectListSelectAgency(String param, HttpServletRequest request, HttpServletResponse response) throws Exception {
+    @ResponseBody
+    public  List<FansAgency> selectListSelectAgency(String param, HttpServletRequest request, HttpServletResponse response) throws Exception {
         if (StringUtils.isEmpty(request.getParameter("param"))){
-            return;
+            return null;
         }
         String textValue = new String(request.getParameter("param").getBytes("ISO-8859-1"), "UTF-8");
         String value = java.net.URLDecoder.decode(textValue,   "utf-8"); 
@@ -415,8 +371,7 @@ public class FansAgencyController extends BaseController {
             example.or(cr2);
         }
         List<FansAgency> list = fansAgencyService.selectByExample(example);
-        SelectFansAgency modelList = new SelectFansAgency("", list);
-        outPrint(objectPaseJson(modelList), response);
+        return list;
     }
 
     /**
@@ -434,7 +389,8 @@ public class FansAgencyController extends BaseController {
      *             异常
      */
     @RequestMapping(value = "/list")
-    public void list(@RequestParam(value = "limit", required = true) int pageSize, @RequestParam(value = "offset", required = true) int offset, FansAgency fansAgency, HttpServletResponse response)
+    @ResponseBody
+    public ResultList list(@RequestParam(value = "limit", required = true) int pageSize, @RequestParam(value = "offset", required = true) int offset, FansAgency fansAgency, HttpServletResponse response)
         throws Exception {
         FansAgencyExample example = new FansAgencyExample();
         if (offset == 0) {
@@ -461,7 +417,7 @@ public class FansAgencyController extends BaseController {
         ResultList res = new ResultList();
         res.setRows(list);
         res.setTotal(totalRowCount);
-        outPrint(resultToJson(res), response);
+        return res;
     }
     
 

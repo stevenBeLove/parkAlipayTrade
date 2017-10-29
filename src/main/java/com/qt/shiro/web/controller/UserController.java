@@ -14,11 +14,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.qt.sales.model.FansAgencyExample;
 import com.qt.sales.utils.ResultList;
-import com.qt.sales.web.BaseController;
 import com.qt.shiro.entity.User;
 import com.qt.shiro.service.OrganizationService;
 import com.qt.shiro.service.PasswordHelper;
@@ -31,7 +31,7 @@ import com.qt.shiro.service.UserService;
  */
 @Controller
 @RequestMapping("/user")
-public class UserController extends BaseController{
+public class UserController{
 
     @Autowired
     private UserService userService;
@@ -154,7 +154,8 @@ public class UserController extends BaseController{
      *             异常
      */
     @RequestMapping(value = "/userPagelist")
-    public void list(@RequestParam(value = "limit", required = true) int pageSize, @RequestParam(value = "offset", required = true) int offset, User user, HttpServletResponse response)
+    @ResponseBody
+    public ResultList list(@RequestParam(value = "limit", required = true) int pageSize, @RequestParam(value = "offset", required = true) int offset, User user, HttpServletResponse response)
         throws Exception {
         FansAgencyExample example = new FansAgencyExample();
         if (offset == 0) {
@@ -179,7 +180,7 @@ public class UserController extends BaseController{
         ResultList res = new ResultList();
         res.setRows(list);
         res.setTotal(totalRowCount);
-        outPrint(resultToJson(res), response);
+        return res;
     }
     
 

@@ -94,11 +94,11 @@ public class AlipayParkController{
      * 获取停车场令牌
      */
     @RequestMapping(value = "/getVehicleToken", method = RequestMethod.GET)
-    public String getVehicleToken(HttpServletRequest request){
+    public String getVehicleToken(HttpServletRequest request,Model model){
         String source = request.getParameter("source");
         String scope = request.getParameter("scope");
         String auth_code = request.getParameter("auth_code");
-        String state = request.getParameter("state");
+        String outParkingId = request.getParameter("state");
         AlipaySystemOauthTokenRequest tokenRequest = new AlipaySystemOauthTokenRequest();
         tokenRequest.setGrantType("authorization_code");
         // 授权设置
@@ -109,23 +109,25 @@ public class AlipayParkController{
             System.out.println(response.getBody());
             if (response.isSuccess()) {
                 // 调用成功
-                String uid = response.getUserId();
-                System.out.println(uid);
-                // 取得令牌
-                String access_token = response.getAccessToken();
-                System.out.println(access_token);
-              
+                ParkBean park = parkService.selectByPrimaryKey(outParkingId);
+                if(!StringUtils.isEmpty(park)){
+                    park.setAppAuthToken(response.getAccessToken());
+                    park.setExpiresIn(response.getExpiresIn());
+                    park.setReExpiresIn(response.getReExpiresIn());
+                    park.setRefreshToken(response.getRefreshToken());
+                    park.setAlipayUserId(response.getUserId());
+                    parkService.updateByPrimaryKeySelective(park);
+                    model.addAttribute("msg", "授权成功!");;
+                }
             } else {
                 // 换取令牌失败逻辑处理
+                model.addAttribute("danger", "授权失败，请重试！错误信息："+response.getBody());;
+                
             }
         } catch (AlipayApiException e) {
-
             e.printStackTrace();
         }
-        
-        
-        
-        return "";
+        return "park/parkList";
     }
     
     /**

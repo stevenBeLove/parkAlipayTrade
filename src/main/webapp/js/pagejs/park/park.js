@@ -30,9 +30,9 @@
                 sidePagination: "server", //服务端请求
                 queryParamsType: "limit",//查询参数组织方式
                 columns: [ 	{radio: true}, 
+                           	{field : "outParkingId",title : "停车场Id",width : 200,align : "center"},
                            	{field : "merchantName",title : "停车场名称",width : 200,align : "center"},
-							{field : "appAuthToken",title : "秘钥",width : 200,align : "center"},
-							{field : "parking",title : "停车场Id",width : 200,align : "center"}
+							{field : "parking",title : "支付宝停车场Id",width : 200,align : "center"}
                       ],
                 locale: 'zh-CN'
             });
@@ -58,13 +58,13 @@
         
         function grantPark(){
         	var ids = $.map($('#mytab').bootstrapTable('getSelections'), function (row) {
-                return row.id;
+                return row.outParkingId;
             });
         	if(ids==''){
         		alert('请选择修改的记录!');
         		return;
         	}
-        	location.href = ctx+"/alipayPark/responseCarAuth"+ids+"/update/";
+        	location.href = ctx+"/alipayPark/responseCarAuth/"+ids;
         }
         
         

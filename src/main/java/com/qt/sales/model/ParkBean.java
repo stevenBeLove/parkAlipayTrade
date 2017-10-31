@@ -3,24 +3,13 @@ package com.qt.sales.model;
 import java.util.Date;
 
 public class ParkBean {
-    /**
-     * 商户Id
-     */
     private String outParkingId;
 
-    /**
-     * 商户简称
-     */
     private String merchantName;
-    
-    /**
-     * 商户账号
-     */
-    private String accountNo;
 
-    
     private String merchantServicePhone;
 
+    private String accountNo;
 
     private String cityId;
 
@@ -75,16 +64,20 @@ public class ParkBean {
     private Date modifyDatetime;
 
     private String status;
-    
+
+    private String parkingId;
+
     private String appAuthToken;
 
     private String expiresIn;
-    
-    private String merchantLogo;
-    
-    private String parkingId;
-    
-    
+
+    private String alipayUserId;
+
+    private String reExpiresIn;
+
+    private String refreshToken;
+
+    private byte[] merchantLogo;
 
     public String getOutParkingId() {
         return outParkingId;
@@ -334,79 +327,59 @@ public class ParkBean {
         this.status = status == null ? null : status.trim();
     }
 
-    /**
-     * 描述：获取属性值.<br/>
-     * 创建人：yinghui zhang <br/>
-     * 返回类型：@return appAuthToken .<br/>
-     */
-    public String getAppAuthToken() {
-        return appAuthToken;
-    }
-
-    /**
-     * 创建人：yinghui zhang <br/>
-     * 创建时间：2017年10月29日 下午8:09:07 <br/>
-     * 参数: @param  appAuthToken 设置值.  <br/>
-     */
-    public void setAppAuthToken(String appAuthToken) {
-        this.appAuthToken = appAuthToken;
-    }
-
-    /**
-     * 描述：获取属性值.<br/>
-     * 创建人：yinghui zhang <br/>
-     * 返回类型：@return expiresIn .<br/>
-     */
-    public String getExpiresIn() {
-        return expiresIn;
-    }
-
-    /**
-     * 创建人：yinghui zhang <br/>
-     * 创建时间：2017年10月29日 下午8:09:07 <br/>
-     * 参数: @param  expiresIn 设置值.  <br/>
-     */
-    public void setExpiresIn(String expiresIn) {
-        this.expiresIn = expiresIn;
-    }
-
-    /**
-     * 描述：获取属性值.<br/>
-     * 创建人：yinghui zhang <br/>
-     * 返回类型：@return merchantLogo .<br/>
-     */
-    public String getMerchantLogo() {
-        return merchantLogo;
-    }
-
-    /**
-     * 创建人：yinghui zhang <br/>
-     * 创建时间：2017年10月29日 下午8:09:07 <br/>
-     * 参数: @param  merchantLogo 设置值.  <br/>
-     */
-    public void setMerchantLogo(String merchantLogo) {
-        this.merchantLogo = merchantLogo;
-    }
-
-    /**
-     * 描述：获取属性值.<br/>
-     * 创建人：yinghui zhang <br/>
-     * 返回类型：@return parkingId .<br/>
-     */
     public String getParkingId() {
         return parkingId;
     }
 
-    /**
-     * 创建人：yinghui zhang <br/>
-     * 创建时间：2017年10月29日 下午9:35:22 <br/>
-     * 参数: @param  parkingId 设置值.  <br/>
-     */
     public void setParkingId(String parkingId) {
-        this.parkingId = parkingId;
+        this.parkingId = parkingId == null ? null : parkingId.trim();
     }
 
-    
-    
-    
+    public String getAppAuthToken() {
+        return appAuthToken;
+    }
+
+    public void setAppAuthToken(String appAuthToken) {
+        this.appAuthToken = appAuthToken == null ? null : appAuthToken.trim();
+    }
+
+    public String getExpiresIn() {
+        return expiresIn;
+    }
+
+    public void setExpiresIn(String expiresIn) {
+        this.expiresIn = expiresIn == null ? null : expiresIn.trim();
+    }
+
+    public String getAlipayUserId() {
+        return alipayUserId;
+    }
+
+    public void setAlipayUserId(String alipayUserId) {
+        this.alipayUserId = alipayUserId == null ? null : alipayUserId.trim();
+    }
+
+    public String getReExpiresIn() {
+        return reExpiresIn;
+    }
+
+    public void setReExpiresIn(String reExpiresIn) {
+        this.reExpiresIn = reExpiresIn == null ? null : reExpiresIn.trim();
+    }
+
+    public String getRefreshToken() {
+        return refreshToken;
+    }
+
+    public void setRefreshToken(String refreshToken) {
+        this.refreshToken = refreshToken == null ? null : refreshToken.trim();
+    }
+
+    public byte[] getMerchantLogo() {
+        return merchantLogo;
+    }
+
+    public void setMerchantLogo(byte[] merchantLogo) {
+        this.merchantLogo = merchantLogo;
+    }
 }

@@ -38,5 +38,7 @@ public interface ParkService {
     
     public boolean parkingConfigSetRequest(AlipayClient alipayClient, String outParkingId) throws QTException;
     
+    int updateByPrimaryKeySelective(ParkBean record);
+    
 }
 

@@ -10,7 +10,7 @@ public class ParkBeanExample {
     protected boolean distinct;
 
     protected List<Criteria> oredCriteria;
-    
+
     private int start;
     
     /**
@@ -24,7 +24,7 @@ public class ParkBeanExample {
 
     /**
      * 创建人：yinghui zhang <br/>
-     * 创建时间：2017年10月29日 下午4:58:02 <br/>
+     * 创建时间：2017年10月31日 下午5:38:09 <br/>
      * 参数: @param  start 设置值.  <br/>
      */
     public void setStart(int start) {
@@ -42,7 +42,7 @@ public class ParkBeanExample {
 
     /**
      * 创建人：yinghui zhang <br/>
-     * 创建时间：2017年10月29日 下午4:58:02 <br/>
+     * 创建时间：2017年10月31日 下午5:38:09 <br/>
      * 参数: @param  end 设置值.  <br/>
      */
     public void setEnd(int end) {
@@ -51,7 +51,6 @@ public class ParkBeanExample {
 
     private int end;
     
-
     public ParkBeanExample() {
         oredCriteria = new ArrayList<Criteria>();
     }
@@ -2293,6 +2292,426 @@ public class ParkBeanExample {
 
         public Criteria andStatusNotBetween(String value1, String value2) {
             addCriterion("STATUS not between", value1, value2, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andParkingIdIsNull() {
+            addCriterion("PARKING_ID is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andParkingIdIsNotNull() {
+            addCriterion("PARKING_ID is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andParkingIdEqualTo(String value) {
+            addCriterion("PARKING_ID =", value, "parkingId");
+            return (Criteria) this;
+        }
+
+        public Criteria andParkingIdNotEqualTo(String value) {
+            addCriterion("PARKING_ID <>", value, "parkingId");
+            return (Criteria) this;
+        }
+
+        public Criteria andParkingIdGreaterThan(String value) {
+            addCriterion("PARKING_ID >", value, "parkingId");
+            return (Criteria) this;
+        }
+
+        public Criteria andParkingIdGreaterThanOrEqualTo(String value) {
+            addCriterion("PARKING_ID >=", value, "parkingId");
+            return (Criteria) this;
+        }
+
+        public Criteria andParkingIdLessThan(String value) {
+            addCriterion("PARKING_ID <", value, "parkingId");
+            return (Criteria) this;
+        }
+
+        public Criteria andParkingIdLessThanOrEqualTo(String value) {
+            addCriterion("PARKING_ID <=", value, "parkingId");
+            return (Criteria) this;
+        }
+
+        public Criteria andParkingIdLike(String value) {
+            addCriterion("PARKING_ID like", value, "parkingId");
+            return (Criteria) this;
+        }
+
+        public Criteria andParkingIdNotLike(String value) {
+            addCriterion("PARKING_ID not like", value, "parkingId");
+            return (Criteria) this;
+        }
+
+        public Criteria andParkingIdIn(List<String> values) {
+            addCriterion("PARKING_ID in", values, "parkingId");
+            return (Criteria) this;
+        }
+
+        public Criteria andParkingIdNotIn(List<String> values) {
+            addCriterion("PARKING_ID not in", values, "parkingId");
+            return (Criteria) this;
+        }
+
+        public Criteria andParkingIdBetween(String value1, String value2) {
+            addCriterion("PARKING_ID between", value1, value2, "parkingId");
+            return (Criteria) this;
+        }
+
+        public Criteria andParkingIdNotBetween(String value1, String value2) {
+            addCriterion("PARKING_ID not between", value1, value2, "parkingId");
+            return (Criteria) this;
+        }
+
+        public Criteria andAppAuthTokenIsNull() {
+            addCriterion("APP_AUTH_TOKEN is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAppAuthTokenIsNotNull() {
+            addCriterion("APP_AUTH_TOKEN is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAppAuthTokenEqualTo(String value) {
+            addCriterion("APP_AUTH_TOKEN =", value, "appAuthToken");
+            return (Criteria) this;
+        }
+
+        public Criteria andAppAuthTokenNotEqualTo(String value) {
+            addCriterion("APP_AUTH_TOKEN <>", value, "appAuthToken");
+            return (Criteria) this;
+        }
+
+        public Criteria andAppAuthTokenGreaterThan(String value) {
+            addCriterion("APP_AUTH_TOKEN >", value, "appAuthToken");
+            return (Criteria) this;
+        }
+
+        public Criteria andAppAuthTokenGreaterThanOrEqualTo(String value) {
+            addCriterion("APP_AUTH_TOKEN >=", value, "appAuthToken");
+            return (Criteria) this;
+        }
+
+        public Criteria andAppAuthTokenLessThan(String value) {
+            addCriterion("APP_AUTH_TOKEN <", value, "appAuthToken");
+            return (Criteria) this;
+        }
+
+        public Criteria andAppAuthTokenLessThanOrEqualTo(String value) {
+            addCriterion("APP_AUTH_TOKEN <=", value, "appAuthToken");
+            return (Criteria) this;
+        }
+
+        public Criteria andAppAuthTokenLike(String value) {
+            addCriterion("APP_AUTH_TOKEN like", value, "appAuthToken");
+            return (Criteria) this;
+        }
+
+        public Criteria andAppAuthTokenNotLike(String value) {
+            addCriterion("APP_AUTH_TOKEN not like", value, "appAuthToken");
+            return (Criteria) this;
+        }
+
+        public Criteria andAppAuthTokenIn(List<String> values) {
+            addCriterion("APP_AUTH_TOKEN in", values, "appAuthToken");
+            return (Criteria) this;
+        }
+
+        public Criteria andAppAuthTokenNotIn(List<String> values) {
+            addCriterion("APP_AUTH_TOKEN not in", values, "appAuthToken");
+            return (Criteria) this;
+        }
+
+        public Criteria andAppAuthTokenBetween(String value1, String value2) {
+            addCriterion("APP_AUTH_TOKEN between", value1, value2, "appAuthToken");
+            return (Criteria) this;
+        }
+
+        public Criteria andAppAuthTokenNotBetween(String value1, String value2) {
+            addCriterion("APP_AUTH_TOKEN not between", value1, value2, "appAuthToken");
+            return (Criteria) this;
+        }
+
+        public Criteria andExpiresInIsNull() {
+            addCriterion("EXPIRES_IN is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andExpiresInIsNotNull() {
+            addCriterion("EXPIRES_IN is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andExpiresInEqualTo(String value) {
+            addCriterion("EXPIRES_IN =", value, "expiresIn");
+            return (Criteria) this;
+        }
+
+        public Criteria andExpiresInNotEqualTo(String value) {
+            addCriterion("EXPIRES_IN <>", value, "expiresIn");
+            return (Criteria) this;
+        }
+
+        public Criteria andExpiresInGreaterThan(String value) {
+            addCriterion("EXPIRES_IN >", value, "expiresIn");
+            return (Criteria) this;
+        }
+
+        public Criteria andExpiresInGreaterThanOrEqualTo(String value) {
+            addCriterion("EXPIRES_IN >=", value, "expiresIn");
+            return (Criteria) this;
+        }
+
+        public Criteria andExpiresInLessThan(String value) {
+            addCriterion("EXPIRES_IN <", value, "expiresIn");
+            return (Criteria) this;
+        }
+
+        public Criteria andExpiresInLessThanOrEqualTo(String value) {
+            addCriterion("EXPIRES_IN <=", value, "expiresIn");
+            return (Criteria) this;
+        }
+
+        public Criteria andExpiresInLike(String value) {
+            addCriterion("EXPIRES_IN like", value, "expiresIn");
+            return (Criteria) this;
+        }
+
+        public Criteria andExpiresInNotLike(String value) {
+            addCriterion("EXPIRES_IN not like", value, "expiresIn");
+            return (Criteria) this;
+        }
+
+        public Criteria andExpiresInIn(List<String> values) {
+            addCriterion("EXPIRES_IN in", values, "expiresIn");
+            return (Criteria) this;
+        }
+
+        public Criteria andExpiresInNotIn(List<String> values) {
+            addCriterion("EXPIRES_IN not in", values, "expiresIn");
+            return (Criteria) this;
+        }
+
+        public Criteria andExpiresInBetween(String value1, String value2) {
+            addCriterion("EXPIRES_IN between", value1, value2, "expiresIn");
+            return (Criteria) this;
+        }
+
+        public Criteria andExpiresInNotBetween(String value1, String value2) {
+            addCriterion("EXPIRES_IN not between", value1, value2, "expiresIn");
+            return (Criteria) this;
+        }
+
+        public Criteria andAlipayUserIdIsNull() {
+            addCriterion("ALIPAY_USER_ID is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAlipayUserIdIsNotNull() {
+            addCriterion("ALIPAY_USER_ID is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAlipayUserIdEqualTo(String value) {
+            addCriterion("ALIPAY_USER_ID =", value, "alipayUserId");
+            return (Criteria) this;
+        }
+
+        public Criteria andAlipayUserIdNotEqualTo(String value) {
+            addCriterion("ALIPAY_USER_ID <>", value, "alipayUserId");
+            return (Criteria) this;
+        }
+
+        public Criteria andAlipayUserIdGreaterThan(String value) {
+            addCriterion("ALIPAY_USER_ID >", value, "alipayUserId");
+            return (Criteria) this;
+        }
+
+        public Criteria andAlipayUserIdGreaterThanOrEqualTo(String value) {
+            addCriterion("ALIPAY_USER_ID >=", value, "alipayUserId");
+            return (Criteria) this;
+        }
+
+        public Criteria andAlipayUserIdLessThan(String value) {
+            addCriterion("ALIPAY_USER_ID <", value, "alipayUserId");
+            return (Criteria) this;
+        }
+
+        public Criteria andAlipayUserIdLessThanOrEqualTo(String value) {
+            addCriterion("ALIPAY_USER_ID <=", value, "alipayUserId");
+            return (Criteria) this;
+        }
+
+        public Criteria andAlipayUserIdLike(String value) {
+            addCriterion("ALIPAY_USER_ID like", value, "alipayUserId");
+            return (Criteria) this;
+        }
+
+        public Criteria andAlipayUserIdNotLike(String value) {
+            addCriterion("ALIPAY_USER_ID not like", value, "alipayUserId");
+            return (Criteria) this;
+        }
+
+        public Criteria andAlipayUserIdIn(List<String> values) {
+            addCriterion("ALIPAY_USER_ID in", values, "alipayUserId");
+            return (Criteria) this;
+        }
+
+        public Criteria andAlipayUserIdNotIn(List<String> values) {
+            addCriterion("ALIPAY_USER_ID not in", values, "alipayUserId");
+            return (Criteria) this;
+        }
+
+        public Criteria andAlipayUserIdBetween(String value1, String value2) {
+            addCriterion("ALIPAY_USER_ID between", value1, value2, "alipayUserId");
+            return (Criteria) this;
+        }
+
+        public Criteria andAlipayUserIdNotBetween(String value1, String value2) {
+            addCriterion("ALIPAY_USER_ID not between", value1, value2, "alipayUserId");
+            return (Criteria) this;
+        }
+
+        public Criteria andReExpiresInIsNull() {
+            addCriterion("RE_EXPIRES_IN is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andReExpiresInIsNotNull() {
+            addCriterion("RE_EXPIRES_IN is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andReExpiresInEqualTo(String value) {
+            addCriterion("RE_EXPIRES_IN =", value, "reExpiresIn");
+            return (Criteria) this;
+        }
+
+        public Criteria andReExpiresInNotEqualTo(String value) {
+            addCriterion("RE_EXPIRES_IN <>", value, "reExpiresIn");
+            return (Criteria) this;
+        }
+
+        public Criteria andReExpiresInGreaterThan(String value) {
+            addCriterion("RE_EXPIRES_IN >", value, "reExpiresIn");
+            return (Criteria) this;
+        }
+
+        public Criteria andReExpiresInGreaterThanOrEqualTo(String value) {
+            addCriterion("RE_EXPIRES_IN >=", value, "reExpiresIn");
+            return (Criteria) this;
+        }
+
+        public Criteria andReExpiresInLessThan(String value) {
+            addCriterion("RE_EXPIRES_IN <", value, "reExpiresIn");
+            return (Criteria) this;
+        }
+
+        public Criteria andReExpiresInLessThanOrEqualTo(String value) {
+            addCriterion("RE_EXPIRES_IN <=", value, "reExpiresIn");
+            return (Criteria) this;
+        }
+
+        public Criteria andReExpiresInLike(String value) {
+            addCriterion("RE_EXPIRES_IN like", value, "reExpiresIn");
+            return (Criteria) this;
+        }
+
+        public Criteria andReExpiresInNotLike(String value) {
+            addCriterion("RE_EXPIRES_IN not like", value, "reExpiresIn");
+            return (Criteria) this;
+        }
+
+        public Criteria andReExpiresInIn(List<String> values) {
+            addCriterion("RE_EXPIRES_IN in", values, "reExpiresIn");
+            return (Criteria) this;
+        }
+
+        public Criteria andReExpiresInNotIn(List<String> values) {
+            addCriterion("RE_EXPIRES_IN not in", values, "reExpiresIn");
+            return (Criteria) this;
+        }
+
+        public Criteria andReExpiresInBetween(String value1, String value2) {
+            addCriterion("RE_EXPIRES_IN between", value1, value2, "reExpiresIn");
+            return (Criteria) this;
+        }
+
+        public Criteria andReExpiresInNotBetween(String value1, String value2) {
+            addCriterion("RE_EXPIRES_IN not between", value1, value2, "reExpiresIn");
+            return (Criteria) this;
+        }
+
+        public Criteria andRefreshTokenIsNull() {
+            addCriterion("REFRESH_TOKEN is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRefreshTokenIsNotNull() {
+            addCriterion("REFRESH_TOKEN is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRefreshTokenEqualTo(String value) {
+            addCriterion("REFRESH_TOKEN =", value, "refreshToken");
+            return (Criteria) this;
+        }
+
+        public Criteria andRefreshTokenNotEqualTo(String value) {
+            addCriterion("REFRESH_TOKEN <>", value, "refreshToken");
+            return (Criteria) this;
+        }
+
+        public Criteria andRefreshTokenGreaterThan(String value) {
+            addCriterion("REFRESH_TOKEN >", value, "refreshToken");
+            return (Criteria) this;
+        }
+
+        public Criteria andRefreshTokenGreaterThanOrEqualTo(String value) {
+            addCriterion("REFRESH_TOKEN >=", value, "refreshToken");
+            return (Criteria) this;
+        }
+
+        public Criteria andRefreshTokenLessThan(String value) {
+            addCriterion("REFRESH_TOKEN <", value, "refreshToken");
+            return (Criteria) this;
+        }
+
+        public Criteria andRefreshTokenLessThanOrEqualTo(String value) {
+            addCriterion("REFRESH_TOKEN <=", value, "refreshToken");
+            return (Criteria) this;
+        }
+
+        public Criteria andRefreshTokenLike(String value) {
+            addCriterion("REFRESH_TOKEN like", value, "refreshToken");
+            return (Criteria) this;
+        }
+
+        public Criteria andRefreshTokenNotLike(String value) {
+            addCriterion("REFRESH_TOKEN not like", value, "refreshToken");
+            return (Criteria) this;
+        }
+
+        public Criteria andRefreshTokenIn(List<String> values) {
+            addCriterion("REFRESH_TOKEN in", values, "refreshToken");
+            return (Criteria) this;
+        }
+
+        public Criteria andRefreshTokenNotIn(List<String> values) {
+            addCriterion("REFRESH_TOKEN not in", values, "refreshToken");
+            return (Criteria) this;
+        }
+
+        public Criteria andRefreshTokenBetween(String value1, String value2) {
+            addCriterion("REFRESH_TOKEN between", value1, value2, "refreshToken");
+            return (Criteria) this;
+        }
+
+        public Criteria andRefreshTokenNotBetween(String value1, String value2) {
+            addCriterion("REFRESH_TOKEN not between", value1, value2, "refreshToken");
             return (Criteria) this;
         }
     }

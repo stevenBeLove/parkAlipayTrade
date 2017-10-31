@@ -7,7 +7,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>单点登录</title>
+<title>停车场管理后台</title>
   <link rel="stylesheet" media="screen" href="${ctx}/css/common/cus-icons.css">
   <style>
   		#allmenu li span.glyphicon-tag + span{
@@ -82,11 +82,13 @@
         </nav>
 
 	
-<div style="position:absolute;top:15px;bottom:10px;left:0px;right:0px;">
-	<iframe class="content" frameborder="0" name="myContent" id="iframe1"
-		width="100%" height="100%" src="${ctx}/client/myApplist">
-    </iframe>
-</div>
+		<div style="position:absolute;top:15px;bottom:10px;left:0px;right:0px;">
+			
+			<jsp:include page="${ctx}/park/parkList" flush="true"></jsp:include>
+			<%-- <iframe class="content" frameborder="0" name="myContent" id="iframe1"
+				width="100%" height="100%" src="${ctx}/client/myApplist">
+		    </iframe> --%>
+		</div>
 
 	 <%--  <jsp:include page="footer.jsp"></jsp:include> 
  --%>

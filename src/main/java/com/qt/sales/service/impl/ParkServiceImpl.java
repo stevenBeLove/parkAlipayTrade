@@ -193,6 +193,12 @@ public class ParkServiceImpl implements ParkService {
     }
         return "";
     }
+
+
+    @Override
+    public int updateByPrimaryKeySelective(ParkBean record) {
+        return parkBeanMapper.updateByPrimaryKeySelective(record);
+    }
     
 }
 

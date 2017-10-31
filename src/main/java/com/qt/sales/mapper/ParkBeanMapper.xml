@@ -33,9 +33,15 @@
     <result column="CREATE_DATETIME" property="createDatetime" jdbcType="TIMESTAMP" />
     <result column="MODIFY_DATETIME" property="modifyDatetime" jdbcType="TIMESTAMP" />
     <result column="STATUS" property="status" jdbcType="VARCHAR" />
-     <result column="APP_AUTH_TOKEN" property="appAuthToken" jdbcType="VARCHAR" />
-    <result column="EXPIRES_IN" property="expiresIn" jdbcType="VARCHAR" />
     <result column="PARKING_ID" property="parkingId" jdbcType="VARCHAR" />
+    <result column="APP_AUTH_TOKEN" property="appAuthToken" jdbcType="VARCHAR" />
+    <result column="EXPIRES_IN" property="expiresIn" jdbcType="VARCHAR" />
+    <result column="ALIPAY_USER_ID" property="alipayUserId" jdbcType="VARCHAR" />
+    <result column="RE_EXPIRES_IN" property="reExpiresIn" jdbcType="VARCHAR" />
+    <result column="REFRESH_TOKEN" property="refreshToken" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.qt.sales.model.ParkBean" extends="BaseResultMap" >
+    <result column="MERCHANT_LOGO" property="merchantLogo" jdbcType="BLOB" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -96,16 +102,35 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-  OUT_PARKING_ID, MERCHANT_NAME, MERCHANT_SERVICE_PHONE, ACCOUNT_NO, CITY_ID, EQUIPMENT_NAME, 
+    OUT_PARKING_ID, MERCHANT_NAME, MERCHANT_SERVICE_PHONE, ACCOUNT_NO, CITY_ID, EQUIPMENT_NAME, 
     PARKING_ADDRESS, LONGITUDE, LATITUDE, PARKING_START_TIME, PARKING_END_TIME, PARKING_NUMBER, 
     PARKING_LOT_TYPE, PARKING_TYPE, PAYMENT_MODE, PAY_TYPE, SHOPINGMALL_ID, PARKING_FEE_DESCRIPTION, 
     CONTACT_NAME, CONTACT_MOBILE, CONTACT_TEL, CONTACT_EMALI, CONTACT_WEIXIN, CONTACT_ALIPAY, 
     PARKING_NAME, TIME_OUT, CREATE_USERID, MODIFY_USERID, CREATE_DATETIME, MODIFY_DATETIME, 
-    STATUS, PARKING_ID, APP_AUTH_TOKEN, EXPIRES_IN, PARKING_ID
+    STATUS, PARKING_ID, APP_AUTH_TOKEN, EXPIRES_IN, ALIPAY_USER_ID, RE_EXPIRES_IN, REFRESH_TOKEN
   </sql>
+  <sql id="Blob_Column_List" >
+    MERCHANT_LOGO
+  </sql>
+  <select id="selectByExampleWithBLOBs" resultMap="ResultMapWithBLOBs" parameterType="com.qt.sales.model.ParkBeanExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from park.TB_PARK
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.qt.sales.model.ParkBeanExample" >
-    select * from ( select tmp_page.*, rownum row_id from ( 
-    
+    select * from ( select tmp_page.*, rownum row_id from (
     select
     <if test="distinct" >
       distinct
@@ -118,20 +143,23 @@
     <if test="orderByClause != null" >
       order by ${orderByClause}
     </if>
-     ) tmp_page where rownum <![CDATA[ <= ${end} ]]>  ) where row_id <![CDATA[  > ${start} ]]>
+    ) tmp_page where rownum <![CDATA[ <= ${end} ]]>  ) where row_id <![CDATA[  > ${start} ]]>
   </select>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+  
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.String" >
     select 
     <include refid="Base_Column_List" />
-    from TB_PARK
+    ,
+    <include refid="Blob_Column_List" />
+    from park.TB_PARK
     where OUT_PARKING_ID = #{outParkingId,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
-    delete from TB_PARK
+    delete from park.TB_PARK
     where OUT_PARKING_ID = #{outParkingId,jdbcType=VARCHAR}
   </delete>
   <delete id="deleteByExample" parameterType="com.qt.sales.model.ParkBeanExample" >
-    delete from TB_PARK
+    delete from park.TB_PARK
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
@@ -148,7 +176,8 @@
       PARKING_NAME, TIME_OUT, CREATE_USERID, 
       MODIFY_USERID, CREATE_DATETIME, MODIFY_DATETIME, 
       STATUS, PARKING_ID, APP_AUTH_TOKEN, 
-      EXPIRES_IN, MERCHANT_LOGO)
+      EXPIRES_IN, ALIPAY_USER_ID, RE_EXPIRES_IN, 
+      REFRESH_TOKEN, MERCHANT_LOGO)
     values (#{outParkingId,jdbcType=VARCHAR}, #{merchantName,jdbcType=VARCHAR}, #{merchantServicePhone,jdbcType=VARCHAR}, 
       #{accountNo,jdbcType=VARCHAR}, #{cityId,jdbcType=VARCHAR}, #{equipmentName,jdbcType=VARCHAR}, 
       #{parkingAddress,jdbcType=VARCHAR}, #{longitude,jdbcType=VARCHAR}, #{latitude,jdbcType=VARCHAR}, 
@@ -160,10 +189,11 @@
       #{parkingName,jdbcType=VARCHAR}, #{timeOut,jdbcType=VARCHAR}, #{createUserid,jdbcType=VARCHAR}, 
       #{modifyUserid,jdbcType=VARCHAR}, #{createDatetime,jdbcType=TIMESTAMP}, #{modifyDatetime,jdbcType=TIMESTAMP}, 
       #{status,jdbcType=VARCHAR}, #{parkingId,jdbcType=VARCHAR}, #{appAuthToken,jdbcType=VARCHAR}, 
-      #{expiresIn,jdbcType=VARCHAR}, #{merchantLogo,jdbcType=BLOB})
+      #{expiresIn,jdbcType=VARCHAR}, #{alipayUserId,jdbcType=VARCHAR}, #{reExpiresIn,jdbcType=VARCHAR}, 
+      #{refreshToken,jdbcType=VARCHAR}, #{merchantLogo,jdbcType=BLOB})
   </insert>
   <insert id="insertSelective" parameterType="com.qt.sales.model.ParkBean" >
-    insert into TB_PARK
+    insert into park.TB_PARK
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="outParkingId != null" >
         OUT_PARKING_ID,
@@ -257,6 +287,27 @@
       </if>
       <if test="status != null" >
         STATUS,
+      </if>
+      <if test="parkingId != null" >
+        PARKING_ID,
+      </if>
+      <if test="appAuthToken != null" >
+        APP_AUTH_TOKEN,
+      </if>
+      <if test="expiresIn != null" >
+        EXPIRES_IN,
+      </if>
+      <if test="alipayUserId != null" >
+        ALIPAY_USER_ID,
+      </if>
+      <if test="reExpiresIn != null" >
+        RE_EXPIRES_IN,
+      </if>
+      <if test="refreshToken != null" >
+        REFRESH_TOKEN,
+      </if>
+      <if test="merchantLogo != null" >
+        MERCHANT_LOGO,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -352,6 +403,27 @@
       </if>
       <if test="status != null" >
         #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="parkingId != null" >
+        #{parkingId,jdbcType=VARCHAR},
+      </if>
+      <if test="appAuthToken != null" >
+        #{appAuthToken,jdbcType=VARCHAR},
+      </if>
+      <if test="expiresIn != null" >
+        #{expiresIn,jdbcType=VARCHAR},
+      </if>
+      <if test="alipayUserId != null" >
+        #{alipayUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="reExpiresIn != null" >
+        #{reExpiresIn,jdbcType=VARCHAR},
+      </if>
+      <if test="refreshToken != null" >
+        #{refreshToken,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantLogo != null" >
+        #{merchantLogo,jdbcType=BLOB},
       </if>
     </trim>
   </insert>
@@ -457,13 +529,72 @@
       <if test="record.status != null" >
         STATUS = #{record.status,jdbcType=VARCHAR},
       </if>
-        <if test="record.expiresIn != null" >
+      <if test="record.parkingId != null" >
+        PARKING_ID = #{record.parkingId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.appAuthToken != null" >
+        APP_AUTH_TOKEN = #{record.appAuthToken,jdbcType=VARCHAR},
+      </if>
+      <if test="record.expiresIn != null" >
         EXPIRES_IN = #{record.expiresIn,jdbcType=VARCHAR},
+      </if>
+      <if test="record.alipayUserId != null" >
+        ALIPAY_USER_ID = #{record.alipayUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.reExpiresIn != null" >
+        RE_EXPIRES_IN = #{record.reExpiresIn,jdbcType=VARCHAR},
+      </if>
+      <if test="record.refreshToken != null" >
+        REFRESH_TOKEN = #{record.refreshToken,jdbcType=VARCHAR},
       </if>
       <if test="record.merchantLogo != null" >
         MERCHANT_LOGO = #{record.merchantLogo,jdbcType=BLOB},
       </if>
     </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map" >
+    update park.TB_PARK
+    set OUT_PARKING_ID = #{record.outParkingId,jdbcType=VARCHAR},
+      MERCHANT_NAME = #{record.merchantName,jdbcType=VARCHAR},
+      MERCHANT_SERVICE_PHONE = #{record.merchantServicePhone,jdbcType=VARCHAR},
+      ACCOUNT_NO = #{record.accountNo,jdbcType=VARCHAR},
+      CITY_ID = #{record.cityId,jdbcType=VARCHAR},
+      EQUIPMENT_NAME = #{record.equipmentName,jdbcType=VARCHAR},
+      PARKING_ADDRESS = #{record.parkingAddress,jdbcType=VARCHAR},
+      LONGITUDE = #{record.longitude,jdbcType=VARCHAR},
+      LATITUDE = #{record.latitude,jdbcType=VARCHAR},
+      PARKING_START_TIME = #{record.parkingStartTime,jdbcType=VARCHAR},
+      PARKING_END_TIME = #{record.parkingEndTime,jdbcType=VARCHAR},
+      PARKING_NUMBER = #{record.parkingNumber,jdbcType=VARCHAR},
+      PARKING_LOT_TYPE = #{record.parkingLotType,jdbcType=VARCHAR},
+      PARKING_TYPE = #{record.parkingType,jdbcType=VARCHAR},
+      PAYMENT_MODE = #{record.paymentMode,jdbcType=VARCHAR},
+      PAY_TYPE = #{record.payType,jdbcType=VARCHAR},
+      SHOPINGMALL_ID = #{record.shopingmallId,jdbcType=VARCHAR},
+      PARKING_FEE_DESCRIPTION = #{record.parkingFeeDescription,jdbcType=VARCHAR},
+      CONTACT_NAME = #{record.contactName,jdbcType=VARCHAR},
+      CONTACT_MOBILE = #{record.contactMobile,jdbcType=VARCHAR},
+      CONTACT_TEL = #{record.contactTel,jdbcType=VARCHAR},
+      CONTACT_EMALI = #{record.contactEmali,jdbcType=VARCHAR},
+      CONTACT_WEIXIN = #{record.contactWeixin,jdbcType=VARCHAR},
+      CONTACT_ALIPAY = #{record.contactAlipay,jdbcType=VARCHAR},
+      PARKING_NAME = #{record.parkingName,jdbcType=VARCHAR},
+      TIME_OUT = #{record.timeOut,jdbcType=VARCHAR},
+      CREATE_USERID = #{record.createUserid,jdbcType=VARCHAR},
+      MODIFY_USERID = #{record.modifyUserid,jdbcType=VARCHAR},
+      CREATE_DATETIME = #{record.createDatetime,jdbcType=TIMESTAMP},
+      MODIFY_DATETIME = #{record.modifyDatetime,jdbcType=TIMESTAMP},
+      STATUS = #{record.status,jdbcType=VARCHAR},
+      PARKING_ID = #{record.parkingId,jdbcType=VARCHAR},
+      APP_AUTH_TOKEN = #{record.appAuthToken,jdbcType=VARCHAR},
+      EXPIRES_IN = #{record.expiresIn,jdbcType=VARCHAR},
+      ALIPAY_USER_ID = #{record.alipayUserId,jdbcType=VARCHAR},
+      RE_EXPIRES_IN = #{record.reExpiresIn,jdbcType=VARCHAR},
+      REFRESH_TOKEN = #{record.refreshToken,jdbcType=VARCHAR},
+      MERCHANT_LOGO = #{record.merchantLogo,jdbcType=BLOB}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -500,7 +631,13 @@
       MODIFY_USERID = #{record.modifyUserid,jdbcType=VARCHAR},
       CREATE_DATETIME = #{record.createDatetime,jdbcType=TIMESTAMP},
       MODIFY_DATETIME = #{record.modifyDatetime,jdbcType=TIMESTAMP},
-      STATUS = #{record.status,jdbcType=VARCHAR}
+      STATUS = #{record.status,jdbcType=VARCHAR},
+      PARKING_ID = #{record.parkingId,jdbcType=VARCHAR},
+      APP_AUTH_TOKEN = #{record.appAuthToken,jdbcType=VARCHAR},
+      EXPIRES_IN = #{record.expiresIn,jdbcType=VARCHAR},
+      ALIPAY_USER_ID = #{record.alipayUserId,jdbcType=VARCHAR},
+      RE_EXPIRES_IN = #{record.reExpiresIn,jdbcType=VARCHAR},
+      REFRESH_TOKEN = #{record.refreshToken,jdbcType=VARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -598,17 +735,69 @@
       <if test="status != null" >
         STATUS = #{status,jdbcType=VARCHAR},
       </if>
-       <if test="appAuthToken != null" >
+      <if test="parkingId != null" >
+        PARKING_ID = #{parkingId,jdbcType=VARCHAR},
+      </if>
+      <if test="appAuthToken != null" >
         APP_AUTH_TOKEN = #{appAuthToken,jdbcType=VARCHAR},
       </if>
       <if test="expiresIn != null" >
         EXPIRES_IN = #{expiresIn,jdbcType=VARCHAR},
       </if>
-      <if test="parkingId != null" >
-        PARKING_ID = #{parkingId,jdbcType=VARCHAR},
+      <if test="alipayUserId != null" >
+        ALIPAY_USER_ID = #{alipayUserId,jdbcType=VARCHAR},
       </if>
-      
+      <if test="reExpiresIn != null" >
+        RE_EXPIRES_IN = #{reExpiresIn,jdbcType=VARCHAR},
+      </if>
+      <if test="refreshToken != null" >
+        REFRESH_TOKEN = #{refreshToken,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantLogo != null" >
+        MERCHANT_LOGO = #{merchantLogo,jdbcType=BLOB},
+      </if>
     </set>
+    where OUT_PARKING_ID = #{outParkingId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.qt.sales.model.ParkBean" >
+    update park.TB_PARK
+    set MERCHANT_NAME = #{merchantName,jdbcType=VARCHAR},
+      MERCHANT_SERVICE_PHONE = #{merchantServicePhone,jdbcType=VARCHAR},
+      ACCOUNT_NO = #{accountNo,jdbcType=VARCHAR},
+      CITY_ID = #{cityId,jdbcType=VARCHAR},
+      EQUIPMENT_NAME = #{equipmentName,jdbcType=VARCHAR},
+      PARKING_ADDRESS = #{parkingAddress,jdbcType=VARCHAR},
+      LONGITUDE = #{longitude,jdbcType=VARCHAR},
+      LATITUDE = #{latitude,jdbcType=VARCHAR},
+      PARKING_START_TIME = #{parkingStartTime,jdbcType=VARCHAR},
+      PARKING_END_TIME = #{parkingEndTime,jdbcType=VARCHAR},
+      PARKING_NUMBER = #{parkingNumber,jdbcType=VARCHAR},
+      PARKING_LOT_TYPE = #{parkingLotType,jdbcType=VARCHAR},
+      PARKING_TYPE = #{parkingType,jdbcType=VARCHAR},
+      PAYMENT_MODE = #{paymentMode,jdbcType=VARCHAR},
+      PAY_TYPE = #{payType,jdbcType=VARCHAR},
+      SHOPINGMALL_ID = #{shopingmallId,jdbcType=VARCHAR},
+      PARKING_FEE_DESCRIPTION = #{parkingFeeDescription,jdbcType=VARCHAR},
+      CONTACT_NAME = #{contactName,jdbcType=VARCHAR},
+      CONTACT_MOBILE = #{contactMobile,jdbcType=VARCHAR},
+      CONTACT_TEL = #{contactTel,jdbcType=VARCHAR},
+      CONTACT_EMALI = #{contactEmali,jdbcType=VARCHAR},
+      CONTACT_WEIXIN = #{contactWeixin,jdbcType=VARCHAR},
+      CONTACT_ALIPAY = #{contactAlipay,jdbcType=VARCHAR},
+      PARKING_NAME = #{parkingName,jdbcType=VARCHAR},
+      TIME_OUT = #{timeOut,jdbcType=VARCHAR},
+      CREATE_USERID = #{createUserid,jdbcType=VARCHAR},
+      MODIFY_USERID = #{modifyUserid,jdbcType=VARCHAR},
+      CREATE_DATETIME = #{createDatetime,jdbcType=TIMESTAMP},
+      MODIFY_DATETIME = #{modifyDatetime,jdbcType=TIMESTAMP},
+      STATUS = #{status,jdbcType=VARCHAR},
+      PARKING_ID = #{parkingId,jdbcType=VARCHAR},
+      APP_AUTH_TOKEN = #{appAuthToken,jdbcType=VARCHAR},
+      EXPIRES_IN = #{expiresIn,jdbcType=VARCHAR},
+      ALIPAY_USER_ID = #{alipayUserId,jdbcType=VARCHAR},
+      RE_EXPIRES_IN = #{reExpiresIn,jdbcType=VARCHAR},
+      REFRESH_TOKEN = #{refreshToken,jdbcType=VARCHAR},
+      MERCHANT_LOGO = #{merchantLogo,jdbcType=BLOB}
     where OUT_PARKING_ID = #{outParkingId,jdbcType=VARCHAR}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.qt.sales.model.ParkBean" >
@@ -642,7 +831,13 @@
       MODIFY_USERID = #{modifyUserid,jdbcType=VARCHAR},
       CREATE_DATETIME = #{createDatetime,jdbcType=TIMESTAMP},
       MODIFY_DATETIME = #{modifyDatetime,jdbcType=TIMESTAMP},
-      STATUS = #{status,jdbcType=VARCHAR}
+      STATUS = #{status,jdbcType=VARCHAR},
+      PARKING_ID = #{parkingId,jdbcType=VARCHAR},
+      APP_AUTH_TOKEN = #{appAuthToken,jdbcType=VARCHAR},
+      EXPIRES_IN = #{expiresIn,jdbcType=VARCHAR},
+      ALIPAY_USER_ID = #{alipayUserId,jdbcType=VARCHAR},
+      RE_EXPIRES_IN = #{reExpiresIn,jdbcType=VARCHAR},
+      REFRESH_TOKEN = #{refreshToken,jdbcType=VARCHAR}
     where OUT_PARKING_ID = #{outParkingId,jdbcType=VARCHAR}
   </update>
 </mapper>

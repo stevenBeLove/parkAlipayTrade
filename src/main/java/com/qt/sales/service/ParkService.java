@@ -36,9 +36,16 @@ public interface ParkService {
 
     List<ParkBean> selectByExample(ParkBeanExample example);
     
-    public boolean parkingConfigSetRequest(AlipayClient alipayClient, String outParkingId) throws QTException;
+    public boolean parkingConfigSetRequest(String outParkingId) throws QTException;
     
     int updateByPrimaryKeySelective(ParkBean record);
+    
+    //创建停车场
+    public String parkingCreate(String outParkingId);
+    
+    //修改停车场信息
+    public String parkinglotinfoUpdate(String outParkingId);
+    
     
 }
 

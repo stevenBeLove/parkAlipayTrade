@@ -35,22 +35,15 @@ body.bootstrap-admin-with-small-navbar {
                             <div class="panel panel-default bootstrap-admin-no-table-panel">
                                
                                 <div class="bootstrap-admin-no-table-panel-content bootstrap-admin-panel-content collapse in">
-                                    <form class="form-horizontal" onsubmit="reloadDate();return false;">
+                                    <!-- <form class="form-horizontal" onsubmit="reloadDate();return false;">
                                         <fieldset>
                                             <div class="form-group">
                                             	
-                                            	<label class="col-lg-1 control-label" for="nickname">昵称</label>
-                                                <div class="col-lg-2">
-                                                    <input type="text"  id="nickname" class="form-control" />
-                                                </div>
-                                            	
-                                            	<label class="col-lg-1 control-label" for="username">用户名</label>
+                                            	<label class="col-lg-1 control-label" for="username">停车场</label>
                                                 <div class="col-lg-2">
                                                     <input type="text"  id="username" class="form-control" />
                                                 </div>
                                             	
-                                            	
-                                                
                                                 <div class="col-lg-2">
                                                 	<button type="submit" class="btn btn-primary">查&nbsp;询</button>
                                            			 <button type="reset" class="btn btn-default">清&nbsp;空</button>
@@ -58,7 +51,7 @@ body.bootstrap-admin-with-small-navbar {
                                             </div>
                                             
                                         </fieldset>
-                                    </form>
+                                    </form> -->
                                 </div>
                             </div>
                         </div>

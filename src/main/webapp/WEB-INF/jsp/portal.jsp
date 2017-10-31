@@ -84,10 +84,9 @@
 	
 		<div style="position:absolute;top:15px;bottom:10px;left:0px;right:0px;">
 			
-			<jsp:include page="${ctx}/park/parkList" flush="true"></jsp:include>
-			<%-- <iframe class="content" frameborder="0" name="myContent" id="iframe1"
-				width="100%" height="100%" src="${ctx}/client/myApplist">
-		    </iframe> --%>
+			<iframe class="content" frameborder="0" name="myContent" id="iframe1"
+				width="100%" height="100%" src="${ctx}/park/parkList">
+		    </iframe>
 		</div>
 
 	 <%--  <jsp:include page="footer.jsp"></jsp:include> 

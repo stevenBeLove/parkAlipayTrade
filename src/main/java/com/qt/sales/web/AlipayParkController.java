@@ -17,6 +17,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSON;
@@ -24,12 +25,16 @@ import com.alibaba.fastjson.JSONObject;
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
 import com.alipay.api.DefaultAlipayClient;
+import com.alipay.api.request.AlipayEcoMycarParkingEnterinfoSyncRequest;
 import com.alipay.api.request.AlipayEcoMycarParkingVehicleQueryRequest;
 import com.alipay.api.request.AlipaySystemOauthTokenRequest;
+import com.alipay.api.response.AlipayEcoMycarParkingEnterinfoSyncResponse;
 import com.alipay.api.response.AlipayEcoMycarParkingVehicleQueryResponse;
 import com.alipay.api.response.AlipaySystemOauthTokenResponse;
+import com.qt.sales.common.RSConsts;
 import com.qt.sales.model.ParkBean;
 import com.qt.sales.service.ParkService;
+import com.qt.sales.service.impl.ParkServiceImpl;
 import com.qt.sales.utils.LogPay;
 
 /** 
@@ -45,7 +50,7 @@ public class AlipayParkController{
     
     protected final Logger       logger = LoggerFactory.getLogger(this.getClass());  
     
-    private static AlipayClient alipayClient;
+    public static AlipayClient alipayClient;
     private static final String APP_ID = "2016080700191244";
     private static final String APP_PRIVATE_KEY = "MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCbqs+RfKI6CDpQBp87XpBQyrDX/9Rl4hZ0EJncJS0pa0Q+b4k/MHQRR9gNj8nuyBesla1plGPKo8/7Br95MFPNfMUaTd+P6x+1fb3xRn2LFzvQGzt9VgpNuIEDIgGfSJkB8eXFUzpDCacqJiwP6yV9JpfVIqBg2iqMAreeBAs7p53ElmqxIOdvHNPn4mYVl0jnUonYZ6vndN/D74YqgnX/bzvnjoFYhiQ6WjhhBS6/jxFQ2z58KztJSmtRgHPuCcp7es2CVUmHVHtPKdB5TM+3MLaOnZ3VIN9pQFHNzmfK8mFy7QQv7vSibMySsogzW7s4T0bVb64SCaDj1qUOicn5AgMBAAECggEANBu/k+H2pBpw+qzczJDhGkpfXE7FGL3P6lZMSscfEQhZNdU8Siy8DbTQ++kwHYBZfGo2PGtx5Dllu5AMtFKbGuQzTpTWy2RXnvdSh9ui1taWLRmQlmog1Nd4SEYv6NPydBY3ZhBwJlSq4o8YnNOIHxa2KKCIsyMUrv2R3ZFY+USirb1mKGNeg6kfyJZBr2CiHmOObCXddCywjdS07ePqB1NY8XnPGV4rfMGww4We6zDHLRz1eA7k4wsQZyIrHib/GnDsyjT64mrV01BTofN+HcqirhePmGJwoO6CO9OJnzbdzdjEGDmSxoFLPtukIW9opwyaboMB/qP70kbp48cJoQKBgQDWPj/2Ih3M5EZkj/7q77ArjyJYC8lmyJxPbIhwlkiJw50CjmB+Lbfy0iEdOPQG8nqaEc7cMQfOCc7RwcrXfXL6LUsc9lLzr7oY7SqxpepNohkEzXnSQDkgsGgWTxRHkPzSV6BikXCm3AZkDcqtXdK6jW+10N4fCN0CdB2a+bmFPQKBgQC6AeQNGf+XpeQkIG+UMc089MsbJBxlWboxIzn2TGdjGwO4ylDlj20eQjzSj0PvVfa6cGhgpd/N2MVJNGETfFmy58zKQLLO7er+Hm4Jiasu9YG9LoxDE05gO1ccN6/07Ln2xJcU8khPaGRJkg7pdG3V5+99SKdN5vXWigRH36M7bQKBgQDFHDCsu2a/g6ZgDztx22QyL1ZhuzZpIljtmeVN8HZ8iUSDfYq5jEaZWUquICAj5CN4bLntTA7qOYvW4H1HFVwbYGCjHN3k5eBJ3qpRF10iX+i0yncyQXRN5v9cxxTZY0O4InalOTpzyir3EtlN9+xRRp9on+o8k2MDRuGWG/vb4QKBgBVgmkEXN9TJ8Apm3+v8PUZALAeWgtzzDv8OuV6hMVCmjirytZFshnHv0uWwKXKcQpryyEwzRCF4RFRBfNasd/KjyVmFTgeSOGu0O5lFBTOEa8C+VMhws5VDvKM1kzdm7Yh615JEtiLKMJxz+NrD0su+uDuB2hiN7rsVaaCJB02RAoGBAJGgzEsyzaV6YPHb0JIXioBflaBBX+VrGsUZMfb2lCCvpKGFleiD3VfXg4EeBfYnfa0OD0kwiJyhqj6CmugTJr0Yzqv4CrazKTnxc9uqA26OFzqrGkJuHA/cP8GsbQ5oHUj3FslcRnJzFabiq3pNdp+yURevXk73Dg6lJAWVm4ok";
     private static final String ALIPAY_PUBLIC_KEY = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAtyoGBcNgmEzskZx8BN8LHTaeH65HHac3g7lsqS2N06Tk1oDpuMw4GMTBEMtDDbycUu76vfOifpf4vco3dyRijEpMAcEObhPR/6XylNf1d1ZHPmyCI8QBX0B6p32kh0KU2G0l//fuPUYyvjkb59kD44OQGmNcdt64ENzL7/HSZjP+DvcvOidwPoOg5xEC9nOJM8/c2Esb2Gn3nq+yrEx5w6Wr3aJyxt39ydcg+4MNxcG0uTveEYBbJuU8WY9euYXB+WjiDMFwmHBL1Td/OlxZfjK78XwwBk+ZI5L9v1K8aP1BWBpgnBFIDJz/Hk3Qq32zgAOkcmHWZHCiFJ/bLu9S5wIDAQAB";
@@ -55,7 +60,7 @@ public class AlipayParkController{
     //支付宝沙箱网关
     private static final String gatewayUrl = "https://openapi.alipaydev.com/gateway.do";
     static String VEHICLE_URL = "https%3a%2f%2fwww.kangguole.com.cn%2fparkAlipayTrade%2falipayPark%2fgetVehicleToken";    
-    
+    public static String INTERFACE_URL = "https%3a%2f%2fwww.kangguole.com.cn%2fparkAlipayTrade%2falipayPark%2fnotify";    
     
 	
     static {
@@ -127,7 +132,7 @@ public class AlipayParkController{
         } catch (AlipayApiException e) {
             e.printStackTrace();
         }
-        return "park/parkList";
+        return "redirect:/park/parkList";
     }
     
     /**
@@ -138,10 +143,13 @@ public class AlipayParkController{
     public AjaxReturnInfo parkingConfigSet(@PathVariable("outParkingId") String outParkingId){
         AjaxReturnInfo ajaxinfo = new AjaxReturnInfo();
         try {
-           boolean  result = parkService.parkingConfigSetRequest(alipayClient, outParkingId);
+           boolean  result = parkService.parkingConfigSetRequest(outParkingId);
            if(result){
                ajaxinfo.setSuccess(AjaxReturnInfo.TURE_RESULT);
                ajaxinfo.setMessage("添加成功！");
+           }else{
+        	   ajaxinfo.setSuccess(AjaxReturnInfo.FALSE_RESULT);
+               ajaxinfo.setMessage("添加失败！");
            }
         } catch (Exception e) {
             LogPay.error(e.getMessage(), e);
@@ -197,13 +205,56 @@ public class AlipayParkController{
                 // 换取令牌失败逻辑处理
             }
         } catch (AlipayApiException e) {
-
             e.printStackTrace();
         }
-
+    }
+    
+    /**
+     * 车辆驶入接口
+     * @return
+     */
+    @RequestMapping(value="/enterinfoSync", method={RequestMethod.GET, RequestMethod.POST})  
+    public AjaxReturnInfo enterinfoSync(@RequestParam(value="parkingId")String parkingId,@RequestParam(value="carNumber")String carNumber,
+    		@RequestParam(value="in_time")String in_time){
+    	AjaxReturnInfo ajaxinfo = new AjaxReturnInfo();
+    	String token = (String) ParkServiceImpl.parkingStore.get(parkingId);
+    	if(StringUtils.isEmpty(token)){
+    		 ajaxinfo.setSuccess(AjaxReturnInfo.FALSE_RESULT);
+             ajaxinfo.setMessage("未授权！");
+             return ajaxinfo;
+    	}
+    	AlipayEcoMycarParkingEnterinfoSyncRequest request = new AlipayEcoMycarParkingEnterinfoSyncRequest();
+        request.setBizContent(enterinfoSyncGetBizContent( parkingId, carNumber, in_time));//业务数据
+        AlipayEcoMycarParkingEnterinfoSyncResponse   response;
+        try {
+            response = alipayClient.execute(request, APP_AUTH_TOKEN);
+            if (response.isSuccess()) {
+	        	 ajaxinfo.setSuccess(AjaxReturnInfo.TURE_RESULT);
+	             ajaxinfo.setMessage("调用成功！");
+                 System.out.println(response.getBody());
+                 System.out.println("调用成功");
+            } else {
+            	ajaxinfo.setSuccess(AjaxReturnInfo.FALSE_RESULT);
+                ajaxinfo.setMessage("调用失败！");
+                System.out.println("调用失败");
+            }
+        } catch (AlipayApiException e) {
+            e.printStackTrace();
+        }
+    	return ajaxinfo;
     }
     
     
+	 public String enterinfoSyncGetBizContent(String parking_id,String car_number,String in_time){
+	        JSONObject data = new JSONObject();
+	        data.put(RSConsts.parking_id, parking_id);
+	        data.put(RSConsts.car_number, car_number);
+	        data.put(RSConsts.in_time, in_time);
+	        String jsonStr = JSON.toJSONString(data);
+	        return jsonStr;
+	 }
+ 
+
    
   
     

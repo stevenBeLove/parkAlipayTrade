@@ -315,6 +315,7 @@ public class ParkServiceImpl implements ParkService {
 		 List<ParkBean> parks = this.selectByExample(example);
 		 for (ParkBean parkBean : parks) {
 			if(parkBean!=null && !StringUtils.isEmpty(parkBean.getAppAuthToken())&& !StringUtils.isEmpty(parkBean.getParkingId())){
+				logger.debug("---装入park---"+parkBean.getParkingId() + "|" + parkBean.getAppAuthToken());
 				parkingStore.put(parkBean.getParkingId(), parkBean.getAppAuthToken());
 			}
 			

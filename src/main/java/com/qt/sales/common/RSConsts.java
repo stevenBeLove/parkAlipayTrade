@@ -57,6 +57,16 @@ public class RSConsts {
     public static final String parking_id = "parking_id"; 
     public static final String car_number = "car_number"; 
     public static final String in_time = "in_time"; 
+    public static final String out_time = "out_time"; 
+    public static final String user_id = "user_id"; 
+    public static final String out_order_no = "out_order_no"; 
+    public static final String order_status = "order_status"; 
+    public static final String order_time = "order_time"; 
+    public static final String order_no = "order_no"; 
+    public static final String pay_time = "pay_time"; 
+    public static final String pay_money = "pay_money"; 
+    public static final String in_duration = "in_duration"; 
+    public static final String card_number = "card_number"; 
     
     
     

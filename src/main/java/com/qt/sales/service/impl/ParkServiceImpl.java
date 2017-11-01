@@ -24,9 +24,11 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.request.AlipayEcoMycarParkingConfigSetRequest;
+import com.alipay.api.request.AlipayEcoMycarParkingOrderSyncRequest;
 import com.alipay.api.request.AlipayEcoMycarParkingParkinglotinfoCreateRequest;
 import com.alipay.api.request.AlipayEcoMycarParkingParkinglotinfoUpdateRequest;
 import com.alipay.api.response.AlipayEcoMycarParkingConfigSetResponse;
+import com.alipay.api.response.AlipayEcoMycarParkingOrderSyncResponse;
 import com.alipay.api.response.AlipayEcoMycarParkingParkinglotinfoCreateResponse;
 import com.alipay.api.response.AlipayEcoMycarParkingParkinglotinfoUpdateResponse;
 import com.qt.sales.common.RSConsts;
@@ -37,7 +39,6 @@ import com.qt.sales.model.ParkBeanExample;
 import com.qt.sales.service.ParkService;
 import com.qt.sales.web.AlipayParkController;
 
-import oracle.jdbc.proxy.annotation.Post;
 import sun.misc.BASE64Encoder;
 
 /** 
@@ -321,7 +322,71 @@ public class ParkServiceImpl implements ParkService {
 			
 		}
 	}
+
+
+	@Override
+	public String enterinfoSync(String parkingId, String carNumber, String inTime) {
+		//新建tb_park_record表
+		return null;
+	}
+
+
+	@Override
+	public String ecoMycarParkingExitinfoSync(String parkingId, String carNumber, String inTime) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public String ecoMycarParkingVehicleQuery(String car_id, String parking_id, String car_number,
+			String access_token) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public String ecoMycarParkingOrderSyn() {
+		try {
+			AlipayEcoMycarParkingOrderSyncRequest request = new AlipayEcoMycarParkingOrderSyncRequest();
+			String token = (String) ParkServiceImpl.parkingStore.get("");
+			request.setBizContent("{" +
+			"\"user_id\":\"2088006362935583\"," +
+			"\"out_parking_id\":\"201605061278654\"," +
+			"\"parking_name\":\"上海证大五道口地下停车场\"," +
+			"\"car_number\":\"浙Axxxxx\"," +
+			"\"out_order_no\":\"201605061278654435466567\"," +
+			"\"order_status\":\"1\"," +
+			"\"order_time\":\"2016-08-12 20:27:30\"," +
+			"\"order_no\":\"7674879087745646586\"," +
+			"\"pay_time\":\"2016-08-12 23:20:23\"," +
+			"\"pay_type\":\"1\"," +
+			"\"pay_money\":\"20.00\"," +
+			"\"in_time\":\"2016-08-12 20:20:13\"," +
+			"\"parking_id\":\"1234567890123456\"," +
+			"\"in_duration\":\"320\"," +
+			"\"card_number\":\"2357868977445645645656\"" +
+			"  }");
+			request.putOtherTextParam("app_auth_token", token);
+			AlipayEcoMycarParkingOrderSyncResponse response = AlipayParkController.alipayClient.execute(request);
+			if(response.isSuccess()){
+			System.out.println("调用成功");
+			} else {
+			System.out.println("调用失败");
+			}
+			
+		} catch (AlipayApiException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
 	
+//	private String orderSynBiz(){
+//		
+//	}
+//	
     
 }
 

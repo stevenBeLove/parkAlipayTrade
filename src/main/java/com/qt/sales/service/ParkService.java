@@ -6,7 +6,6 @@ package com.qt.sales.service;
 
 import java.util.List;
 
-import com.alipay.api.AlipayClient;
 import com.qt.sales.exception.QTException;
 import com.qt.sales.model.ParkBean;
 import com.qt.sales.model.ParkBeanExample;
@@ -46,6 +45,16 @@ public interface ParkService {
     //修改停车场信息
     public String parkinglotinfoUpdate(String outParkingId);
     
+    //驶入车辆
+    public String enterinfoSync(String parkingId, String carNumber,String inTime);
     
+    //车辆驶出
+    public String ecoMycarParkingExitinfoSync(String parkingId, String carNumber,String inTime);
+    
+    //车牌查询
+    public String ecoMycarParkingVehicleQuery(String car_id,String parking_id,String car_number,String access_token);
+    
+    //订单同步
+    public String ecoMycarParkingOrderSyn();
 }
 

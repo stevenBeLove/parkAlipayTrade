@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
+<<<<<<< HEAD
 	<head>
 	<title>支付宝统一下单并支付接口</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -21,6 +22,11 @@ ul,ol{
 .hidden{
 	display:none;
 }
+=======
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+<title>订单</title>
+>>>>>>> branch 'master' of https://github.com/zhangyinghui88/parkAlipayTrade.git
 
 .new-btn-login-sp{
 	border:1px solid #D74C00;

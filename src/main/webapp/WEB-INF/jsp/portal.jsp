@@ -7,7 +7,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>停车场管理后台</title>
+<title>管理后台</title>
   <link rel="stylesheet" media="screen" href="${ctx}/css/common/cus-icons.css">
   <style>
   		#allmenu li span.glyphicon-tag + span{

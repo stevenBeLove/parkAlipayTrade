@@ -45,10 +45,36 @@ public interface ParkService {
     //修改停车场信息
     public String parkinglotinfoUpdate(String outParkingId);
     
-    //驶入车辆
+    /**
+     * 【注意】: (驶入车辆).<br/> 
+     * 【作者】: yinghui zhang .<br/>
+     * 【时间】： 2017年11月2日 下午5:23:41 .<br/>
+     * 【参数】： .<br/>
+     * @param parkingId
+     * @param carNumber
+     * @param inTime
+     * @return .<br/>
+     * <p>
+     * 修改记录.<br/>
+     * 修改人:  yinghui zhang 修改描述： .<br/>
+     * <p/>
+     */
     public String enterinfoSync(String parkingId, String carNumber,String inTime);
     
-    //车辆驶出
+    /**
+     * 【方法名】    : (车辆驶出). <br/> 
+     * 【作者】: yinghui zhang .<br/>
+     * 【时间】： 2017年11月2日 下午5:24:00 .<br/>
+     * 【参数】： .<br/>
+     * @param parkingId
+     * @param carNumber
+     * @param inTime
+     * @return .<br/>
+     * <p>
+     * 修改记录.<br/>
+     * 修改人:  yinghui zhang 修改描述： .<br/>
+     * <p/>
+     */
     public String ecoMycarParkingExitinfoSync(String parkingId, String carNumber,String inTime);
     
     //车牌查询

@@ -326,7 +326,6 @@ public class ParkServiceImpl implements ParkService {
 
 	@Override
 	public String enterinfoSync(String parkingId, String carNumber, String inTime) {
-		//新建tb_park_record表
 		return null;
 	}
 

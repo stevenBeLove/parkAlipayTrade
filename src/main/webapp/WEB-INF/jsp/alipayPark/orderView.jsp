@@ -20,9 +20,7 @@
 
     $(document).ready(function(){
         // 页面载入完成后即唤起收银台
-        // 此处${tradeNO}为模板语言语法，实际调用样例类似为tradePpay("2016072621001004200000000752")
         //tradePay("${tradeNO}"); 
-
         // 点击payButton按钮后唤起收银台
         $("#payButton").click(function() {
         	$.ajax({
@@ -64,9 +62,9 @@
              AlipayJSBridge.call("tradePay", {
                   tradeNO: tradeNO
              }, function (data) {
-                 log(JSON.stringify(data));
+                 alert(JSON.stringify(data));
                  if ("9000" == data.resultCode) {
-                     log("支付成功");
+                     alert("支付成功");
                  }
              });
         });

@@ -196,16 +196,6 @@
 			<version>${slf4j.version}</version>
 		</dependency>
 
-		<!-- <dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-log4j12</artifactId>
-			<version>${slf4j.version}</version>
-		</dependency> -->
-
-		<!-- log dependency end -->
-
-
-
 		<!-- json dependency start -->
 		<dependency>
 			<groupId>com.alibaba</groupId>
@@ -358,12 +348,6 @@
 		</dependency>
 		
 
-		<!-- <dependency>
-			<groupId>javax.jms</groupId>
-			<artifactId>jms-api</artifactId>
-			<version>${jms-api_version}</version>
-		</dependency> -->
-
 		
 		<dependency>
 		  <groupId>net.sf.jxls</groupId>
@@ -388,20 +372,6 @@
 		  <artifactId>commons-fileupload</artifactId>
 		  <version>1.3.1</version>
 		</dependency>
-		
-		 <dependency>
-            <groupId>org.apache.oltu.oauth2</groupId>
-            <artifactId>org.apache.oltu.oauth2.authzserver</artifactId>
-            <version>1.0.2</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.oltu.oauth2</groupId>
-            <artifactId>org.apache.oltu.oauth2.resourceserver</artifactId>
-            <version>1.0.2</version>
-        </dependency>
-		
-		
 
 	</dependencies>
 	<build>

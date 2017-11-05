@@ -5,6 +5,7 @@
 package com.qt.sales.web;
 
 import java.util.Map;
+import java.util.Random;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -28,15 +29,21 @@ import com.alipay.api.DefaultAlipayClient;
 import com.alipay.api.request.AlipayEcoMycarParkingEnterinfoSyncRequest;
 import com.alipay.api.request.AlipayEcoMycarParkingExitinfoSyncRequest;
 import com.alipay.api.request.AlipayEcoMycarParkingVehicleQueryRequest;
+import com.alipay.api.request.AlipayOpenAuthTokenAppRequest;
 import com.alipay.api.request.AlipaySystemOauthTokenRequest;
+import com.alipay.api.request.AlipayTradeCreateRequest;
 import com.alipay.api.response.AlipayEcoMycarParkingEnterinfoSyncResponse;
 import com.alipay.api.response.AlipayEcoMycarParkingExitinfoSyncResponse;
 import com.alipay.api.response.AlipayEcoMycarParkingVehicleQueryResponse;
+import com.alipay.api.response.AlipayOpenAuthTokenAppResponse;
 import com.alipay.api.response.AlipaySystemOauthTokenResponse;
+import com.alipay.api.response.AlipayTradeCreateResponse;
 import com.qt.sales.common.RSConsts;
 import com.qt.sales.model.ParkBean;
+import com.qt.sales.model.VehicleBean;
 import com.qt.sales.service.ParkService;
 import com.qt.sales.service.impl.ParkServiceImpl;
+import com.qt.sales.utils.DateUtil;
 import com.qt.sales.utils.LogPay;
 
 /**
@@ -63,7 +70,7 @@ public class AlipayParkController {
 	private static final String gatewayUrl = "https://openapi.alipaydev.com/gateway.do";
 	static String VEHICLE_URL = "https%3a%2f%2fwww.kangguole.com.cn%2fparkAlipayTrade%2falipayPark%2fgetVehicleToken";
 	public static String INTERFACE_URL = "https%3a%2f%2fwww.kangguole.com.cn%2fparkAlipayTrade%2falipayPark%2fnotify";
-
+	
 	static {
 		alipayClient = new DefaultAlipayClient(gatewayUrl, APP_ID, APP_PRIVATE_KEY, "json", charset, ALIPAY_PUBLIC_KEY,
 				sign_type);
@@ -83,17 +90,59 @@ public class AlipayParkController {
 		String auth_code = request.getParameter("auth_code");
 		String car_id = request.getParameter("car_id");
 		String parking_id = request.getParameter("parking_id");
-		String rand = request.getParameter("rand");
-		ecoMycarParkingVehicleQueryRequest(auth_code, car_id, parking_id, model);
+		String source = request.getParameter("source");
+		if(!StringUtils.isEmpty(source)){
+		    getAPPToken(request,model);
+		}else{
+		    logger.debug("parking_id="+parking_id);
+		    String rand = request.getParameter("rand");
+		    ecoMycarParkingVehicleQueryRequest(auth_code, car_id, parking_id, model);
+		}
 		return "alipayPark/orderView";
+		
 	}
+	
+	 public void getAPPToken(HttpServletRequest request, Model model) {
+	      String source = request.getParameter("source");
+	      String scope = request.getParameter("scope");
+	      String auth_code = request.getParameter("app_auth_code");
+	      String outParkingId = request.getParameter("state");
+	      AlipayOpenAuthTokenAppRequest tokenRequest = new AlipayOpenAuthTokenAppRequest();
+	      JSONObject data = new JSONObject();
+	      data.put("grant_type", "authorization_code");
+	      data.put("code", auth_code);
+	      // 授权设置
+	      tokenRequest.setBizContent(data.toJSONString());
+	      try {
+	        // 换取调用
+	        AlipayOpenAuthTokenAppResponse response = alipayClient.execute(tokenRequest);
+	        System.out.println(response.getBody());
+	        if (response.isSuccess()) {
+	          // 调用成功
+	          ParkBean park = parkService.selectByPrimaryKey(outParkingId);
+	          if (!StringUtils.isEmpty(park)) {
+	            park.setAppAuthToken(response.getAppAuthToken());
+	            park.setExpiresIn(response.getExpiresIn());
+	            park.setReExpiresIn(response.getReExpiresIn());
+	            park.setRefreshToken(response.getReExpiresIn());
+	            park.setAlipayUserId(response.getUserId());
+	            parkService.updateByPrimaryKeySelective(park);
+	            model.addAttribute("msg", "授权成功!");
+	          }
+	        } else {
+	          // 换取令牌失败逻辑处理
+	          model.addAttribute("danger", "授权失败，请重试！错误信息：" + response.getBody());
+	        }
+	      } catch (AlipayApiException e) {
+	        e.printStackTrace();
+	      }
+	    }
 	
 	/**
 	 * 【方法名】 : (车牌查询). <br/>
 	 * 【作者】: yinghui zhang .<br/>
 	 * 【时间】： 2017年10月28日 下午9:00:28 .<br/>
 	 * 【参数】： .<br/>
-	 * 
 	 * @param code
 	 * @param app_auth_token
 	 * @param car_id
@@ -107,10 +156,11 @@ public class AlipayParkController {
 		AlipaySystemOauthTokenRequest tokenRequest = new AlipaySystemOauthTokenRequest();
 		tokenRequest.setGrantType("authorization_code");
 		String app_auth_token = (String) ParkServiceImpl.parkingStore.get(parking_id);
-		if (StringUtils.isEmpty(app_auth_token)) {
-			model.addAttribute("danger", "请先获得访问授权！");
-			return;
-		}
+		System.out.println("----------store.token = "+app_auth_token);
+//		if (StringUtils.isEmpty(app_auth_token)) {
+//			model.addAttribute("danger", "请先获得访问授权！");
+//			return;
+//		}
 		tokenRequest.putOtherTextParam("app_auth_token", app_auth_token);
 		// 授权设置
 		tokenRequest.setCode(code);
@@ -118,11 +168,13 @@ public class AlipayParkController {
 			// 换取调用
 			AlipaySystemOauthTokenResponse response = alipayClient.execute(tokenRequest);
 			if (response.isSuccess()) {
+			   System.out.println("response="+response.getBody());
 				// 调用成功
 				String uid = response.getUserId();
+				logger.debug("uid="+uid);
 				// 取得令牌
 				String access_token = response.getAccessToken();
-				System.out.println(access_token);
+				System.out.println("获取token="+access_token);
 				// 通过授权令牌调用获取用户车牌信息接口
 				AlipayEcoMycarParkingVehicleQueryRequest requestBiz = new AlipayEcoMycarParkingVehicleQueryRequest();
 				
@@ -132,16 +184,22 @@ public class AlipayParkController {
 				AlipayEcoMycarParkingVehicleQueryResponse responseBiz = alipayClient.execute(requestBiz, access_token);
 				// 判断调用是否成功
 				if (responseBiz.isSuccess()) {
-					System.out.println(responseBiz.toString());
+					System.out.println("responseBiz="+responseBiz.getBody());
 					// 获取相应数据
 					Map<String, String> responseParams = responseBiz.getParams();
 					System.out.println(responseParams.toString());
 					String car_number = responseBiz.getCarNumber();
 					model.addAttribute("car_number", car_number);
-					
+					VehicleBean bean = new VehicleBean();
+					bean.setCarId(car_id);
+					bean.setParkingId(parking_id);
+					bean.setCarNumber(car_number);
+					bean.setAuthToken(access_token);
+					bean.setUserId(uid);
 					//获得车牌业务逻辑
-					parkService.ecoMycarParkingVehicleQuery(car_id,parking_id,car_number,access_token);
-					
+					parkService.ecoMycarParkingVehicleQuery(bean);
+					//创建订单
+					System.out.println("uid="+uid);
 				} else {
 					// 调用失败处理逻辑
 					System.out.println(responseBiz.getBody());
@@ -153,18 +211,30 @@ public class AlipayParkController {
 			e.printStackTrace();
 		}
 	}
+	
 
-
-	@RequestMapping(value = "/responseCarAuth/{outParkingId}", method = RequestMethod.GET)
-	public String responseCarAuth(HttpServletRequest request, @PathVariable("outParkingId") String outParkingId) {
-		String url = "https://openauth.alipaydev.com/oauth2/publicAppAuthorize.htm?app_id=" + APP_ID
-				+ "&scope=auth_user&redirect_uri=" + VEHICLE_URL + "&state=" + outParkingId;
-		logger.debug(url);
-		return "redirect:" + url;
-	}
+	@RequestMapping(value = "/responseParkAuth/{outParkingId}", method = RequestMethod.GET)
+  public String responseParkAuth(HttpServletRequest request, @PathVariable("outParkingId") String outParkingId) {
+	    String url = "https://openauth.alipaydev.com/oauth2/appToAppAuth.htm?app_id=" + APP_ID
+	            + "&redirect_uri=" + INTERFACE_URL + "&state=" + outParkingId;
+    logger.debug(url);
+    return "redirect:" + url;
+  }
+	    
+	
 
 	/**
-	 * 获取停车场令牌
+	 * 【方法名】    : (停车场授权). <br/> 
+	 * 【作者】: yinghui zhang .<br/>
+	 * 【时间】： 2017年11月4日 下午9:30:49 .<br/>
+	 * 【参数】： .<br/>
+	 * @param request
+	 * @param model
+	 * @return .<br/>
+	 * <p>
+	 * 修改记录.<br/>
+	 * 修改人:  yinghui zhang 修改描述： .<br/>
+	 * <p/>
 	 */
 	@RequestMapping(value = "/getVehicleToken", method = RequestMethod.GET)
 	public String getVehicleToken(HttpServletRequest request, Model model) {
@@ -172,31 +242,31 @@ public class AlipayParkController {
 		String scope = request.getParameter("scope");
 		String auth_code = request.getParameter("auth_code");
 		String outParkingId = request.getParameter("state");
-		AlipaySystemOauthTokenRequest tokenRequest = new AlipaySystemOauthTokenRequest();
-		tokenRequest.setGrantType("authorization_code");
+		AlipayOpenAuthTokenAppRequest tokenRequest = new AlipayOpenAuthTokenAppRequest();
+    JSONObject data = new JSONObject();
+    data.put("grant_type", "authorization_code");
+    data.put("code", auth_code);
 		// 授权设置
-		tokenRequest.setCode(auth_code);
+		tokenRequest.setBizContent(data.toJSONString());
 		try {
 			// 换取调用
-			AlipaySystemOauthTokenResponse response = alipayClient.execute(tokenRequest);
+		  AlipayOpenAuthTokenAppResponse response = alipayClient.execute(tokenRequest);
 			System.out.println(response.getBody());
 			if (response.isSuccess()) {
 				// 调用成功
 				ParkBean park = parkService.selectByPrimaryKey(outParkingId);
 				if (!StringUtils.isEmpty(park)) {
-					park.setAppAuthToken(response.getAccessToken());
+					park.setAppAuthToken(response.getAppAuthToken());
 					park.setExpiresIn(response.getExpiresIn());
 					park.setReExpiresIn(response.getReExpiresIn());
-					park.setRefreshToken(response.getRefreshToken());
+					park.setRefreshToken(response.getReExpiresIn());
 					park.setAlipayUserId(response.getUserId());
 					parkService.updateByPrimaryKeySelective(park);
 					model.addAttribute("msg", "授权成功!");
-					;
 				}
 			} else {
 				// 换取令牌失败逻辑处理
 				model.addAttribute("danger", "授权失败，请重试！错误信息：" + response.getBody());
-				;
 
 			}
 		} catch (AlipayApiException e) {
@@ -206,7 +276,16 @@ public class AlipayParkController {
 	}
 
 	/**
-	 * 添加停车场
+	 * 【方法名】    : (停车场设置). <br/> 
+	 * 【作者】: yinghui zhang .<br/>
+	 * 【时间】： 2017年11月4日 下午9:39:36 .<br/>
+	 * 【参数】： .<br/>
+	 * @param outParkingId
+	 * @return .<br/>
+	 * <p>
+	 * 修改记录.<br/>
+	 * 修改人:  yinghui zhang 修改描述： .<br/>
+	 * <p/>
 	 */
 	@RequestMapping(value = "/parkingConfigSet/{outParkingId}", method = RequestMethod.GET)
 	@ResponseBody
@@ -227,16 +306,41 @@ public class AlipayParkController {
 		return ajaxinfo;
 	}
 
+	 /**
+   * 【方法名】    : (添加停车场). <br/> 
+   * 【作者】: yinghui zhang .<br/>
+   * 【时间】： 2017年11月4日 下午9:39:36 .<br/>
+   * 【参数】： .<br/>
+   * @param outParkingId
+   * @return .<br/>
+   * <p>
+   * 修改记录.<br/>
+   * 修改人:  yinghui zhang 修改描述： .<br/>
+   * <p/>
+   */
+  @RequestMapping(value = "/parkingCreate/{outParkingId}", method = RequestMethod.GET)
+  @ResponseBody
+  public AjaxReturnInfo parkingCreate(@PathVariable("outParkingId") String outParkingId) {
+    AjaxReturnInfo ajaxinfo = new AjaxReturnInfo();
+    try {
+      String result = parkService.parkingCreate(outParkingId);
+        ajaxinfo.setSuccess(AjaxReturnInfo.TURE_RESULT);
+        ajaxinfo.setMessage(result);
+    } catch (Exception e) {
+      LogPay.error(e.getMessage(), e);
+    }
+    return ajaxinfo;
+  }
 
 	/**
 	 * 车辆驶入接口
-	 * 
 	 * @return
 	 */
-	@RequestMapping(value = "/enterinfoSync", method = { RequestMethod.GET, RequestMethod.POST })
-	public AjaxReturnInfo enterinfoSync(@RequestParam(value = "parkingId") String parkingId,
-			@RequestParam(value = "carNumber") String carNumber, @RequestParam(value = "in_time") String in_time) {
+	@RequestMapping(value = "/enterinfoSync", method = {RequestMethod.POST })
+	@ResponseBody
+	public AjaxReturnInfo enterinfoSync(String parkingId,String carNumber) {
 		AjaxReturnInfo ajaxinfo = new AjaxReturnInfo();
+		String in_time = DateUtil.getCurrDate(DateUtil.STANDDATEFORMAT);
 		String token = (String) ParkServiceImpl.parkingStore.get(parkingId);
 		if (StringUtils.isEmpty(token)) {
 			ajaxinfo.setSuccess(AjaxReturnInfo.FALSE_RESULT);
@@ -267,7 +371,7 @@ public class AlipayParkController {
 	}
 
 	// 车辆驶入接口
-	public String enterinfoSyncGetBizContent(String parking_id, String car_number, String in_time) {
+	private String enterinfoSyncGetBizContent(String parking_id, String car_number,String in_time) {
 		JSONObject data = new JSONObject();
 		data.put(RSConsts.parking_id, parking_id);
 		data.put(RSConsts.car_number, car_number);
@@ -282,6 +386,7 @@ public class AlipayParkController {
 	 * @return
 	 */
 	@RequestMapping(value = "/ecoMycarParkingExitinfoSync", method = { RequestMethod.GET, RequestMethod.POST })
+	@ResponseBody
 	public AjaxReturnInfo ecoMycarParkingExitinfoSync(@RequestParam(value = "parkingId") String parkingId,
 			@RequestParam(value = "carNumber") String carNumber, @RequestParam(value = "out_time") String out_time) {
 		AjaxReturnInfo ajaxinfo = new AjaxReturnInfo();
@@ -327,7 +432,88 @@ public class AlipayParkController {
 	
 	
 	
+	 /**
+   * 跳转到列表页
+   * @param model
+   *            实体类
+   * @return 页面路径
+   */
+  @RequestMapping(value = "/orderView", method = { RequestMethod.GET, RequestMethod.POST })
+  public String orderView(Model model) {
+      return "alipayPark/orderView";
+  }
+  
+  
+  /**
+  * 跳转到列表页
+  * @param model
+  *            实体类
+  * @return 页面路径
+  */
+ @RequestMapping(value = "/alipayapi",  method = { RequestMethod.GET, RequestMethod.POST })
+ public String alipayapi(Model model) {
+     return "alipayPark/alipayapi";
+ }
 	
-	
+  /**
+   * 创建订单
+   */
+  @RequestMapping(value = "/tradeCreate", method = {RequestMethod.POST, RequestMethod.GET})
+  @ResponseBody
+  public AjaxReturnInfo tradeCreate() {
+      AjaxReturnInfo ajaxinfo = new AjaxReturnInfo();
+      try {
+          AlipayTradeCreateRequest request = new AlipayTradeCreateRequest();
+          request.setBizContent(getTradeCreateBizContent());
+          request.putOtherTextParam("app_auth_token", "201711BB4fe4a6e144cf427ebbbdcbded0b52X45");
+          AlipayTradeCreateResponse response = alipayClient.execute(request);
+          if (response.isSuccess()) {
+              ajaxinfo.setSuccess(AjaxReturnInfo.TURE_RESULT);
+              ajaxinfo.setMessage(response.getTradeNo());
+              System.out.println(response.getBody());
+              System.out.println(response.getTradeNo());
+              System.out.println("调用成功");
+          } else {
+              System.out.println("调用失败");
+          }
+      } catch (AlipayApiException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+      }
+      return ajaxinfo;
+  }
 
+ public static Random random = new Random();
+ 
+ public static String getTradeCreateBizContent(){
+     JSONObject data = new JSONObject();
+     data.put(RSConsts.out_trade_no, DateUtil.getCurrDateAndTime()+random.nextInt(1000));//商户订单号
+     data.put(RSConsts.seller_id, "2088102170455452");//卖家支付宝用户ID
+     data.put(RSConsts.total_amount, "188.88");
+//     data.put("discountable_amount", "");// 可打折金额.!
+     data.put(RSConsts.subject, "停车费");
+     data.put(RSConsts.body, "车牌号码：沪C8H9K3");
+     data.put("buyer_id", "2088102174838743");
+//     data.put("operator_id", "0001");//商户操作员编号 !
+//     data.put("store_id", "10002");//商户门店编号!
+//     data.put("terminal_id", "10000");// 商户机具终端编号  !
+     
+     JSONObject goodsDetail = new JSONObject();
+     goodsDetail.put("goods_id", "park01");  //商品的编号
+     goodsDetail.put("goods_name", "停车费");//商品名称 
+     goodsDetail.put("quantity", "1");//商品数量 
+     goodsDetail.put("price", "2000");//商品单价，单位为元 
+//     goodsDetail.put("goods_category", "");//商品类目  !
+//     goodsDetail.put("body", ""); //商品描述信息 !
+//     goodsDetail.put("show_url", "");//商品的展示地址  !
+//     data.put("goods_detail", goodsDetail.toJSONString());
+     
+     JSONObject extend_params = new JSONObject();
+     extend_params.put("sys_service_provider_id", "2088102170404632");//系统商编号 
+//     extend_params.put("timeout_express", "");!
+//     extend_params.put("business_params", "");!
+//     data.put("extend_params", extend_params.toJSONString());
+     return data.toJSONString();
+ }
+ 
 }

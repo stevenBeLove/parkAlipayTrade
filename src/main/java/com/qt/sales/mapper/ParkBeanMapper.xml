@@ -129,6 +129,15 @@
     </if>
   </select>
   
+  <select id="selectAllParkBean" resultMap="BaseResultMap" parameterType="com.qt.sales.model.ParkBeanExample" >
+   	select
+    <include refid="Base_Column_List" />
+    from park.TB_PARK
+     <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.qt.sales.model.ParkBeanExample" >
     select * from ( select tmp_page.*, rownum row_id from (
     select

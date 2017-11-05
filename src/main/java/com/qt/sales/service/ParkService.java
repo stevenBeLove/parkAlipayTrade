@@ -9,6 +9,7 @@ import java.util.List;
 import com.qt.sales.exception.QTException;
 import com.qt.sales.model.ParkBean;
 import com.qt.sales.model.ParkBeanExample;
+import com.qt.sales.model.VehicleBean;
 
 /** 
  * 类名: ParkService <br/> 
@@ -39,7 +40,18 @@ public interface ParkService {
     
     int updateByPrimaryKeySelective(ParkBean record);
     
-    //创建停车场
+    /**
+     * 【方法名】    : (创建停车场). <br/> 
+     * 【作者】: yinghui zhang .<br/>
+     * 【时间】： 2017年11月4日 下午9:38:52 .<br/>
+     * 【参数】： .<br/>
+     * @param outParkingId
+     * @return .<br/>
+     * <p>
+     * 修改记录.<br/>
+     * 修改人:  yinghui zhang 修改描述： .<br/>
+     * <p/>
+     */
     public String parkingCreate(String outParkingId);
     
     //修改停车场信息
@@ -77,10 +89,45 @@ public interface ParkService {
      */
     public String ecoMycarParkingExitinfoSync(String parkingId, String carNumber,String inTime);
     
-    //车牌查询
-    public String ecoMycarParkingVehicleQuery(String car_id,String parking_id,String car_number,String access_token);
+    /**
+     * 
+     * 【方法名】    : (车牌查询). <br/> 
+     * 【作者】: yinghui zhang .<br/>
+     * 【时间】： 2017年11月4日 下午2:50:35 .<br/>
+     * 【参数】： .<br/>
+     * @param bean
+     * @return .<br/>
+     * <p>
+     * 修改记录.<br/>
+     * 修改人:  yinghui zhang 修改描述： .<br/>
+     * <p/>
+     */
+    public String ecoMycarParkingVehicleQuery(VehicleBean bean);
     
-    //订单同步
+    /**
+     * 【方法名】    : (订单同步). <br/> 
+     * 【作者】: yinghui zhang .<br/>
+     * 【时间】： 2017年11月4日 下午2:53:16 .<br/>
+     * 【参数】： .<br/>
+     * @return .<br/>
+     * <p>
+     * 修改记录.<br/>
+     * 修改人:  yinghui zhang 修改描述： .<br/>
+     * <p/>
+     */
     public String ecoMycarParkingOrderSyn();
+    /**
+     * 【方法名】    : (加载全部停车场数据). <br/> 
+     * 【作者】: yinghui zhang .<br/>
+     * 【时间】： 2017年11月4日 下午8:15:46 .<br/>
+     * 【参数】： .<br/>
+     * @param example
+     * @return .<br/>
+     * <p>
+     * 修改记录.<br/>
+     * 修改人:  yinghui zhang 修改描述： .<br/>
+     * <p/>
+     */
+    List<ParkBean> selectAllParkBean(ParkBeanExample example);
 }
 

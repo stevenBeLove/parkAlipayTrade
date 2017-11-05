@@ -15,6 +15,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.qt.sales.model.ParkBean;
+import com.qt.sales.model.VehicleBean;
 import com.qt.sales.service.ParkService;
 
 /** 
@@ -59,5 +60,7 @@ public class ParkServiceTest {
         System.out.println(jsonStr);
         return jsonStr;
     }
+    
+    
 }
 

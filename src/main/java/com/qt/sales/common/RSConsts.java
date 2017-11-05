@@ -67,7 +67,26 @@ public class RSConsts {
     public static final String pay_money = "pay_money"; 
     public static final String in_duration = "in_duration"; 
     public static final String card_number = "card_number"; 
-    
-    
+    public static final String out_trade_no = "out_trade_no"; 
+    public static final String seller_id = "seller_id"; 
+    public static final String total_amount = "total_amount"; 
+    public static final String discountable_amount = "discountable_amount"; 
+    public static final String subject = "subject"; 
+    public static final String body = "body"; 
+    public static final String buyer_id = "buyer_id"; 
+    public static final String goods_detail = "goods_detail"; 
+    public static final String goods_id = "goods_id"; 
+    public static final String goods_name = "goods_name"; 
+    public static final String quantity = "quantity"; 
+    public static final String goods_category = "goods_category"; 
+    public static final String show_url = "show_url"; 
+    public static final String price = "price"; 
+    public static final String operator_id = "operator_id"; 
+    public static final String store_id = "store_id"; 
+    public static final String terminal_id = "terminal_id"; 
+    public static final String extend_params = "extend_params"; 
+    public static final String sys_service_provider_id = "sys_service_provider_id"; 
+    public static final String timeout_express = "timeout_express"; 
+    public static final String business_params = "business_params"; 
     
 }

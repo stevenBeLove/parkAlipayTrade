@@ -30,4 +30,6 @@ public interface ParkBeanMapper {
     int updateByPrimaryKeySelective(ParkBean record);
 
     int updateByPrimaryKey(ParkBean record);
+    
+    List<ParkBean> selectAllParkBean(ParkBeanExample example);
 }

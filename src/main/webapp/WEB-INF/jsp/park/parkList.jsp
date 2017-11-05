@@ -14,6 +14,42 @@
 
 <script src="${ctx}/js/suggest/src/bootstrap-suggest.js"></script>
 <script src="${ctx}/js/pagejs/park/park.js"></script>
+
+<script type="text/javascript">
+function createPark(){
+	   var ids = $.map($('#mytab').bootstrapTable('getSelections'), function (row) {
+        return row.outParkingId;
+    });
+		if(ids==''){
+    		alert('请选择修改的记录!');
+    		return;
+		}
+		$.ajax({   
+	   	   type:"GET",
+	       url:  ctx+"/alipayPark/parkingCreate/"+ids,
+	       success:function(obj){
+	    	   alert(obj.message);
+	    	  if(obj.success=='true'){
+					alert(obj.message);
+				}else{
+					alert(obj.message);
+				}
+	          }	          
+	     }); 
+}     
+
+
+function carControl(){
+	var ids = $.map($('#mytab').bootstrapTable('getSelections'), function (row) {
+        return row.outParkingId;
+    });
+	if(ids==''){
+		alert('请选择修改的记录!');
+		return;
+	}
+	location.href = ctx+"/park/showCarControl/"+ids;
+}
+</script>
 <meta name="viewport"
 	content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
 <style type="text/css">
@@ -35,23 +71,6 @@ body.bootstrap-admin-with-small-navbar {
                             <div class="panel panel-default bootstrap-admin-no-table-panel">
                                
                                 <div class="bootstrap-admin-no-table-panel-content bootstrap-admin-panel-content collapse in">
-                                    <!-- <form class="form-horizontal" onsubmit="reloadDate();return false;">
-                                        <fieldset>
-                                            <div class="form-group">
-                                            	
-                                            	<label class="col-lg-1 control-label" for="username">停车场</label>
-                                                <div class="col-lg-2">
-                                                    <input type="text"  id="username" class="form-control" />
-                                                </div>
-                                            	
-                                                <div class="col-lg-2">
-                                                	<button type="submit" class="btn btn-primary">查&nbsp;询</button>
-                                           			 <button type="reset" class="btn btn-default">清&nbsp;空</button>
-                                                </div>
-                                            </div>
-                                            
-                                        </fieldset>
-                                    </form> -->
                                 </div>
                             </div>
                         </div>
@@ -81,8 +100,14 @@ body.bootstrap-admin-with-small-navbar {
 						 		<button id="btn_edit" type="button" class="btn btn-default" onclick="grantPark();">
 							    <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>授权
 							   </button>&nbsp;&nbsp;
+							   <button id="btn_create" type="button" class="btn btn-default" onclick="createPark();">
+							    <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>创建停车场
+							   </button>&nbsp;&nbsp;
 							   <button id="btn_add" type="button" class="btn btn-default" onclick="addUser();">
 							    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>更新停车场信息
+							   </button>
+							    <button id="btn_control" type="button" class="btn btn-default" onclick="carControl();">
+							    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>车场接口
 							   </button>
 							 
 						  </div>

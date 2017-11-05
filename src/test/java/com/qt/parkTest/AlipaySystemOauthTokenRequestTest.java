@@ -35,10 +35,7 @@ public class AlipaySystemOauthTokenRequestTest {
         AlipaySystemOauthTokenRequest request = new AlipaySystemOauthTokenRequest();
         //授权设置 
         request.setGrantType("authorization_code"); 
-        //auth_code设置,从alipay.eco.mycar.parking.userpage.query页面接口中可以获取到该值 
-        request.setCode("0ec7e8a59b3c4f64b59bec143360VX72"); 
-        
-        
+        request.setCode("a5e08d06ffc14cfc8da4f639a4e9WC45"); 
         try {
 			//换取调用 
 			AlipaySystemOauthTokenResponse response = alipayClient.execute(request); 
@@ -47,24 +44,7 @@ public class AlipaySystemOauthTokenRequestTest {
 			    String uid = response.getUserId(); 
 			    //取得令牌 
 			    String access_token = response.getAccessToken(); 
-			    //通过授权令牌调用获取用户车牌信息接口
-			    AlipayEcoMycarParkingVehicleQueryRequest requestBiz = new AlipayEcoMycarParkingVehicleQueryRequest(); 
-			    //SDK已经封装掉了公共参数，这里只需要传入业务参数 
-			    JSONObject data = new JSONObject();
-		        data.put("car_id", "201605061278654");
-			    requestBiz.setBizContent(JSON.toJSONString(data));//业务数据
-				AlipayEcoMycarParkingVehicleQueryResponse responseBiz = alipayClient.execute(requestBiz,access_token); 
-				//判断调用是否成功
-				if(responseBiz.isSuccess()){
-					//获取相应数据
-					Map<String,String> responseParams = responseBiz.getParams();
-					//通过返回数据进行业务处理，可以通过responseParams获取到返回的键值数据
-					System.out.println(responseBiz.getBody());
-				}else{
-					//调用失败处理逻辑
-					System.out.println(responseBiz.getBody());
-				}
-				
+				  System.out.println(access_token);
 			} else {
 			 //换取令牌失败逻辑处理
 			}

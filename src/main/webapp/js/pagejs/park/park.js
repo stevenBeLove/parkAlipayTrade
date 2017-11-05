@@ -32,7 +32,7 @@
                 columns: [ 	{radio: true}, 
                            	{field : "outParkingId",title : "停车场Id",width : 200,align : "center"},
                            	{field : "merchantName",title : "停车场名称",width : 200,align : "center"},
-							{field : "parking",title : "支付宝停车场Id",width : 200,align : "center"}
+							{field : "parkingId",title : "支付宝停车场Id",width : 200,align : "center"}
                       ],
                 locale: 'zh-CN'
             });
@@ -64,10 +64,10 @@
         		alert('请选择修改的记录!');
         		return;
         	}
-        	location.href = ctx+"/alipayPark/responseCarAuth/"+ids;
+        	location.href = ctx+"/alipayPark/responseParkAuth/"+ids;
         }
-        
-        
+       
+
         
         function deleteUser(){
         	var ids = $.map($('#mytab').bootstrapTable('getSelections'), function (row) {
@@ -93,4 +93,6 @@
         	location.href = ctx+"/user/"+ids+"/changePassword/";
         } 
         
+        
+    
         

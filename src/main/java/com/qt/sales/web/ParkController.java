@@ -49,6 +49,29 @@ public class ParkController {
         return "park/parkList";
     }
     
+    /**
+     * 跳转到列表页
+     * @param model
+     *            实体类
+     * @return 页面路径
+     */
+    @RequestMapping(value = "/showCarControl/{outParkingId}", method = RequestMethod.GET)
+    public String showCarControl(@PathVariable("outParkingId") String outParkingId, Model model) {
+        ParkBean bean = parkService.selectByPrimaryKey(outParkingId);
+        model.addAttribute("parkingId",bean.getParkingId());
+        return "park/parkControl";
+    }
+    
+    /**
+     * 跳转到唤醒页
+     * @return 页面路径
+     */
+    @RequestMapping(value = "/orderView/{tradeNO}", method = RequestMethod.GET)
+    public String orderView(@PathVariable("tradeNO") String tradeNO, Model model) {
+        model.addAttribute("tradeNO",tradeNO);
+        return "alipayPark/orderView";
+    }
+    
     
     /**
      * 查询人员列表

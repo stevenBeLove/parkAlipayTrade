@@ -20,6 +20,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import sun.misc.BASE64Encoder;
+
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alipay.api.AlipayApiException;
@@ -33,14 +35,14 @@ import com.alipay.api.response.AlipayEcoMycarParkingParkinglotinfoCreateResponse
 import com.alipay.api.response.AlipayEcoMycarParkingParkinglotinfoUpdateResponse;
 import com.qt.sales.common.RSConsts;
 import com.qt.sales.dao.ParkBeanMapper;
+import com.qt.sales.dao.VehicleBeanMapper;
 import com.qt.sales.exception.QTException;
 import com.qt.sales.model.OrderBean;
 import com.qt.sales.model.ParkBean;
 import com.qt.sales.model.ParkBeanExample;
+import com.qt.sales.model.VehicleBean;
 import com.qt.sales.service.ParkService;
 import com.qt.sales.web.AlipayParkController;
-
-import sun.misc.BASE64Encoder;
 
 /** 
  * 类名: ParkServiceImpl <br/> 
@@ -58,6 +60,9 @@ public class ParkServiceImpl implements ParkService {
     
     @Resource
     private ParkBeanMapper parkBeanMapper;
+    
+    @Resource
+    private VehicleBeanMapper vehicleBeanMapper;
     
     
     @Override
@@ -133,9 +138,9 @@ public class ParkServiceImpl implements ParkService {
      */
     public boolean parkingConfigSetRequest(String outParkingId) throws QTException{
         ParkBean park = this.selectByPrimaryKey(outParkingId);
-        if(StringUtils.isEmpty(park) && StringUtils.isEmpty(park.getAppAuthToken())){
-            throw new QTException("未获得商家授权！请先授权");
-        }
+//        if(StringUtils.isEmpty(park) && StringUtils.isEmpty(park.getAppAuthToken())){
+//            throw new QTException("未获得商家授权！请先授权");
+//        }
         AlipayEcoMycarParkingConfigSetRequest request = new AlipayEcoMycarParkingConfigSetRequest();
         request.setBizContent(getBizContent(park));//业务数据
         request.putOtherTextParam("app_auth_token",park.getAppAuthToken());
@@ -213,38 +218,35 @@ public class ParkServiceImpl implements ParkService {
     }
 
 
-	@Override
-	public String parkingCreate(String outParkingId) {
-		ParkBean park = this.selectByPrimaryKey(outParkingId);
-		JSONObject returnjson = new JSONObject();
-		if(StringUtils.isEmpty(park) && StringUtils.isEmpty(park.getAppAuthToken())){
-			returnjson.put(RSConsts.STATUS,RSConsts.FAILE_CODE);
-			returnjson.put(RSConsts.MESSAGE, "未获得商家授权！请先授权");
+    @Override
+    public String parkingCreate(String outParkingId) {
+        ParkBean park = this.selectByPrimaryKey(outParkingId);
+        JSONObject returnjson = new JSONObject();
+        AlipayEcoMycarParkingParkinglotinfoCreateRequest request = new AlipayEcoMycarParkingParkinglotinfoCreateRequest();
+        request.setBizContent(getParkingCreateBizContent(park));
+        request.putOtherTextParam("app_auth_token", park.getAppAuthToken());
+        AlipayEcoMycarParkingParkinglotinfoCreateResponse response;
+        try {
+            response = AlipayParkController.alipayClient.execute(request);
+            if (response.isSuccess()) {
+                park.setParkingId(response.getParkingId());
+                updateByPrimaryKeySelective(park);
+                ParkServiceImpl.parkingStore.put(outParkingId,park.getAppAuthToken());
+                ParkServiceImpl.parkingStore.put(response.getParkingId(),park.getAppAuthToken());
+                returnjson.put(RSConsts.STATUS, RSConsts.SUCCESS_CODE);
+                returnjson.put(RSConsts.MESSAGE, "同步创建停车场成功!");
+                logger.debug("同步创建停车场成功!");
+            } else {
+                returnjson.put(RSConsts.STATUS, RSConsts.FAILE_CODE);
+                returnjson.put(RSConsts.MESSAGE, response.getMsg());
+                returnjson.put(RSConsts.BODY, response.getBody());
+            }
+        } catch (AlipayApiException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         }
-		 AlipayEcoMycarParkingParkinglotinfoCreateRequest request = new AlipayEcoMycarParkingParkinglotinfoCreateRequest();
-	        request.setBizContent(getParkingCreateBizContent(park));
-	        request.putOtherTextParam("app_auth_token",park.getAppAuthToken());
-	        AlipayEcoMycarParkingParkinglotinfoCreateResponse   response;
-	        try {
-	            response = AlipayParkController.alipayClient.execute(request);
-	            if (response.isSuccess()) {
-	                park.setParkingId(response.getParkingId());
-	                updateByPrimaryKeySelective(park);
-                    ParkServiceImpl.parkingStore.put(park.getAppAuthToken(), response.getParkingId());
-	                returnjson.put(RSConsts.STATUS,RSConsts.SUCCESS_CODE);
-	    			returnjson.put(RSConsts.MESSAGE, "同步创建停车场成功!");
-	            } else {
-	            	returnjson.put(RSConsts.STATUS,RSConsts.FAILE_CODE);
-	            	returnjson.put(RSConsts.MESSAGE,response.getMsg());
-	            	returnjson.put(RSConsts.BODY,response.getBody());
-	            }
-	        } catch (AlipayApiException e) {
-	            // TODO Auto-generated catch block
-	            e.printStackTrace();
-	        }
-		return JSON.toJSONString(returnjson);
-	}
-	
+        return JSON.toJSONString(returnjson);
+    }
 	
 	
 	
@@ -283,10 +285,6 @@ public class ParkServiceImpl implements ParkService {
 	public String parkinglotinfoUpdate(String outParkingId) {
 		ParkBean park = this.selectByPrimaryKey(outParkingId);
 		JSONObject returnjson = new JSONObject();
-		if (StringUtils.isEmpty(park) && StringUtils.isEmpty(park.getAppAuthToken())) {
-			returnjson.put(RSConsts.STATUS, RSConsts.FAILE_CODE);
-			returnjson.put(RSConsts.MESSAGE, "未获得商家授权！请先授权");
-		}
 		AlipayEcoMycarParkingParkinglotinfoUpdateRequest request = new AlipayEcoMycarParkingParkinglotinfoUpdateRequest();
 		request.setBizContent(getParkingCreateBizContent(park));
 		request.putOtherTextParam("app_auth_token", park.getAppAuthToken());
@@ -314,11 +312,16 @@ public class ParkServiceImpl implements ParkService {
 		 ParkBeanExample example = new ParkBeanExample();
 		 ParkBeanExample.Criteria cr = example.createCriteria();
 		 cr.andAppAuthTokenIsNotNull();
-		 List<ParkBean> parks = this.selectByExample(example);
+		 List<ParkBean> parks = this.selectAllParkBean(example);
 		 for (ParkBean parkBean : parks) {
-			if(parkBean!=null && !StringUtils.isEmpty(parkBean.getAppAuthToken())&& !StringUtils.isEmpty(parkBean.getParkingId())){
-				logger.debug("---装入park---"+parkBean.getParkingId() + "|" + parkBean.getAppAuthToken());
-				parkingStore.put(parkBean.getParkingId(), parkBean.getAppAuthToken());
+			if(parkBean!=null && !StringUtils.isEmpty(parkBean.getAppAuthToken())){
+				logger.debug("---装入park---"+parkBean.getOutParkingId() + "|" + parkBean.getAppAuthToken());
+				parkingStore.put(parkBean.getOutParkingId(), parkBean.getAppAuthToken());
+				if(!StringUtils.isEmpty(parkBean.getParkingId())){
+				    logger.debug("---装入park---"+parkBean.getParkingId() + "|" + parkBean.getAppAuthToken());
+				    parkingStore.put(parkBean.getParkingId(), parkBean.getAppAuthToken());
+				}
+				
 			}
 			
 		}
@@ -343,10 +346,9 @@ public class ParkServiceImpl implements ParkService {
 
 
 	@Override
-	public String ecoMycarParkingVehicleQuery(String car_id, String parking_id, String car_number,
-			String access_token) {
-		 
-		return null;
+	public String ecoMycarParkingVehicleQuery(VehicleBean bean) {
+		 vehicleBeanMapper.insert(bean);
+		 return "success";
 	}
 
 
@@ -394,6 +396,13 @@ public class ParkServiceImpl implements ParkService {
 	    String jsonStr = JSON.toJSONString(data);
       return jsonStr; 
 	}
+
+
+    @Override
+    public List<ParkBean> selectAllParkBean(ParkBeanExample example) {
+        // TODO Auto-generated method stub
+        return parkBeanMapper.selectAllParkBean(example);
+    }
 	
     
 }

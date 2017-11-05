@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qt.sales.dao.VehicleBeanMapper" >
+  <resultMap id="BaseResultMap" type="com.qt.sales.model.VehicleBean" >
+    <id column="VEHICLE_ID" property="vehicleId" jdbcType="VARCHAR" />
+    <result column="CAR_ID" property="carId" jdbcType="VARCHAR" />
+    <result column="CAR_NUMBER" property="carNumber" jdbcType="VARCHAR" />
+    <result column="PARKING_ID" property="parkingId" jdbcType="VARCHAR" />
+    <result column="AUTH_TOKEN" property="authToken" jdbcType="VARCHAR" />
+    <result column="APP_AUTH_TOKEN" property="appAuthToken" jdbcType="VARCHAR" />
+    <result column="USER_ID" property="userId" jdbcType="VARCHAR" />
+    <result column="CREATE_DATETIME" property="createDatetime" jdbcType="TIMESTAMP" />
+    <result column="MODIFY_DATETIME" property="modifyDatetime" jdbcType="TIMESTAMP" />
+    <result column="STATUS" property="status" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    VEHICLE_ID, CAR_ID, CAR_NUMBER, PARKING_ID, AUTH_TOKEN, APP_AUTH_TOKEN, USER_ID, 
+    CREATE_DATETIME, MODIFY_DATETIME, STATUS
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.qt.sales.model.VehicleBeanExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from park.TB_VEHICLE
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from park.TB_VEHICLE
+    where VEHICLE_ID = #{vehicleId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from park.TB_VEHICLE
+    where VEHICLE_ID = #{vehicleId,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.qt.sales.model.VehicleBeanExample" >
+    delete from park.TB_VEHICLE
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.qt.sales.model.VehicleBean" >
+    insert into park.TB_VEHICLE (VEHICLE_ID, CAR_ID, CAR_NUMBER, 
+      PARKING_ID, AUTH_TOKEN, APP_AUTH_TOKEN, 
+      USER_ID, CREATE_DATETIME, MODIFY_DATETIME, 
+      STATUS)
+    values (park.seq_parkid.nextval, #{carId,jdbcType=VARCHAR}, #{carNumber,jdbcType=VARCHAR}, 
+      #{parkingId,jdbcType=VARCHAR}, #{authToken,jdbcType=VARCHAR}, #{appAuthToken,jdbcType=VARCHAR}, 
+      #{userId,jdbcType=VARCHAR}, #{createDatetime,jdbcType=TIMESTAMP}, #{modifyDatetime,jdbcType=TIMESTAMP}, 
+      #{status,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.qt.sales.model.VehicleBean" >
+    insert into park.TB_VEHICLE
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="vehicleId != null" >
+        VEHICLE_ID,
+      </if>
+      <if test="carId != null" >
+        CAR_ID,
+      </if>
+      <if test="carNumber != null" >
+        CAR_NUMBER,
+      </if>
+      <if test="parkingId != null" >
+        PARKING_ID,
+      </if>
+      <if test="authToken != null" >
+        AUTH_TOKEN,
+      </if>
+      <if test="appAuthToken != null" >
+        APP_AUTH_TOKEN,
+      </if>
+      <if test="userId != null" >
+        USER_ID,
+      </if>
+      <if test="createDatetime != null" >
+        CREATE_DATETIME,
+      </if>
+      <if test="modifyDatetime != null" >
+        MODIFY_DATETIME,
+      </if>
+      <if test="status != null" >
+        STATUS,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="vehicleId != null" >
+        #{vehicleId,jdbcType=VARCHAR},
+      </if>
+      <if test="carId != null" >
+        #{carId,jdbcType=VARCHAR},
+      </if>
+      <if test="carNumber != null" >
+        #{carNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="parkingId != null" >
+        #{parkingId,jdbcType=VARCHAR},
+      </if>
+      <if test="authToken != null" >
+        #{authToken,jdbcType=VARCHAR},
+      </if>
+      <if test="appAuthToken != null" >
+        #{appAuthToken,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="createDatetime != null" >
+        #{createDatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyDatetime != null" >
+        #{modifyDatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.qt.sales.model.VehicleBeanExample" resultType="java.lang.Integer" >
+    select count(*) from park.TB_VEHICLE
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update park.TB_VEHICLE
+    <set >
+      <if test="record.vehicleId != null" >
+        VEHICLE_ID = #{record.vehicleId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.carId != null" >
+        CAR_ID = #{record.carId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.carNumber != null" >
+        CAR_NUMBER = #{record.carNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="record.parkingId != null" >
+        PARKING_ID = #{record.parkingId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.authToken != null" >
+        AUTH_TOKEN = #{record.authToken,jdbcType=VARCHAR},
+      </if>
+      <if test="record.appAuthToken != null" >
+        APP_AUTH_TOKEN = #{record.appAuthToken,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userId != null" >
+        USER_ID = #{record.userId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createDatetime != null" >
+        CREATE_DATETIME = #{record.createDatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.modifyDatetime != null" >
+        MODIFY_DATETIME = #{record.modifyDatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.status != null" >
+        STATUS = #{record.status,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update park.TB_VEHICLE
+    set VEHICLE_ID = #{record.vehicleId,jdbcType=VARCHAR},
+      CAR_ID = #{record.carId,jdbcType=VARCHAR},
+      CAR_NUMBER = #{record.carNumber,jdbcType=VARCHAR},
+      PARKING_ID = #{record.parkingId,jdbcType=VARCHAR},
+      AUTH_TOKEN = #{record.authToken,jdbcType=VARCHAR},
+      APP_AUTH_TOKEN = #{record.appAuthToken,jdbcType=VARCHAR},
+      USER_ID = #{record.userId,jdbcType=VARCHAR},
+      CREATE_DATETIME = #{record.createDatetime,jdbcType=TIMESTAMP},
+      MODIFY_DATETIME = #{record.modifyDatetime,jdbcType=TIMESTAMP},
+      STATUS = #{record.status,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.qt.sales.model.VehicleBean" >
+    update park.TB_VEHICLE
+    <set >
+      <if test="carId != null" >
+        CAR_ID = #{carId,jdbcType=VARCHAR},
+      </if>
+      <if test="carNumber != null" >
+        CAR_NUMBER = #{carNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="parkingId != null" >
+        PARKING_ID = #{parkingId,jdbcType=VARCHAR},
+      </if>
+      <if test="authToken != null" >
+        AUTH_TOKEN = #{authToken,jdbcType=VARCHAR},
+      </if>
+      <if test="appAuthToken != null" >
+        APP_AUTH_TOKEN = #{appAuthToken,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null" >
+        USER_ID = #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="createDatetime != null" >
+        CREATE_DATETIME = #{createDatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyDatetime != null" >
+        MODIFY_DATETIME = #{modifyDatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null" >
+        STATUS = #{status,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where VEHICLE_ID = #{vehicleId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.qt.sales.model.VehicleBean" >
+    update park.TB_VEHICLE
+    set CAR_ID = #{carId,jdbcType=VARCHAR},
+      CAR_NUMBER = #{carNumber,jdbcType=VARCHAR},
+      PARKING_ID = #{parkingId,jdbcType=VARCHAR},
+      AUTH_TOKEN = #{authToken,jdbcType=VARCHAR},
+      APP_AUTH_TOKEN = #{appAuthToken,jdbcType=VARCHAR},
+      USER_ID = #{userId,jdbcType=VARCHAR},
+      CREATE_DATETIME = #{createDatetime,jdbcType=TIMESTAMP},
+      MODIFY_DATETIME = #{modifyDatetime,jdbcType=TIMESTAMP},
+      STATUS = #{status,jdbcType=VARCHAR}
+    where VEHICLE_ID = #{vehicleId,jdbcType=VARCHAR}
+  </update>
+</mapper>

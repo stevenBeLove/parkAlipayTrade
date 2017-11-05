@@ -131,16 +131,7 @@
 	<welcome-file-list>
 		<welcome-file>index.html</welcome-file>
 	</welcome-file-list>
-	<!-- 页面不存在的Error Page定义 -->
-		<error-page>  
-	    <error-code>404</error-code>  
-	    <location>/chart404.jsp</location>  
-	</error-page>  
-	
-	<error-page>  
-	    <error-code>401</error-code>  
-	    <location>/inc/error/unauthorizedException.jsp</location>  
-	</error-page> 
+
 
 	
 </web-app>

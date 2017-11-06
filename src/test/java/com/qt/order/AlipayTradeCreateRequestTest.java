@@ -54,7 +54,7 @@ public class AlipayTradeCreateRequestTest {
     
     public static String getBizContent(){
         JSONObject data = new JSONObject();
-        data.put("out_trade_no", "20170320010101001");//商户订单号
+        data.put("out_trade_no", "20170320010102001");//商户订单号
         data.put("seller_id", "2088102170455452");//卖家支付宝用户ID
         data.put("total_amount", "188.88");
 //        data.put("discountable_amount", "");// 可打折金额.!

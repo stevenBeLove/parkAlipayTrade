@@ -331,7 +331,6 @@ public class ParkServiceImpl implements ParkService {
 	@Override
 	public String enterinfoSync(String parkingId, String carNumber, String inTime) {
 	    //https://docs.open.alipay.com/api_1/alipay.trade.create  
-	    OrderBean order = new OrderBean();
 	    
 	    
 	    return null;

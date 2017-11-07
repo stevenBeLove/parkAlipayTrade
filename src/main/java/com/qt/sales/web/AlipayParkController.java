@@ -4,6 +4,7 @@
  */
 package com.qt.sales.web;
 
+import java.util.Date;
 import java.util.Map;
 import java.util.Random;
 
@@ -39,6 +40,7 @@ import com.alipay.api.response.AlipayOpenAuthTokenAppResponse;
 import com.alipay.api.response.AlipaySystemOauthTokenResponse;
 import com.alipay.api.response.AlipayTradeCreateResponse;
 import com.qt.sales.common.RSConsts;
+import com.qt.sales.model.OrderBean;
 import com.qt.sales.model.ParkBean;
 import com.qt.sales.model.VehicleBean;
 import com.qt.sales.service.ParkService;
@@ -156,11 +158,7 @@ public class AlipayParkController {
 		AlipaySystemOauthTokenRequest tokenRequest = new AlipaySystemOauthTokenRequest();
 		tokenRequest.setGrantType("authorization_code");
 		String app_auth_token = (String) ParkServiceImpl.parkingStore.get(parking_id);
-		System.out.println("----------store.token = "+app_auth_token);
-//		if (StringUtils.isEmpty(app_auth_token)) {
-//			model.addAttribute("danger", "请先获得访问授权！");
-//			return;
-//		}
+		logger.debug("----------store.token = "+app_auth_token);
 		tokenRequest.putOtherTextParam("app_auth_token", app_auth_token);
 		// 授权设置
 		tokenRequest.setCode(code);
@@ -199,6 +197,17 @@ public class AlipayParkController {
 					//获得车牌业务逻辑
 					parkService.ecoMycarParkingVehicleQuery(bean);
 					//创建订单
+					OrderBean order = new OrderBean();
+					order.setCarNumber(car_number);
+					order.setUserId(uid);
+					order.setParkingId(parking_id);
+					order.setInTime("");
+					
+					
+					
+					
+					
+					
 					System.out.println("uid="+uid);
 				} else {
 					// 调用失败处理逻辑
@@ -460,11 +469,14 @@ public class AlipayParkController {
    */
   @RequestMapping(value = "/tradeCreate", method = {RequestMethod.POST, RequestMethod.GET})
   @ResponseBody
-  public AjaxReturnInfo tradeCreate() {
+  public AjaxReturnInfo tradeCreate(OrderBean orderBean) {
       AjaxReturnInfo ajaxinfo = new AjaxReturnInfo();
       try {
           AlipayTradeCreateRequest request = new AlipayTradeCreateRequest();
-          request.setBizContent(getTradeCreateBizContent());
+          orderBean.setOrderTime(DateUtil.getCurrDate(new Date(), DateUtil.STANDDATEFORMAT));
+          orderBean.setPayType("1");
+          
+          request.setBizContent(getTradeCreateBizContent(orderBean));
           request.putOtherTextParam("app_auth_token", "201711BB4fe4a6e144cf427ebbbdcbded0b52X45");
           AlipayTradeCreateResponse response = alipayClient.execute(request);
           if (response.isSuccess()) {
@@ -485,15 +497,15 @@ public class AlipayParkController {
 
  public static Random random = new Random();
  
- public static String getTradeCreateBizContent(){
+ public static String getTradeCreateBizContent(OrderBean order){
      JSONObject data = new JSONObject();
      data.put(RSConsts.out_trade_no, DateUtil.getCurrDateAndTime()+random.nextInt(1000));//商户订单号
-     data.put(RSConsts.seller_id, "2088102170455452");//卖家支付宝用户ID
-     data.put(RSConsts.total_amount, "188.88");
+     data.put(RSConsts.seller_id, order.getSellerId());//卖家支付宝用户ID
+     data.put(RSConsts.total_amount, order.getPayMoney());
 //     data.put("discountable_amount", "");// 可打折金额.!
-     data.put(RSConsts.subject, "停车费");
-     data.put(RSConsts.body, "车牌号码：沪C8H9K3");
-     data.put("buyer_id", "2088102174838743");
+     data.put(RSConsts.subject, order.getParkingName()+"停车费");
+     data.put(RSConsts.body, "车牌号码："+order.getCarNumber());
+     data.put("buyer_id", order.getUserId());
 //     data.put("operator_id", "0001");//商户操作员编号 !
 //     data.put("store_id", "10002");//商户门店编号!
 //     data.put("terminal_id", "10000");// 商户机具终端编号  !

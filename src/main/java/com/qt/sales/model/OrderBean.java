@@ -1,6 +1,9 @@
 package com.qt.sales.model;
 
+import java.math.BigDecimal;
+
 public class OrderBean {
+	
     private String orderNo;
 
     private String userId;
@@ -9,8 +12,14 @@ public class OrderBean {
 
     private String parkingName;
 
+    /**
+     * 车牌号
+     */
     private String carNumber;
 
+    /**
+     * 订单号
+     */
     private String outOrderNo;
 
     private String orderStatus;
@@ -21,16 +30,40 @@ public class OrderBean {
 
     private String payType;
 
+    /**
+     * 应付金额
+     */
     private String payMoney;
 
+    /**
+     * 入场时间
+     */
     private String inTime;
 
     private String parkingId;
 
+    /**
+     * 停车时长
+     */
     private String inDuration;
 
     private String cardNumber;
+    
+    /**
+     * 优惠金额
+     */
+    private BigDecimal discountMoney;
 
+    /**
+     * 已付金额
+     */
+    private BigDecimal paidMoney;
+    
+    /**
+     * 卖家ID
+     */
+    private String sellerId;
+    
     public String getOrderNo() {
         return orderNo;
     }
@@ -150,4 +183,32 @@ public class OrderBean {
     public void setCardNumber(String cardNumber) {
         this.cardNumber = cardNumber == null ? null : cardNumber.trim();
     }
+
+	public BigDecimal getDiscountMoney() {
+		return discountMoney;
+	}
+
+	public void setDiscountMoney(BigDecimal discountMoney) {
+		this.discountMoney = discountMoney;
+	}
+
+	public BigDecimal getPaidMoney() {
+		return paidMoney;
+	}
+
+	public void setPaidMoney(BigDecimal paidMoney) {
+		this.paidMoney = paidMoney;
+	}
+
+	public String getSellerId() {
+		return sellerId;
+	}
+
+	public void setSellerId(String sellerId) {
+		this.sellerId = sellerId;
+	}
+    
+    
+    
+    
 }

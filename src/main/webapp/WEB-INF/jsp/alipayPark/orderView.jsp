@@ -19,8 +19,6 @@
     }
 
     $(document).ready(function(){
-        // 页面载入完成后即唤起收银台
-        //tradePay("${tradeNO}"); 
         // 点击payButton按钮后唤起收银台
         $("#payButton").click(function() {
         	$.ajax({
@@ -30,7 +28,6 @@
     			beforeSend : function() {
     			},
     			success : function(obj) {
-    				alert(obj.message);
     				if (obj.success == 'true') {
     					 tradePay(obj.message);
     				} else {
@@ -64,7 +61,24 @@
              }, function (data) {
                  alert(JSON.stringify(data));
                  if ("9000" == data.resultCode) {
-                     alert("支付成功");
+                	 //alert("支付成功");
+                	 location.href = ctx+"/alipayPark/responseParkAuth/"+ids;
+                	 
+                 }
+                 
+                 if ("4000" == data.resultCode) {
+               	  Ali.alert({
+                         title: '亲',
+                         message: '订单支付失败',
+                         button: '确定'
+                     });
+                }
+                if ("6001" == data.resultCode) {
+                  	  Ali.alert({
+                            title: '亲',
+                            message: '用户中途取消',
+                            button: '确定'
+                        });
                  }
              });
         });
@@ -72,6 +86,8 @@
 </script>
 <br />
 <br /><br /><br />
+应付金额：
+
 取出的车牌${car_number }
 <input type="button" name="payButton"  id ="payButton" value="确定支付"/>
 </body>

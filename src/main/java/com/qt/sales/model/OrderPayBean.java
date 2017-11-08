@@ -3,8 +3,8 @@ package com.qt.sales.model;
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class OrderBean {
-    private String orderNo;
+public class OrderPayBean {
+    private String orderPayId;
 
     private String userId;
 
@@ -19,6 +19,8 @@ public class OrderBean {
     private String orderStatus;
 
     private String orderTime;
+
+    private String orderNo;
 
     private String payTime;
 
@@ -46,12 +48,12 @@ public class OrderBean {
 
     private String orderPayStatus;
 
-    public String getOrderNo() {
-        return orderNo;
+    public String getOrderPayId() {
+        return orderPayId;
     }
 
-    public void setOrderNo(String orderNo) {
-        this.orderNo = orderNo == null ? null : orderNo.trim();
+    public void setOrderPayId(String orderPayId) {
+        this.orderPayId = orderPayId == null ? null : orderPayId.trim();
     }
 
     public String getUserId() {
@@ -108,6 +110,14 @@ public class OrderBean {
 
     public void setOrderTime(String orderTime) {
         this.orderTime = orderTime == null ? null : orderTime.trim();
+    }
+
+    public String getOrderNo() {
+        return orderNo;
+    }
+
+    public void setOrderNo(String orderNo) {
+        this.orderNo = orderNo == null ? null : orderNo.trim();
     }
 
     public String getPayTime() {

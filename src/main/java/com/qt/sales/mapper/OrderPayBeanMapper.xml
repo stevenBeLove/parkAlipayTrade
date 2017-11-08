@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.qt.sales.dao.OrderBeanMapper" >
-  <resultMap id="BaseResultMap" type="com.qt.sales.model.OrderBean" >
-    <id column="ORDER_NO" property="orderNo" jdbcType="VARCHAR" />
+<mapper namespace="com.qt.sales.dao.OrderPayBeanMapper" >
+  <resultMap id="BaseResultMap" type="com.qt.sales.model.OrderPayBean" >
+    <id column="ORDER_PAY_ID" property="orderPayId" jdbcType="VARCHAR" />
     <result column="USER_ID" property="userId" jdbcType="VARCHAR" />
     <result column="OUT_PARKING_ID" property="outParkingId" jdbcType="VARCHAR" />
     <result column="PARKING_NAME" property="parkingName" jdbcType="VARCHAR" />
@@ -10,6 +10,7 @@
     <result column="OUT_ORDER_NO" property="outOrderNo" jdbcType="VARCHAR" />
     <result column="ORDER_STATUS" property="orderStatus" jdbcType="VARCHAR" />
     <result column="ORDER_TIME" property="orderTime" jdbcType="VARCHAR" />
+    <result column="ORDER_NO" property="orderNo" jdbcType="VARCHAR" />
     <result column="PAY_TIME" property="payTime" jdbcType="VARCHAR" />
     <result column="PAY_TYPE" property="payType" jdbcType="VARCHAR" />
     <result column="PAY_MONEY" property="payMoney" jdbcType="DECIMAL" />
@@ -83,17 +84,17 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    ORDER_NO, USER_ID, OUT_PARKING_ID, PARKING_NAME, CAR_NUMBER, OUT_ORDER_NO, ORDER_STATUS, 
-    ORDER_TIME, PAY_TIME, PAY_TYPE, PAY_MONEY, IN_TIME, PARKING_ID, IN_DURATION, CARD_NUMBER, 
-    DISCOUNT_MONEY, PAID_MONEY, SELLER_ID, OUT_TIME, ORDER_SYN_STATUS, ORDER_PAY_STATUS
+    ORDER_PAY_ID, USER_ID, OUT_PARKING_ID, PARKING_NAME, CAR_NUMBER, OUT_ORDER_NO, ORDER_STATUS, 
+    ORDER_TIME, ORDER_NO, PAY_TIME, PAY_TYPE, PAY_MONEY, IN_TIME, PARKING_ID, IN_DURATION, 
+    CARD_NUMBER, DISCOUNT_MONEY, PAID_MONEY, SELLER_ID, OUT_TIME, ORDER_SYN_STATUS, ORDER_PAY_STATUS
   </sql>
-  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.qt.sales.model.OrderBeanExample" >
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.qt.sales.model.OrderPayBeanExample" >
     select
     <if test="distinct" >
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from TB_ORDER
+    from TB_ORDER_PAY
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
@@ -104,42 +105,42 @@
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
     <include refid="Base_Column_List" />
-    from TB_ORDER
-    where ORDER_NO = #{orderNo,jdbcType=VARCHAR}
+    from TB_ORDER_PAY
+    where ORDER_PAY_ID = #{orderPayId,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
-    delete from TB_ORDER
-    where ORDER_NO = #{orderNo,jdbcType=VARCHAR}
+    delete from TB_ORDER_PAY
+    where ORDER_PAY_ID = #{orderPayId,jdbcType=VARCHAR}
   </delete>
-  <delete id="deleteByExample" parameterType="com.qt.sales.model.OrderBeanExample" >
-    delete from TB_ORDER
+  <delete id="deleteByExample" parameterType="com.qt.sales.model.OrderPayBeanExample" >
+    delete from TB_ORDER_PAY
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.qt.sales.model.OrderBean" >
-    insert into TB_ORDER (ORDER_NO, USER_ID, OUT_PARKING_ID, 
+  <insert id="insert" parameterType="com.qt.sales.model.OrderPayBean" >
+    insert into TB_ORDER_PAY (ORDER_PAY_ID, USER_ID, OUT_PARKING_ID, 
       PARKING_NAME, CAR_NUMBER, OUT_ORDER_NO, 
-      ORDER_STATUS, ORDER_TIME, PAY_TIME, 
-      PAY_TYPE, PAY_MONEY, IN_TIME, 
-      PARKING_ID, IN_DURATION, CARD_NUMBER, 
-      DISCOUNT_MONEY, PAID_MONEY, SELLER_ID, 
-      OUT_TIME, ORDER_SYN_STATUS, ORDER_PAY_STATUS
-      )
-    values (#{orderNo,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, #{outParkingId,jdbcType=VARCHAR}, 
+      ORDER_STATUS, ORDER_TIME, ORDER_NO, 
+      PAY_TIME, PAY_TYPE, PAY_MONEY, 
+      IN_TIME, PARKING_ID, IN_DURATION, 
+      CARD_NUMBER, DISCOUNT_MONEY, PAID_MONEY, 
+      SELLER_ID, OUT_TIME, ORDER_SYN_STATUS, 
+      ORDER_PAY_STATUS)
+    values (#{orderPayId,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, #{outParkingId,jdbcType=VARCHAR}, 
       #{parkingName,jdbcType=VARCHAR}, #{carNumber,jdbcType=VARCHAR}, #{outOrderNo,jdbcType=VARCHAR}, 
-      #{orderStatus,jdbcType=VARCHAR}, #{orderTime,jdbcType=VARCHAR}, #{payTime,jdbcType=VARCHAR}, 
-      #{payType,jdbcType=VARCHAR}, #{payMoney,jdbcType=DECIMAL}, #{inTime,jdbcType=VARCHAR}, 
-      #{parkingId,jdbcType=VARCHAR}, #{inDuration,jdbcType=VARCHAR}, #{cardNumber,jdbcType=VARCHAR}, 
-      #{discountMoney,jdbcType=DECIMAL}, #{paidMoney,jdbcType=DECIMAL}, #{sellerId,jdbcType=VARCHAR}, 
-      #{outTime,jdbcType=TIMESTAMP}, #{orderSynStatus,jdbcType=VARCHAR}, #{orderPayStatus,jdbcType=VARCHAR}
-      )
+      #{orderStatus,jdbcType=VARCHAR}, #{orderTime,jdbcType=VARCHAR}, #{orderNo,jdbcType=VARCHAR}, 
+      #{payTime,jdbcType=VARCHAR}, #{payType,jdbcType=VARCHAR}, #{payMoney,jdbcType=DECIMAL}, 
+      #{inTime,jdbcType=VARCHAR}, #{parkingId,jdbcType=VARCHAR}, #{inDuration,jdbcType=VARCHAR}, 
+      #{cardNumber,jdbcType=VARCHAR}, #{discountMoney,jdbcType=DECIMAL}, #{paidMoney,jdbcType=DECIMAL}, 
+      #{sellerId,jdbcType=VARCHAR}, #{outTime,jdbcType=TIMESTAMP}, #{orderSynStatus,jdbcType=VARCHAR}, 
+      #{orderPayStatus,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.qt.sales.model.OrderBean" >
-    insert into TB_ORDER
+  <insert id="insertSelective" parameterType="com.qt.sales.model.OrderPayBean" >
+    insert into TB_ORDER_PAY
     <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="orderNo != null" >
-        ORDER_NO,
+      <if test="orderPayId != null" >
+        ORDER_PAY_ID,
       </if>
       <if test="userId != null" >
         USER_ID,
@@ -161,6 +162,9 @@
       </if>
       <if test="orderTime != null" >
         ORDER_TIME,
+      </if>
+      <if test="orderNo != null" >
+        ORDER_NO,
       </if>
       <if test="payTime != null" >
         PAY_TIME,
@@ -203,8 +207,8 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="orderNo != null" >
-        #{orderNo,jdbcType=VARCHAR},
+      <if test="orderPayId != null" >
+        #{orderPayId,jdbcType=VARCHAR},
       </if>
       <if test="userId != null" >
         #{userId,jdbcType=VARCHAR},
@@ -226,6 +230,9 @@
       </if>
       <if test="orderTime != null" >
         #{orderTime,jdbcType=VARCHAR},
+      </if>
+      <if test="orderNo != null" >
+        #{orderNo,jdbcType=VARCHAR},
       </if>
       <if test="payTime != null" >
         #{payTime,jdbcType=VARCHAR},
@@ -268,17 +275,17 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.qt.sales.model.OrderBeanExample" resultType="java.lang.Integer" >
-    select count(*) from TB_ORDER
+  <select id="countByExample" parameterType="com.qt.sales.model.OrderPayBeanExample" resultType="java.lang.Integer" >
+    select count(*) from TB_ORDER_PAY
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map" >
-    update TB_ORDER
+    update TB_ORDER_PAY
     <set >
-      <if test="record.orderNo != null" >
-        ORDER_NO = #{record.orderNo,jdbcType=VARCHAR},
+      <if test="record.orderPayId != null" >
+        ORDER_PAY_ID = #{record.orderPayId,jdbcType=VARCHAR},
       </if>
       <if test="record.userId != null" >
         USER_ID = #{record.userId,jdbcType=VARCHAR},
@@ -300,6 +307,9 @@
       </if>
       <if test="record.orderTime != null" >
         ORDER_TIME = #{record.orderTime,jdbcType=VARCHAR},
+      </if>
+      <if test="record.orderNo != null" >
+        ORDER_NO = #{record.orderNo,jdbcType=VARCHAR},
       </if>
       <if test="record.payTime != null" >
         PAY_TIME = #{record.payTime,jdbcType=VARCHAR},
@@ -346,8 +356,8 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map" >
-    update TB_ORDER
-    set ORDER_NO = #{record.orderNo,jdbcType=VARCHAR},
+    update TB_ORDER_PAY
+    set ORDER_PAY_ID = #{record.orderPayId,jdbcType=VARCHAR},
       USER_ID = #{record.userId,jdbcType=VARCHAR},
       OUT_PARKING_ID = #{record.outParkingId,jdbcType=VARCHAR},
       PARKING_NAME = #{record.parkingName,jdbcType=VARCHAR},
@@ -355,6 +365,7 @@
       OUT_ORDER_NO = #{record.outOrderNo,jdbcType=VARCHAR},
       ORDER_STATUS = #{record.orderStatus,jdbcType=VARCHAR},
       ORDER_TIME = #{record.orderTime,jdbcType=VARCHAR},
+      ORDER_NO = #{record.orderNo,jdbcType=VARCHAR},
       PAY_TIME = #{record.payTime,jdbcType=VARCHAR},
       PAY_TYPE = #{record.payType,jdbcType=VARCHAR},
       PAY_MONEY = #{record.payMoney,jdbcType=DECIMAL},
@@ -372,8 +383,8 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.qt.sales.model.OrderBean" >
-    update TB_ORDER
+  <update id="updateByPrimaryKeySelective" parameterType="com.qt.sales.model.OrderPayBean" >
+    update TB_ORDER_PAY
     <set >
       <if test="userId != null" >
         USER_ID = #{userId,jdbcType=VARCHAR},
@@ -395,6 +406,9 @@
       </if>
       <if test="orderTime != null" >
         ORDER_TIME = #{orderTime,jdbcType=VARCHAR},
+      </if>
+      <if test="orderNo != null" >
+        ORDER_NO = #{orderNo,jdbcType=VARCHAR},
       </if>
       <if test="payTime != null" >
         PAY_TIME = #{payTime,jdbcType=VARCHAR},
@@ -436,10 +450,10 @@
         ORDER_PAY_STATUS = #{orderPayStatus,jdbcType=VARCHAR},
       </if>
     </set>
-    where ORDER_NO = #{orderNo,jdbcType=VARCHAR}
+    where ORDER_PAY_ID = #{orderPayId,jdbcType=VARCHAR}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.qt.sales.model.OrderBean" >
-    update TB_ORDER
+  <update id="updateByPrimaryKey" parameterType="com.qt.sales.model.OrderPayBean" >
+    update TB_ORDER_PAY
     set USER_ID = #{userId,jdbcType=VARCHAR},
       OUT_PARKING_ID = #{outParkingId,jdbcType=VARCHAR},
       PARKING_NAME = #{parkingName,jdbcType=VARCHAR},
@@ -447,6 +461,7 @@
       OUT_ORDER_NO = #{outOrderNo,jdbcType=VARCHAR},
       ORDER_STATUS = #{orderStatus,jdbcType=VARCHAR},
       ORDER_TIME = #{orderTime,jdbcType=VARCHAR},
+      ORDER_NO = #{orderNo,jdbcType=VARCHAR},
       PAY_TIME = #{payTime,jdbcType=VARCHAR},
       PAY_TYPE = #{payType,jdbcType=VARCHAR},
       PAY_MONEY = #{payMoney,jdbcType=DECIMAL},
@@ -460,6 +475,6 @@
       OUT_TIME = #{outTime,jdbcType=TIMESTAMP},
       ORDER_SYN_STATUS = #{orderSynStatus,jdbcType=VARCHAR},
       ORDER_PAY_STATUS = #{orderPayStatus,jdbcType=VARCHAR}
-    where ORDER_NO = #{orderNo,jdbcType=VARCHAR}
+    where ORDER_PAY_ID = #{orderPayId,jdbcType=VARCHAR}
   </update>
 </mapper>

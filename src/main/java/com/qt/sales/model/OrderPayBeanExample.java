@@ -5,14 +5,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class OrderBeanExample {
+public class OrderPayBeanExample {
     protected String orderByClause;
 
     protected boolean distinct;
 
     protected List<Criteria> oredCriteria;
 
-    public OrderBeanExample() {
+    public OrderPayBeanExample() {
         oredCriteria = new ArrayList<Criteria>();
     }
 
@@ -106,73 +106,73 @@ public class OrderBeanExample {
             criteria.add(new Criterion(condition, value1, value2));
         }
 
-        public Criteria andOrderNoIsNull() {
-            addCriterion("ORDER_NO is null");
+        public Criteria andOrderPayIdIsNull() {
+            addCriterion("ORDER_PAY_ID is null");
             return (Criteria) this;
         }
 
-        public Criteria andOrderNoIsNotNull() {
-            addCriterion("ORDER_NO is not null");
+        public Criteria andOrderPayIdIsNotNull() {
+            addCriterion("ORDER_PAY_ID is not null");
             return (Criteria) this;
         }
 
-        public Criteria andOrderNoEqualTo(String value) {
-            addCriterion("ORDER_NO =", value, "orderNo");
+        public Criteria andOrderPayIdEqualTo(String value) {
+            addCriterion("ORDER_PAY_ID =", value, "orderPayId");
             return (Criteria) this;
         }
 
-        public Criteria andOrderNoNotEqualTo(String value) {
-            addCriterion("ORDER_NO <>", value, "orderNo");
+        public Criteria andOrderPayIdNotEqualTo(String value) {
+            addCriterion("ORDER_PAY_ID <>", value, "orderPayId");
             return (Criteria) this;
         }
 
-        public Criteria andOrderNoGreaterThan(String value) {
-            addCriterion("ORDER_NO >", value, "orderNo");
+        public Criteria andOrderPayIdGreaterThan(String value) {
+            addCriterion("ORDER_PAY_ID >", value, "orderPayId");
             return (Criteria) this;
         }
 
-        public Criteria andOrderNoGreaterThanOrEqualTo(String value) {
-            addCriterion("ORDER_NO >=", value, "orderNo");
+        public Criteria andOrderPayIdGreaterThanOrEqualTo(String value) {
+            addCriterion("ORDER_PAY_ID >=", value, "orderPayId");
             return (Criteria) this;
         }
 
-        public Criteria andOrderNoLessThan(String value) {
-            addCriterion("ORDER_NO <", value, "orderNo");
+        public Criteria andOrderPayIdLessThan(String value) {
+            addCriterion("ORDER_PAY_ID <", value, "orderPayId");
             return (Criteria) this;
         }
 
-        public Criteria andOrderNoLessThanOrEqualTo(String value) {
-            addCriterion("ORDER_NO <=", value, "orderNo");
+        public Criteria andOrderPayIdLessThanOrEqualTo(String value) {
+            addCriterion("ORDER_PAY_ID <=", value, "orderPayId");
             return (Criteria) this;
         }
 
-        public Criteria andOrderNoLike(String value) {
-            addCriterion("ORDER_NO like", value, "orderNo");
+        public Criteria andOrderPayIdLike(String value) {
+            addCriterion("ORDER_PAY_ID like", value, "orderPayId");
             return (Criteria) this;
         }
 
-        public Criteria andOrderNoNotLike(String value) {
-            addCriterion("ORDER_NO not like", value, "orderNo");
+        public Criteria andOrderPayIdNotLike(String value) {
+            addCriterion("ORDER_PAY_ID not like", value, "orderPayId");
             return (Criteria) this;
         }
 
-        public Criteria andOrderNoIn(List<String> values) {
-            addCriterion("ORDER_NO in", values, "orderNo");
+        public Criteria andOrderPayIdIn(List<String> values) {
+            addCriterion("ORDER_PAY_ID in", values, "orderPayId");
             return (Criteria) this;
         }
 
-        public Criteria andOrderNoNotIn(List<String> values) {
-            addCriterion("ORDER_NO not in", values, "orderNo");
+        public Criteria andOrderPayIdNotIn(List<String> values) {
+            addCriterion("ORDER_PAY_ID not in", values, "orderPayId");
             return (Criteria) this;
         }
 
-        public Criteria andOrderNoBetween(String value1, String value2) {
-            addCriterion("ORDER_NO between", value1, value2, "orderNo");
+        public Criteria andOrderPayIdBetween(String value1, String value2) {
+            addCriterion("ORDER_PAY_ID between", value1, value2, "orderPayId");
             return (Criteria) this;
         }
 
-        public Criteria andOrderNoNotBetween(String value1, String value2) {
-            addCriterion("ORDER_NO not between", value1, value2, "orderNo");
+        public Criteria andOrderPayIdNotBetween(String value1, String value2) {
+            addCriterion("ORDER_PAY_ID not between", value1, value2, "orderPayId");
             return (Criteria) this;
         }
 
@@ -663,6 +663,76 @@ public class OrderBeanExample {
 
         public Criteria andOrderTimeNotBetween(String value1, String value2) {
             addCriterion("ORDER_TIME not between", value1, value2, "orderTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderNoIsNull() {
+            addCriterion("ORDER_NO is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderNoIsNotNull() {
+            addCriterion("ORDER_NO is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderNoEqualTo(String value) {
+            addCriterion("ORDER_NO =", value, "orderNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderNoNotEqualTo(String value) {
+            addCriterion("ORDER_NO <>", value, "orderNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderNoGreaterThan(String value) {
+            addCriterion("ORDER_NO >", value, "orderNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderNoGreaterThanOrEqualTo(String value) {
+            addCriterion("ORDER_NO >=", value, "orderNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderNoLessThan(String value) {
+            addCriterion("ORDER_NO <", value, "orderNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderNoLessThanOrEqualTo(String value) {
+            addCriterion("ORDER_NO <=", value, "orderNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderNoLike(String value) {
+            addCriterion("ORDER_NO like", value, "orderNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderNoNotLike(String value) {
+            addCriterion("ORDER_NO not like", value, "orderNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderNoIn(List<String> values) {
+            addCriterion("ORDER_NO in", values, "orderNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderNoNotIn(List<String> values) {
+            addCriterion("ORDER_NO not in", values, "orderNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderNoBetween(String value1, String value2) {
+            addCriterion("ORDER_NO between", value1, value2, "orderNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderNoNotBetween(String value1, String value2) {
+            addCriterion("ORDER_NO not between", value1, value2, "orderNo");
             return (Criteria) this;
         }
 

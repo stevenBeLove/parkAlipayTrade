@@ -86,9 +86,14 @@
 </script>
 <br />
 <br /><br /><br />
-应付金额：
-
-取出的车牌${car_number }
-<input type="button" name="payButton"  id ="payButton" value="确定支付"/>
+<hr />
+应付金额：${payMoney }
+已付金额：${paidMoney}
+优惠金额：${discountMoney }
+<hr />
+车牌号：${car_number }
+入场时间：${inTime }
+停车时长：${timeDiffer }
+<input type="button" style="height:20px;width:100px;" name="payButton"  id ="payButton" value="确定支付"/>
 </body>
 </html>

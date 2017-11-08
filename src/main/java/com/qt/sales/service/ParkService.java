@@ -62,16 +62,15 @@ public interface ParkService {
      * 【作者】: yinghui zhang .<br/>
      * 【时间】： 2017年11月2日 下午5:23:41 .<br/>
      * 【参数】： .<br/>
-     * @param parkingId
+     * @param park
      * @param carNumber
-     * @param inTime
      * @return .<br/>
      * <p>
      * 修改记录.<br/>
      * 修改人:  yinghui zhang 修改描述： .<br/>
      * <p/>
      */
-    public String enterinfoSync(String parkingId, String carNumber,String inTime);
+    public String enterinfoSyncEnter(ParkBean park,String carNumber,String in_time);
     
     /**
      * 【方法名】    : (车辆驶出). <br/> 
@@ -87,7 +86,7 @@ public interface ParkService {
      * 修改人:  yinghui zhang 修改描述： .<br/>
      * <p/>
      */
-    public String ecoMycarParkingExitinfoSync(String parkingId, String carNumber,String inTime);
+    public String ecoMycarParkingExitinfoSync(ParkBean park,String carNumber,String out_time);
     
     /**
      * 

@@ -27,4 +27,10 @@ public interface OrderBeanMapper {
     int updateByPrimaryKeySelective(OrderBean record);
 
     int updateByPrimaryKey(OrderBean record);
+    /**
+     *查询已经支付的金额
+     * @param outOrderNo
+     * @return
+     */
+    String queryPaidMoneyWithOrderNo(String outOrderNo);
 }

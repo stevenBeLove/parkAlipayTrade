@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
@@ -34,6 +35,7 @@ import com.alipay.api.response.AlipayEcoMycarParkingOrderSyncResponse;
 import com.alipay.api.response.AlipayEcoMycarParkingParkinglotinfoCreateResponse;
 import com.alipay.api.response.AlipayEcoMycarParkingParkinglotinfoUpdateResponse;
 import com.qt.sales.common.RSConsts;
+import com.qt.sales.dao.OrderBeanMapper;
 import com.qt.sales.dao.ParkBeanMapper;
 import com.qt.sales.dao.VehicleBeanMapper;
 import com.qt.sales.exception.QTException;
@@ -42,6 +44,7 @@ import com.qt.sales.model.ParkBean;
 import com.qt.sales.model.ParkBeanExample;
 import com.qt.sales.model.VehicleBean;
 import com.qt.sales.service.ParkService;
+import com.qt.sales.utils.DateUtil;
 import com.qt.sales.web.AlipayParkController;
 
 /** 
@@ -63,6 +66,9 @@ public class ParkServiceImpl implements ParkService {
     
     @Resource
     private VehicleBeanMapper vehicleBeanMapper;
+    
+    @Resource
+    private OrderBeanMapper orderBeanMapper;
     
     
     @Override
@@ -327,18 +333,24 @@ public class ParkServiceImpl implements ParkService {
 		}
 	}
 
-	 
+	public static Random random1 = new Random();
 	@Override
-	public String enterinfoSync(String parkingId, String carNumber, String inTime) {
-	    //https://docs.open.alipay.com/api_1/alipay.trade.create  
-	    
-	    
-	    return null;
+	public String enterinfoSyncEnter(ParkBean park,String carNumber, String in_time) {
+		OrderBean bean = new OrderBean();//创建订单
+		bean.setSellerId(park.getAccountNo());
+		bean.setParkingId(park.getParkingId());
+		bean.setCarNumber(carNumber);
+		bean.setInTime(in_time);
+		bean.setOrderNo("0");//未同步
+		bean.setOutOrderNo(DateUtil.getCurrDateAndTime()+random1.nextInt(1000));//订单号
+		bean.setOutParkingId(park.getOutParkingId());
+	    orderBeanMapper.insert(bean);
+	    return "success";
 	}
 
 
 	@Override
-	public String ecoMycarParkingExitinfoSync(String parkingId, String carNumber, String inTime) {
+	public String ecoMycarParkingExitinfoSync(ParkBean park,String carNumber,String out_time) {
 		// TODO Auto-generated method stub
 		return null;
 	}

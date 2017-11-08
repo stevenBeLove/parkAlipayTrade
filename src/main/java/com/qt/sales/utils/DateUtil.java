@@ -315,5 +315,26 @@ public final class DateUtil {
         SimpleDateFormat standFormat = new SimpleDateFormat(STANDDATEFORMAT);
         return standFormat.format(dates);
     }
+    
+    /**
+     * 算取时间差
+     * @param startTime
+     * @param nowTime
+     * @return
+     * @throws ParseException
+     */
+	public static String getTimeDiffer(String startTime, String nowTime) throws ParseException {
+		SimpleDateFormat df = new SimpleDateFormat(STANDDATEFORMAT);
+		Date now = df.parse(nowTime);
+		Date date = df.parse(startTime);
+		long l = now.getTime() - date.getTime();
+		long day = l / (24 * 60 * 60 * 1000);
+		long hour = (l / (60 * 60 * 1000) - day * 24);
+		long min = ((l / (60 * 1000)) - day * 24 * 60 - hour * 60);
+		long s = (l / 1000 - day * 24 * 60 * 60 - hour * 60 * 60 - min * 60);
+		System.out.println("" + day + "天" + hour + "小时" + min + "分" + s + "秒");
+		return day + "天" + hour + "小时" + min + "分" + s + "秒";
+	}
+    
 
 }

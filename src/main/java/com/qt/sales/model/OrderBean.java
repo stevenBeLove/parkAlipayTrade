@@ -45,6 +45,11 @@ public class OrderBean {
     private String orderSynStatus;
 
     private String orderPayStatus;
+    
+    /**
+     * 车辆ID
+     */
+    private String carId;
 
     public String getOrderNo() {
         return orderNo;
@@ -213,4 +218,16 @@ public class OrderBean {
     public void setOrderPayStatus(String orderPayStatus) {
         this.orderPayStatus = orderPayStatus == null ? null : orderPayStatus.trim();
     }
+
+	public String getCarId() {
+		return carId;
+	}
+
+	public void setCarId(String carId) {
+		this.carId = carId;
+	}
+    
+    
+    
+    
 }

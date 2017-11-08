@@ -171,7 +171,7 @@ public class AlipayParkController {
 		tokenRequest.setGrantType("authorization_code");
 		String app_auth_token = (String) ParkServiceImpl.parkingStore.get(parking_id);
 		logger.debug("----------store.token = "+app_auth_token);
-		tokenRequest.putOtherTextParam("app_auth_token", app_auth_token);
+		//tokenRequest.putOtherTextParam("app_auth_token", app_auth_token);
 		// 授权设置
 		tokenRequest.setCode(code);
 		try {

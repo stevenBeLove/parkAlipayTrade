@@ -94,7 +94,7 @@
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from TB_ORDER
+    from park.TB_ORDER
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
@@ -105,21 +105,21 @@
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
     <include refid="Base_Column_List" />
-    from TB_ORDER
+    from park.TB_ORDER
     where ORDER_NO = #{orderNo,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
-    delete from TB_ORDER
+    delete from park.TB_ORDER
     where ORDER_NO = #{orderNo,jdbcType=VARCHAR}
   </delete>
   <delete id="deleteByExample" parameterType="com.qt.sales.model.OrderBeanExample" >
-    delete from TB_ORDER
+    delete from park.TB_ORDER
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
   <insert id="insert" parameterType="com.qt.sales.model.OrderBean" >
-    insert into TB_ORDER (ORDER_NO, USER_ID, OUT_PARKING_ID, 
+    insert into park.TB_ORDER (ORDER_NO, USER_ID, OUT_PARKING_ID, 
       PARKING_NAME, CAR_NUMBER, OUT_ORDER_NO, 
       ORDER_STATUS, ORDER_TIME, PAY_TIME, 
       PAY_TYPE, PAY_MONEY, IN_TIME, 
@@ -137,7 +137,7 @@
       )
   </insert>
   <insert id="insertSelective" parameterType="com.qt.sales.model.OrderBean" >
-    insert into TB_ORDER
+    insert into park.TB_ORDER
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="orderNo != null" >
         ORDER_NO,
@@ -270,13 +270,13 @@
     </trim>
   </insert>
   <select id="countByExample" parameterType="com.qt.sales.model.OrderBeanExample" resultType="java.lang.Integer" >
-    select count(*) from TB_ORDER
+    select count(*) from park.TB_ORDER
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map" >
-    update TB_ORDER
+    update park.TB_ORDER
     <set >
       <if test="record.orderNo != null" >
         ORDER_NO = #{record.orderNo,jdbcType=VARCHAR},
@@ -347,7 +347,7 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map" >
-    update TB_ORDER
+    update park.TB_ORDER
     set ORDER_NO = #{record.orderNo,jdbcType=VARCHAR},
       USER_ID = #{record.userId,jdbcType=VARCHAR},
       OUT_PARKING_ID = #{record.outParkingId,jdbcType=VARCHAR},
@@ -374,7 +374,7 @@
     </if>
   </update>
   <update id="updateByPrimaryKeySelective" parameterType="com.qt.sales.model.OrderBean" >
-    update TB_ORDER
+    update park.TB_ORDER
     <set >
       <if test="userId != null" >
         USER_ID = #{userId,jdbcType=VARCHAR},
@@ -444,7 +444,7 @@
     where ORDER_NO = #{orderNo,jdbcType=VARCHAR}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.qt.sales.model.OrderBean" >
-    update TB_ORDER
+    update park.TB_ORDER
     set USER_ID = #{userId,jdbcType=VARCHAR},
       OUT_PARKING_ID = #{outParkingId,jdbcType=VARCHAR},
       PARKING_NAME = #{parkingName,jdbcType=VARCHAR},
@@ -469,7 +469,7 @@
   </update>
   
   <select id="queryPaidMoneyWithOrderNo" parameterType="string" resultType="string">
-  	select nvl(sum(p.pay_money),0) from tb_order_pay p where  p.out_order_no = #{outOrderNo,jdbcType=VARCHAR}
+  	select nvl(sum(p.pay_money),0) from park.TB_ORDER_pay p where  p.out_order_no = #{outOrderNo,jdbcType=VARCHAR}
   </select>
   
   

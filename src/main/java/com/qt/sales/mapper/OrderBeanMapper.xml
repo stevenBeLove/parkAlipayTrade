@@ -24,6 +24,8 @@
     <result column="ORDER_SYN_STATUS" property="orderSynStatus" jdbcType="VARCHAR" />
     <result column="ORDER_PAY_STATUS" property="orderPayStatus" jdbcType="VARCHAR" />
     <result column="car_id" property="carId" jdbcType="VARCHAR" />
+    <result column="car_type" property="carType" jdbcType="VARCHAR" />
+    <result column="car_color" property="carColor" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -86,7 +88,7 @@
   <sql id="Base_Column_List" >
     ORDER_NO, USER_ID, OUT_PARKING_ID, PARKING_NAME, CAR_NUMBER, OUT_ORDER_NO, ORDER_STATUS, 
     ORDER_TIME, PAY_TIME, PAY_TYPE, PAY_MONEY, IN_TIME, PARKING_ID, IN_DURATION, CARD_NUMBER, 
-    DISCOUNT_MONEY, PAID_MONEY, SELLER_ID, OUT_TIME, ORDER_SYN_STATUS, ORDER_PAY_STATUS,car_id
+    DISCOUNT_MONEY, PAID_MONEY, SELLER_ID, OUT_TIME, ORDER_SYN_STATUS, ORDER_PAY_STATUS,car_id,car_type,car_color
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.qt.sales.model.OrderBeanExample" >
     select
@@ -102,12 +104,14 @@
       order by ${orderByClause}
     </if>
   </select>
+  
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
     <include refid="Base_Column_List" />
     from park.TB_ORDER
-    where ORDER_NO = #{orderNo,jdbcType=VARCHAR}
+    where out_order_no = #{outOrderNo,jdbcType=VARCHAR}
   </select>
+  
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
     delete from park.TB_ORDER
     where ORDER_NO = #{orderNo,jdbcType=VARCHAR}
@@ -125,7 +129,7 @@
       PAY_TYPE, PAY_MONEY, IN_TIME, 
       PARKING_ID, IN_DURATION, CARD_NUMBER, 
       DISCOUNT_MONEY, PAID_MONEY, SELLER_ID, 
-      OUT_TIME, ORDER_SYN_STATUS, ORDER_PAY_STATUS
+      OUT_TIME, ORDER_SYN_STATUS, ORDER_PAY_STATUS,car_type, car_color
       )
     values (#{orderNo,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, #{outParkingId,jdbcType=VARCHAR}, 
       #{parkingName,jdbcType=VARCHAR}, #{carNumber,jdbcType=VARCHAR}, #{outOrderNo,jdbcType=VARCHAR}, 
@@ -133,7 +137,8 @@
       #{payType,jdbcType=VARCHAR}, #{payMoney,jdbcType=DECIMAL}, #{inTime,jdbcType=VARCHAR}, 
       #{parkingId,jdbcType=VARCHAR}, #{inDuration,jdbcType=VARCHAR}, #{cardNumber,jdbcType=VARCHAR}, 
       #{discountMoney,jdbcType=DECIMAL}, #{paidMoney,jdbcType=DECIMAL}, #{sellerId,jdbcType=VARCHAR}, 
-      #{outTime,jdbcType=TIMESTAMP}, #{orderSynStatus,jdbcType=VARCHAR}, #{orderPayStatus,jdbcType=VARCHAR}
+      #{outTime,jdbcType=TIMESTAMP}, #{orderSynStatus,jdbcType=VARCHAR}, #{orderPayStatus,jdbcType=VARCHAR},
+      #{carType,jdbcType=VARCHAR},#{carColor,jdbcType=VARCHAR}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.qt.sales.model.OrderBean" >

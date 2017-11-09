@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 public class OrderBean {
+    
+    
     private String orderNo;
 
     private String userId;
@@ -16,6 +18,10 @@ public class OrderBean {
 
     private String outOrderNo;
 
+    /**
+     * 订单状态
+     * 0：创建   1支付宝同步创建  2支付成功
+     */
     private String orderStatus;
 
     private String orderTime;
@@ -50,6 +56,89 @@ public class OrderBean {
      * 车辆ID
      */
     private String carId;
+    
+    
+    private String carType;
+    
+    private String carColor;
+
+    
+    //订单状态
+    public enum OrderStatus {
+        /**
+         * 创建
+         */
+        create("0"),
+        /**
+         * 同步创建
+         */
+        sync("1"),
+        /**
+         * 支付成功
+         */
+        paysucess("2");
+        private String val;
+        private OrderStatus(String val) {
+            this.val = val;
+        }
+        public String getVal() {
+            return val;
+        }
+    }
+    
+    public enum PayTypeStatus {
+        /**
+         * 在线缴费
+         */
+        onlinePay("1"),
+        /**
+         * 支付宝代扣
+         */
+        insteadAlipay("2");
+        private String val;
+        private PayTypeStatus(String val) {
+            this.val = val;
+        }
+        public String getVal() {
+            return val;
+        }
+    }
+    
+    /**
+     * 描述：获取属性值.<br/>
+     * 创建人：yinghui zhang <br/>
+     * 返回类型：@return carType .<br/>
+     */
+    public String getCarType() {
+        return carType;
+    }
+
+    /**
+     * 创建人：yinghui zhang <br/>
+     * 创建时间：2017年11月9日 下午1:48:24 <br/>
+     * 参数: @param  carType 设置值.  <br/>
+     */
+    public void setCarType(String carType) {
+        this.carType = carType;
+    }
+
+    /**
+     * 描述：获取属性值.<br/>
+     * 创建人：yinghui zhang <br/>
+     * 返回类型：@return carColor .<br/>
+     */
+    public String getCarColor() {
+        return carColor;
+    }
+
+    /**
+     * 创建人：yinghui zhang <br/>
+     * 创建时间：2017年11月9日 下午1:48:24 <br/>
+     * 参数: @param  carColor 设置值.  <br/>
+     */
+    public void setCarColor(String carColor) {
+        this.carColor = carColor;
+    }
 
     public String getOrderNo() {
         return orderNo;

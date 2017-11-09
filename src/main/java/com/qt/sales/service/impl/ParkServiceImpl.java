@@ -335,7 +335,7 @@ public class ParkServiceImpl implements ParkService {
 
 	public static Random random1 = new Random();
 	@Override
-	public String enterinfoSyncEnter(ParkBean park,String carNumber, String in_time) {
+	public int enterinfoSyncEnter(ParkBean park,String carNumber, String in_time,String carType,String carColor) {
 		OrderBean bean = new OrderBean();//创建订单
 		bean.setSellerId(park.getAccountNo());
 		bean.setParkingId(park.getParkingId());
@@ -344,8 +344,10 @@ public class ParkServiceImpl implements ParkService {
 		bean.setOrderNo("0");//未同步
 		bean.setOutOrderNo(DateUtil.getCurrDateAndTime()+random1.nextInt(1000));//订单号
 		bean.setOutParkingId(park.getOutParkingId());
-	    orderBeanMapper.insert(bean);
-	    return "success";
+		bean.setCarColor(carColor);
+		bean.setCarType(carType);
+		bean.setPayType("1");
+	  return orderBeanMapper.insert(bean);
 	}
 
 

@@ -24,7 +24,10 @@
         	$.ajax({
     			type : "POST",
     			url :  "${ctx}/alipayPark/tradeCreate",
-    			data : {},
+    			data : {
+    				'outOrderNo':$("#outOrderNo").val(),
+    				'payMoney':$("#payMoney").val()
+    			},
     			beforeSend : function() {
     			},
     			success : function(obj) {
@@ -87,10 +90,16 @@
 <br />
 <br /><br /><br />
 <hr />
+<input  type ="hidden" value="${payMoney }" id="payMoney" name="payMoney"/>
+<input  type ="hidden" value="${outOrderNo }" id="outOrderNo" name="outOrderNo"/>
+
 应付金额：${payMoney }
 已付金额：${paidMoney}
 优惠金额：${discountMoney }
 <hr />
+<c:if test="${not empty msg}">
+   ${msg}
+</c:if>
 车牌号：${car_number }
 入场时间：${inTime }
 停车时长：${timeDiffer }

@@ -2,7 +2,7 @@
  * 包名: package com.qt.test; <br/> 
  * 添加时间: 2017年10月29日 下午2:28:54 <br/> 
  */
-package com.qt.test;
+package com.qt.springtest;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,8 +14,11 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.qt.sales.model.OrderBean;
+import com.qt.sales.model.OrderBeanExample;
 import com.qt.sales.model.ParkBean;
 import com.qt.sales.model.VehicleBean;
+import com.qt.sales.service.OrderBeanService;
 import com.qt.sales.service.ParkService;
 
 /** 
@@ -24,24 +27,32 @@ import com.qt.sales.service.ParkService;
  * 添加时间: 2017年10月29日 下午2:28:54 <br/> 
  * 版本： JDK 1.6 parkAlipayTrade 1.0
  */
-public class ParkServiceTest {
+public class OrderBeanServiceTest {
 
-    ParkService parkService;
+    OrderBeanService orderBeanService;
     
     @Before
     public void getTaskByUser() {
         ApplicationContext app = new ClassPathXmlApplicationContext("shiroConfig/applicationContext.xml");
-        parkService = (ParkService) app.getBean("parkService");
+        orderBeanService = (OrderBeanService) app.getBean("orderBeanService");
     }
     
+
     @Test
-    public void insertPark(){
-        ParkBean record = new ParkBean();
-        record.setMerchantName("上海果元停车场");
-        record.setMerchantServicePhone("021-25413215");
-        record.setAccountNo("kftmke1407@sandbox.com");
-        parkService.insert(record);
+    public void testOrder(){
+        //创建订单
+        OrderBeanExample example = new OrderBeanExample();
+        OrderBeanExample.Criteria cr = example.createCriteria();
+        cr.andCarNumberEqualTo("沪A18S8");
+        cr.andParkingIdEqualTo("100002010101");
+        cr.andOrderStatusEqualTo("0");
+        List<OrderBean> orderList = orderBeanService.selectByExample(example);
+        for (OrderBean orderBean : orderList) {
+            System.out.println(orderBean.getCardNumber());
+        }
     }
+    
+    
     
     public static String getBizContent(){
         JSONObject data = new JSONObject();

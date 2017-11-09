@@ -64,13 +64,15 @@ public interface ParkService {
      * 【参数】： .<br/>
      * @param park
      * @param carNumber
+     * @param carType
+     * @param carColor
      * @return .<br/>
      * <p>
      * 修改记录.<br/>
      * 修改人:  yinghui zhang 修改描述： .<br/>
      * <p/>
      */
-    public String enterinfoSyncEnter(ParkBean park,String carNumber,String in_time);
+    public int enterinfoSyncEnter(ParkBean park,String carNumber, String in_time,String carType,String carColor);
     
     /**
      * 【方法名】    : (车辆驶出). <br/> 

@@ -58,7 +58,7 @@ public class ParkController {
     @RequestMapping(value = "/showCarControl/{outParkingId}", method = RequestMethod.GET)
     public String showCarControl(@PathVariable("outParkingId") String outParkingId, Model model) {
         ParkBean bean = parkService.selectByPrimaryKey(outParkingId);
-        model.addAttribute("parkingId",bean.getParkingId());
+        model.addAttribute("outParkingId",bean.getOutParkingId());
         return "park/parkControl";
     }
     

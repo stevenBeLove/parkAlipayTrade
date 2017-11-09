@@ -65,10 +65,9 @@
                  alert(JSON.stringify(data));
                  if ("9000" == data.resultCode) {
                 	 //alert("支付成功");
-                	 location.href = ctx+"/alipayPark/responseParkAuth/"+ids;
+                	 location.href = "${ctx}/alipayPark/OrderSync/"+tradeNO;
                 	 
                  }
-                 
                  if ("4000" == data.resultCode) {
                	  Ali.alert({
                          title: '亲',

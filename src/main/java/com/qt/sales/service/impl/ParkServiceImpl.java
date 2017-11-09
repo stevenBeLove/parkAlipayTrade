@@ -40,6 +40,7 @@ import com.qt.sales.dao.ParkBeanMapper;
 import com.qt.sales.dao.VehicleBeanMapper;
 import com.qt.sales.exception.QTException;
 import com.qt.sales.model.OrderBean;
+import com.qt.sales.model.OrderBean.OrderStatus;
 import com.qt.sales.model.ParkBean;
 import com.qt.sales.model.ParkBeanExample;
 import com.qt.sales.model.VehicleBean;
@@ -337,7 +338,8 @@ public class ParkServiceImpl implements ParkService {
 	@Override
 	public int enterinfoSyncEnter(ParkBean park,String carNumber, String in_time,String carType,String carColor) {
 		OrderBean bean = new OrderBean();//创建订单
-		bean.setSellerId(park.getAccountNo());
+		bean.setParkingName(park.getMerchantName());
+		bean.setSellerId(park.getAlipayUserId());
 		bean.setParkingId(park.getParkingId());
 		bean.setCarNumber(carNumber);
 		bean.setInTime(in_time);
@@ -347,6 +349,7 @@ public class ParkServiceImpl implements ParkService {
 		bean.setCarColor(carColor);
 		bean.setCarType(carType);
 		bean.setPayType("1");
+		bean.setOrderStatus(OrderStatus.create.getVal());
 	  return orderBeanMapper.insert(bean);
 	}
 

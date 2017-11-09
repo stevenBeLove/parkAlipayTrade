@@ -446,7 +446,7 @@
       </if>
       
     </set>
-    where ORDER_NO = #{orderNo,jdbcType=VARCHAR}
+    where out_order_no = #{outOrderNo,jdbcType=VARCHAR}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.qt.sales.model.OrderBean" >
     update park.TB_ORDER
@@ -470,7 +470,7 @@
       OUT_TIME = #{outTime,jdbcType=TIMESTAMP},
       ORDER_SYN_STATUS = #{orderSynStatus,jdbcType=VARCHAR},
       ORDER_PAY_STATUS = #{orderPayStatus,jdbcType=VARCHAR}
-    where ORDER_NO = #{orderNo,jdbcType=VARCHAR}
+    where out_order_no = #{outOrderNo,jdbcType=VARCHAR}
   </update>
   
   <select id="queryPaidMoneyWithOrderNo" parameterType="string" resultType="string">

@@ -21,7 +21,9 @@ function carIn(){
 		url : ctx + "/alipayPark/enterinfoSync",
 		data : {
 			'carNumber':$("#carNumber").val(),
-			'parkingId':$("#parkingId").val()
+			'outParkingId':$("#outParkingId").val(),
+			'carType':'1',
+			'carColor':'白色'
 		},
 		success : function(obj) {
 			alert(obj.message);
@@ -33,6 +35,28 @@ function carIn(){
 		},
 	});
 }
+
+// 点击payButton按钮后唤起收银台
+function createOrderButton(){
+	$.ajax({
+		type : "POST",
+		url :  "${ctx}/alipayPark/tradeCreate",
+		data : {
+			'outOrderNo':$("#outOrderNo").val(),
+			'payMoney':$("#payMoney").val()
+		},
+		beforeSend : function() {
+		},
+		success : function(obj) {
+			if (obj.success == 'true') {
+				alert(obj.message);
+			} else {
+				alert(obj.message);
+			}
+		}
+	});
+}	
+	
 
 function tardeOrder(){
 	var tradeNO = $("#tradeNO").val();
@@ -68,11 +92,10 @@ body.bootstrap-admin-with-small-navbar {
                                                 </div>
                                                 <label class="col-lg-1 control-label" for="username">停车场ID</label>
                                                 <div class="col-lg-2">
-                                                    <input type="text"  id="parkingId" value="${parkingId }" class="form-control" />
+                                                    <input type="text"  id="outParkingId" value="${outParkingId }" class="form-control" />
                                                 </div>
                                                 <div class="col-lg-2">
                                                 	<button id ="carIn" type="button" class="btn btn-primary" onclick="carIn();">车辆驶入</button>
-                                                	<button id="carOut" type="button" class="btn btn-primary" onclick="carOut();">车辆驶出</button>
                                                 </div>
                                             </div>
                                         </fieldset>
@@ -85,12 +108,17 @@ body.bootstrap-admin-with-small-navbar {
                                 <div class="bootstrap-admin-no-table-panel-content bootstrap-admin-panel-content collapse in">
                                         <fieldset>
                                             <div class="form-group">
-                                            	<label class="col-lg-1 control-label" for="tradeNO">订单号</label>
+                                            	<label class="col-lg-1 control-label" for="tradeNO">outOrderNo</label>
                                                 <div class="col-lg-2">
-                                                    <input type="text"  id="tradeNO" name ="tradeNO" class="form-control" />
+                                                    <input type="text"  id="outOrderNo" name ="outOrderNo" class="form-control" />
+                                                </div>
+                                                
+                                                <label class="col-lg-1 control-label" for="tradeNO">订单金额</label>
+                                                <div class="col-lg-2">
+                                                    <input type="text"  id="payMoney" name ="payMoney" class="form-control" />
                                                 </div>
                                                 <div class="col-lg-2">
-                                                	<button id ="carIn" type="button" class="btn btn-primary" onclick="tardeOrder();">支付订单测试</button>
+                                                	<button  type="button" class="btn btn-primary" onclick="createOrderButton();">创建订单</button>
                                                 </div>
                                             </div>
                                         </fieldset>

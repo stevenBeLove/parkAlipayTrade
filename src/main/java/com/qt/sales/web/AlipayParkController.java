@@ -200,20 +200,12 @@ public class AlipayParkController {
 					System.out.println(responseParams.toString());
 					String car_number = responseBiz.getCarNumber();
 					model.addAttribute("car_number", car_number);
-					VehicleBean bean = new VehicleBean();
-					bean.setCarId(car_id);
-					bean.setParkingId(parking_id);
-					bean.setCarNumber(car_number);
-					bean.setAuthToken(access_token);
-					bean.setUserId(uid);
-					//车牌信息进行保存
-					parkService.ecoMycarParkingVehicleQuery(bean);
 					//创建订单
 					OrderBeanExample example = new OrderBeanExample();
 					OrderBeanExample.Criteria cr = example.createCriteria();
 					cr.andCarNumberEqualTo(car_number);
 					cr.andParkingIdEqualTo(parking_id);
-					cr.andOrderStatusEqualTo("0");
+					cr.andOrderStatusEqualTo(OrderStatus.create.getVal());
 					List<OrderBean> orderList = orderBeanService.selectByExample(example);
 					OrderBean order = null;
 					if(orderList!=null && orderList.size()>0){
@@ -222,6 +214,12 @@ public class AlipayParkController {
 					if(StringUtils.isEmpty(order)){
 						  model.addAttribute("msg", "无此车牌入场记录，请联系管理员！");
 					}
+					//更新订单信息
+					order.setUserId(uid);
+					order.setCarId(car_id);
+					orderBeanService.updateByPrimaryKey(order);
+					
+					//显示订单信息
 					String money = getPayMoney();//调用接口查询费用
 					model.addAttribute("outOrderNo", order.getOutOrderNo());
 					model.addAttribute("payMoney", money);
@@ -393,7 +391,7 @@ public class AlipayParkController {
         OrderBeanExample.Criteria cr = example.createCriteria();
         cr.andCarNumberEqualTo(carNumber);
         cr.andOutParkingIdEqualTo(outParkingId);
-        cr.andOrderStatusEqualTo("0");
+        cr.andOrderStatusEqualTo(OrderStatus.create.getVal());
         int count = orderBeanService.countByExample(example);
         if (count > 0) {
             ajaxinfo.setSuccess(AjaxReturnInfo.FALSE_RESULT);
@@ -524,24 +522,26 @@ public class AlipayParkController {
           if(orderBean==null){
               ajaxinfo.setSuccess(AjaxReturnInfo.FALSE_RESULT);
               ajaxinfo.setMessage("订单流程有错！");
+              return ajaxinfo;
           }
           orderBean.setOrderTime(DateUtil.getCurrDate(new Date(), DateUtil.STANDDATEFORMAT));
           orderBean.setPayType(PayTypeStatus.onlinePay.getVal());//支付类型
-          request.setBizContent(getTradeCreateBizContent(orderBean));
+          request.setBizContent(getTradeCreateBizContent(orderBean, payMoney));
           String app_auth_token = (String) ParkServiceImpl.parkingStore.get(orderBean.getParkingId());
           request.putOtherTextParam("app_auth_token", app_auth_token);
           AlipayTradeCreateResponse response = alipayClient.execute(request);
           if (response.isSuccess()) {
+        	  System.out.println(response.getTradeNo());
               ajaxinfo.setSuccess(AjaxReturnInfo.TURE_RESULT);
               ajaxinfo.setMessage(response.getTradeNo());
               //更新订单状态
               orderBean.setOrderNo(response.getTradeNo());
               orderBean.setOrderStatus(OrderStatus.sync.getVal());//同步创建
-              orderBeanService.updateByPrimaryKey(orderBean);
-              System.out.println("调用成功");
+              orderBeanService.updateByPrimaryKeySelective(orderBean);
+              logger.debug("调用成功");
           } else {
               ajaxinfo.setSuccess(AjaxReturnInfo.FALSE_RESULT);
-              ajaxinfo.setMessage("订单流程有错！");
+              ajaxinfo.setMessage("创建订单失败!");
               logger.debug("调用失败");
           }
       } catch (AlipayApiException e) {
@@ -552,11 +552,11 @@ public class AlipayParkController {
   }
 
  //创建订单业务数据
- public String getTradeCreateBizContent(OrderBean order){
+ public String getTradeCreateBizContent(OrderBean order,String payMoney){
      JSONObject data = new JSONObject();
      data.put(RSConsts.out_trade_no, order.getOutOrderNo());//商户订单号
      data.put(RSConsts.seller_id, order.getSellerId());//卖家支付宝用户ID
-     data.put(RSConsts.total_amount, order.getPayMoney());
+     data.put(RSConsts.total_amount, payMoney);
 //     data.put("discountable_amount", "");// 可打折金额.!
      data.put(RSConsts.subject, order.getParkingName()+"停车费");
      data.put(RSConsts.body, "车牌号码："+order.getCarNumber());
@@ -582,5 +582,23 @@ public class AlipayParkController {
 //     data.put("extend_params", extend_params.toJSONString());
      return data.toJSONString();
  }
+ 
+ 
+ 
+ /**
+  * 订单同步
+  * @return 页面路径
+  */
+ @RequestMapping(value = "/OrderSync/{tradeNO}", method = RequestMethod.GET)
+ public String OrderSync(@PathVariable("tradeNO") String tradeNO, Model model) {
+	 //添加OrderID通过ID来关联另外张表的多个订单记录
+	 
+	 
+//     OrderBean order = orderBeanService.s
+//     model.addAttribute("outParkingId",bean.getOutParkingId());
+     return "alipayPark/payResult";
+ }
+ 
+ 
  
 }

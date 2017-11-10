@@ -33,4 +33,17 @@ public interface OrderBeanMapper {
      * @return
      */
     String queryPaidMoneyWithOrderNo(String outOrderNo);
+    /**
+     * 【注意】: (根据订单ID获取订单).<br/> 
+     * 【作者】: yinghui zhang .<br/>
+     * 【时间】： 2017年11月10日 下午2:49:21 .<br/>
+     * 【参数】： .<br/>
+     * @param orderNo
+     * @return .<br/>
+     * <p>
+     * 修改记录.<br/>
+     * 修改人:  yinghui zhang 修改描述： .<br/>
+     * <p/>
+     */
+    OrderBean selectByOrderNo(String orderNo);
 }

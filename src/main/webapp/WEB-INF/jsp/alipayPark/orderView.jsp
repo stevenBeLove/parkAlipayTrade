@@ -26,7 +26,8 @@
     			url :  "${ctx}/alipayPark/tradeCreate",
     			data : {
     				'outOrderNo':$("#outOrderNo").val(),
-    				'payMoney':$("#payMoney").val()
+    				'payMoney':$("#payMoney").val(),
+    				'inDuration':$("#inDuration").val()
     			},
     			beforeSend : function() {
     			},
@@ -91,6 +92,7 @@
 <hr />
 <input  type ="hidden" value="${payMoney }" id="payMoney" name="payMoney"/>
 <input  type ="hidden" value="${outOrderNo }" id="outOrderNo" name="outOrderNo"/>
+<input  type ="hidden" value="${inDuration }" id="inDuration" name="inDuration"/>
 
 应付金额：${payMoney }
 已付金额：${paidMoney}

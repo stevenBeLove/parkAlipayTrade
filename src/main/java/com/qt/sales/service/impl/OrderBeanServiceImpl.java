@@ -84,4 +84,10 @@ public class OrderBeanServiceImpl implements OrderBeanService {
 		return orderBeanMapper.queryPaidMoneyWithOrderNo(outOrderNo);
 	}
 
+    @Override
+    public OrderBean selectByOrderNo(String orderNo) {
+        // TODO Auto-generated method stub
+        return orderBeanMapper.selectByOrderNo(orderNo);
+    }
+
 }

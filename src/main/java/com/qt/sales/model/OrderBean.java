@@ -46,11 +46,11 @@ public class OrderBean {
 
     private String sellerId;
 
-    private Date outTime;
+    private String outTime;
 
     private String orderSynStatus;
 
-    private String orderPayStatus;
+//    private String orderPayStatus;
     
     /**
      * 车辆ID
@@ -284,11 +284,21 @@ public class OrderBean {
         this.sellerId = sellerId == null ? null : sellerId.trim();
     }
 
-    public Date getOutTime() {
+    /**
+     * 描述：获取属性值.<br/>
+     * 创建人：yinghui zhang <br/>
+     * 返回类型：@return outTime .<br/>
+     */
+    public String getOutTime() {
         return outTime;
     }
 
-    public void setOutTime(Date outTime) {
+    /**
+     * 创建人：yinghui zhang <br/>
+     * 创建时间：2017年11月10日 下午5:53:08 <br/>
+     * 参数: @param  outTime 设置值.  <br/>
+     */
+    public void setOutTime(String outTime) {
         this.outTime = outTime;
     }
 
@@ -299,14 +309,14 @@ public class OrderBean {
     public void setOrderSynStatus(String orderSynStatus) {
         this.orderSynStatus = orderSynStatus == null ? null : orderSynStatus.trim();
     }
-
-    public String getOrderPayStatus() {
-        return orderPayStatus;
-    }
-
-    public void setOrderPayStatus(String orderPayStatus) {
-        this.orderPayStatus = orderPayStatus == null ? null : orderPayStatus.trim();
-    }
+//
+//    public String getOrderPayStatus() {
+//        return orderPayStatus;
+//    }
+//
+//    public void setOrderPayStatus(String orderPayStatus) {
+//        this.orderPayStatus = orderPayStatus == null ? null : orderPayStatus.trim();
+//    }
 
 	public String getCarId() {
 		return carId;

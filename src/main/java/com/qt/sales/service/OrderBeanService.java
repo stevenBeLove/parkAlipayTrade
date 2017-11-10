@@ -36,4 +36,20 @@ public interface OrderBeanService {
 	     * @return
 	     */
 	    String queryPaidMoneyWithOrderNo(String outOrderNo);
+	    
+	    /**
+	     * 根据订单ID获取订单
+	     * 【方法名】    : (这里用一句话描述这个方法的作用). <br/> 
+	     * 【注意】: (这里描述这个方法的注意事项 – 可选).<br/> 
+	     * 【作者】: yinghui zhang .<br/>
+	     * 【时间】： 2017年11月10日 下午2:50:05 .<br/>
+	     * 【参数】： .<br/>
+	     * @param orderNo
+	     * @return .<br/>
+	     * <p>
+	     * 修改记录.<br/>
+	     * 修改人:  yinghui zhang 修改描述： .<br/>
+	     * <p/>
+	     */
+	    OrderBean selectByOrderNo(String orderNo);
 }

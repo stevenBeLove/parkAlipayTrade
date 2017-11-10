@@ -112,6 +112,13 @@
     where out_order_no = #{outOrderNo,jdbcType=VARCHAR}
   </select>
   
+    <select id="selectByOrderNo" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from park.TB_ORDER
+    where ORDER_NO = #{orderNo,jdbcType=VARCHAR}
+  </select>
+  
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
     delete from park.TB_ORDER
     where ORDER_NO = #{orderNo,jdbcType=VARCHAR}

@@ -19,20 +19,18 @@ public class OrderBeanServiceImpl implements OrderBeanService {
 	
 	@Override
 	public int countByExample(OrderBeanExample example) {
-		// TODO Auto-generated method stub
-		return 0;
+		return orderBeanMapper.countByExample(example);
 	}
 
 	@Override
 	public int deleteByExample(OrderBeanExample example) {
-		// TODO Auto-generated method stub
-		return 0;
+		return orderBeanMapper.deleteByExample(example);
 	}
 
 	@Override
 	public int deleteByPrimaryKey(String orderNo) {
 		// TODO Auto-generated method stub
-		return 0;
+		return orderBeanMapper.deleteByPrimaryKey(orderNo);
 	}
 
 	@Override
@@ -44,7 +42,7 @@ public class OrderBeanServiceImpl implements OrderBeanService {
 	@Override
 	public int insertSelective(OrderBean record) {
 		// TODO Auto-generated method stub
-		return 0;
+		return orderBeanMapper.insertSelective(record);
 	}
 
 	@Override
@@ -86,8 +84,17 @@ public class OrderBeanServiceImpl implements OrderBeanService {
 
     @Override
     public OrderBean selectByOrderNo(String orderNo) {
-        // TODO Auto-generated method stub
         return orderBeanMapper.selectByOrderNo(orderNo);
     }
+    
+    @Override
+    public int insertFromOrder(OrderBean record){
+    	return orderBeanMapper.insertFromOrder(record);
+    }
+
+	@Override
+	public int updateOrderPayByOrderNo(OrderBean record) {
+		return orderBeanMapper.updateOrderPayByOrderNo(record);
+	}
 
 }

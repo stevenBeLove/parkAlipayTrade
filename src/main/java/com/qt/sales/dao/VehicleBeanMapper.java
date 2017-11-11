@@ -27,4 +27,6 @@ public interface VehicleBeanMapper {
     int updateByPrimaryKeySelective(VehicleBean record);
 
     int updateByPrimaryKey(VehicleBean record);
+    
+    
 }

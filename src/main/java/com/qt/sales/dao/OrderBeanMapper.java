@@ -46,4 +46,16 @@ public interface OrderBeanMapper {
      * <p/>
      */
     OrderBean selectByOrderNo(String orderNo);
+    /**
+     * 记录订单表
+     * @param record
+     * @return
+     */
+    int insertFromOrder(OrderBean record);
+    /**
+     * 更新订单
+     * @param record
+     * @return
+     */
+    int updateOrderPayByOrderNo(OrderBean record);
 }

@@ -4,6 +4,7 @@
  */
 package com.qt.springtest;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,7 +16,6 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.qt.sales.model.ParkBean;
-import com.qt.sales.model.VehicleBean;
 import com.qt.sales.service.ParkService;
 
 /** 
@@ -28,7 +28,7 @@ public class ParkServiceTest {
 
     ParkService parkService;
     
-    @Before
+    //@Before
     public void getTaskByUser() {
         ApplicationContext app = new ClassPathXmlApplicationContext("shiroConfig/applicationContext.xml");
         parkService = (ParkService) app.getBean("parkService");
@@ -59,6 +59,13 @@ public class ParkServiceTest {
         String jsonStr = JSON.toJSONString(data);
         System.out.println(jsonStr);
         return jsonStr;
+    }
+    
+    @Test
+    public void substract(){
+    	BigDecimal b1 = new BigDecimal("20.02");   
+    	BigDecimal b2 = new BigDecimal("10.50");   
+    	System.out.println(b1.subtract(b2).floatValue()); 
     }
     
     

@@ -22,7 +22,6 @@
     <result column="SELLER_ID" property="sellerId" jdbcType="VARCHAR" />
     <result column="OUT_TIME" property="outTime" jdbcType="TIMESTAMP" />
     <result column="ORDER_SYN_STATUS" property="orderSynStatus" jdbcType="VARCHAR" />
-    <result column="ORDER_PAY_STATUS" property="orderPayStatus" jdbcType="VARCHAR" />
     <result column="car_id" property="carId" jdbcType="VARCHAR" />
     <result column="car_type" property="carType" jdbcType="VARCHAR" />
     <result column="car_color" property="carColor" jdbcType="VARCHAR" />
@@ -88,7 +87,7 @@
   <sql id="Base_Column_List" >
     ORDER_NO, USER_ID, OUT_PARKING_ID, PARKING_NAME, CAR_NUMBER, OUT_ORDER_NO, ORDER_STATUS, 
     ORDER_TIME, PAY_TIME, PAY_TYPE, PAY_MONEY, IN_TIME, PARKING_ID, IN_DURATION, CARD_NUMBER, 
-    DISCOUNT_MONEY, PAID_MONEY, SELLER_ID, OUT_TIME, ORDER_SYN_STATUS, ORDER_PAY_STATUS,car_id,car_type,car_color
+    DISCOUNT_MONEY, PAID_MONEY, SELLER_ID, OUT_TIME, ORDER_SYN_STATUS, car_id,car_type,car_color
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.qt.sales.model.OrderBeanExample" >
     select
@@ -136,7 +135,7 @@
       PAY_TYPE, PAY_MONEY, IN_TIME, 
       PARKING_ID, IN_DURATION, CARD_NUMBER, 
       DISCOUNT_MONEY, PAID_MONEY, SELLER_ID, 
-      OUT_TIME, ORDER_SYN_STATUS, ORDER_PAY_STATUS,car_type, car_color
+      OUT_TIME, ORDER_SYN_STATUS, car_type, car_color
       )
     values (#{orderNo,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, #{outParkingId,jdbcType=VARCHAR}, 
       #{parkingName,jdbcType=VARCHAR}, #{carNumber,jdbcType=VARCHAR}, #{outOrderNo,jdbcType=VARCHAR}, 
@@ -144,10 +143,32 @@
       #{payType,jdbcType=VARCHAR}, #{payMoney,jdbcType=DECIMAL}, #{inTime,jdbcType=VARCHAR}, 
       #{parkingId,jdbcType=VARCHAR}, #{inDuration,jdbcType=VARCHAR}, #{cardNumber,jdbcType=VARCHAR}, 
       #{discountMoney,jdbcType=DECIMAL}, #{paidMoney,jdbcType=DECIMAL}, #{sellerId,jdbcType=VARCHAR}, 
-      #{outTime,jdbcType=TIMESTAMP}, #{orderSynStatus,jdbcType=VARCHAR}, #{orderPayStatus,jdbcType=VARCHAR},
+      #{outTime,jdbcType=TIMESTAMP}, #{orderSynStatus,jdbcType=VARCHAR}, 
       #{carType,jdbcType=VARCHAR},#{carColor,jdbcType=VARCHAR}
       )
   </insert>
+  
+   <insert id="insertFromOrder" parameterType="com.qt.sales.model.OrderBean" >
+    insert into park.TB_ORDER_PAY (order_id, ORDER_NO, USER_ID, OUT_PARKING_ID, 
+      PARKING_NAME, CAR_NUMBER, OUT_ORDER_NO, 
+      ORDER_STATUS, ORDER_TIME, PAY_TIME, 
+      PAY_TYPE, PAY_MONEY, IN_TIME, 
+      PARKING_ID, IN_DURATION, CARD_NUMBER, 
+      DISCOUNT_MONEY, PAID_MONEY, SELLER_ID, 
+      OUT_TIME, ORDER_SYN_STATUS, car_type, car_color
+      )
+    values (park.seq_parkid.nextval,#{orderNo,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, #{outParkingId,jdbcType=VARCHAR}, 
+      #{parkingName,jdbcType=VARCHAR}, #{carNumber,jdbcType=VARCHAR}, #{outOrderNo,jdbcType=VARCHAR}, 
+      #{orderStatus,jdbcType=VARCHAR}, #{orderTime,jdbcType=VARCHAR}, #{payTime,jdbcType=VARCHAR}, 
+      #{payType,jdbcType=VARCHAR}, #{payMoney,jdbcType=DECIMAL}, #{inTime,jdbcType=VARCHAR}, 
+      #{parkingId,jdbcType=VARCHAR}, #{inDuration,jdbcType=VARCHAR}, #{cardNumber,jdbcType=VARCHAR}, 
+      #{discountMoney,jdbcType=DECIMAL}, #{paidMoney,jdbcType=DECIMAL}, #{sellerId,jdbcType=VARCHAR}, 
+      #{outTime,jdbcType=TIMESTAMP}, #{orderSynStatus,jdbcType=VARCHAR},
+      #{carType,jdbcType=VARCHAR},#{carColor,jdbcType=VARCHAR}
+      )
+  </insert>
+  
+  
   <insert id="insertSelective" parameterType="com.qt.sales.model.OrderBean" >
     insert into park.TB_ORDER
     <trim prefix="(" suffix=")" suffixOverrides="," >
@@ -211,9 +232,7 @@
       <if test="orderSynStatus != null" >
         ORDER_SYN_STATUS,
       </if>
-      <if test="orderPayStatus != null" >
-        ORDER_PAY_STATUS,
-      </if>
+   
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="orderNo != null" >
@@ -276,9 +295,6 @@
       <if test="orderSynStatus != null" >
         #{orderSynStatus,jdbcType=VARCHAR},
       </if>
-      <if test="orderPayStatus != null" >
-        #{orderPayStatus,jdbcType=VARCHAR},
-      </if>
     </trim>
   </insert>
   <select id="countByExample" parameterType="com.qt.sales.model.OrderBeanExample" resultType="java.lang.Integer" >
@@ -287,107 +303,13 @@
       <include refid="Example_Where_Clause" />
     </if>
   </select>
-  <update id="updateByExampleSelective" parameterType="map" >
-    update park.TB_ORDER
-    <set >
-      <if test="record.orderNo != null" >
-        ORDER_NO = #{record.orderNo,jdbcType=VARCHAR},
-      </if>
-      <if test="record.userId != null" >
-        USER_ID = #{record.userId,jdbcType=VARCHAR},
-      </if>
-      <if test="record.outParkingId != null" >
-        OUT_PARKING_ID = #{record.outParkingId,jdbcType=VARCHAR},
-      </if>
-      <if test="record.parkingName != null" >
-        PARKING_NAME = #{record.parkingName,jdbcType=VARCHAR},
-      </if>
-      <if test="record.carNumber != null" >
-        CAR_NUMBER = #{record.carNumber,jdbcType=VARCHAR},
-      </if>
-      <if test="record.outOrderNo != null" >
-        OUT_ORDER_NO = #{record.outOrderNo,jdbcType=VARCHAR},
-      </if>
-      <if test="record.orderStatus != null" >
-        ORDER_STATUS = #{record.orderStatus,jdbcType=VARCHAR},
-      </if>
-      <if test="record.orderTime != null" >
-        ORDER_TIME = #{record.orderTime,jdbcType=VARCHAR},
-      </if>
-      <if test="record.payTime != null" >
-        PAY_TIME = #{record.payTime,jdbcType=VARCHAR},
-      </if>
-      <if test="record.payType != null" >
-        PAY_TYPE = #{record.payType,jdbcType=VARCHAR},
-      </if>
-      <if test="record.payMoney != null" >
-        PAY_MONEY = #{record.payMoney,jdbcType=DECIMAL},
-      </if>
-      <if test="record.inTime != null" >
-        IN_TIME = #{record.inTime,jdbcType=VARCHAR},
-      </if>
-      <if test="record.parkingId != null" >
-        PARKING_ID = #{record.parkingId,jdbcType=VARCHAR},
-      </if>
-      <if test="record.inDuration != null" >
-        IN_DURATION = #{record.inDuration,jdbcType=VARCHAR},
-      </if>
-      <if test="record.cardNumber != null" >
-        CARD_NUMBER = #{record.cardNumber,jdbcType=VARCHAR},
-      </if>
-      <if test="record.discountMoney != null" >
-        DISCOUNT_MONEY = #{record.discountMoney,jdbcType=DECIMAL},
-      </if>
-      <if test="record.paidMoney != null" >
-        PAID_MONEY = #{record.paidMoney,jdbcType=DECIMAL},
-      </if>
-      <if test="record.sellerId != null" >
-        SELLER_ID = #{record.sellerId,jdbcType=VARCHAR},
-      </if>
-      <if test="record.outTime != null" >
-        OUT_TIME = #{record.outTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="record.orderSynStatus != null" >
-        ORDER_SYN_STATUS = #{record.orderSynStatus,jdbcType=VARCHAR},
-      </if>
-      <if test="record.orderPayStatus != null" >
-        ORDER_PAY_STATUS = #{record.orderPayStatus,jdbcType=VARCHAR},
-      </if>
-    </set>
-    <if test="_parameter != null" >
-      <include refid="Update_By_Example_Where_Clause" />
-    </if>
-  </update>
-  <update id="updateByExample" parameterType="map" >
-    update park.TB_ORDER
-    set ORDER_NO = #{record.orderNo,jdbcType=VARCHAR},
-      USER_ID = #{record.userId,jdbcType=VARCHAR},
-      OUT_PARKING_ID = #{record.outParkingId,jdbcType=VARCHAR},
-      PARKING_NAME = #{record.parkingName,jdbcType=VARCHAR},
-      CAR_NUMBER = #{record.carNumber,jdbcType=VARCHAR},
-      OUT_ORDER_NO = #{record.outOrderNo,jdbcType=VARCHAR},
-      ORDER_STATUS = #{record.orderStatus,jdbcType=VARCHAR},
-      ORDER_TIME = #{record.orderTime,jdbcType=VARCHAR},
-      PAY_TIME = #{record.payTime,jdbcType=VARCHAR},
-      PAY_TYPE = #{record.payType,jdbcType=VARCHAR},
-      PAY_MONEY = #{record.payMoney,jdbcType=DECIMAL},
-      IN_TIME = #{record.inTime,jdbcType=VARCHAR},
-      PARKING_ID = #{record.parkingId,jdbcType=VARCHAR},
-      IN_DURATION = #{record.inDuration,jdbcType=VARCHAR},
-      CARD_NUMBER = #{record.cardNumber,jdbcType=VARCHAR},
-      DISCOUNT_MONEY = #{record.discountMoney,jdbcType=DECIMAL},
-      PAID_MONEY = #{record.paidMoney,jdbcType=DECIMAL},
-      SELLER_ID = #{record.sellerId,jdbcType=VARCHAR},
-      OUT_TIME = #{record.outTime,jdbcType=TIMESTAMP},
-      ORDER_SYN_STATUS = #{record.orderSynStatus,jdbcType=VARCHAR},
-      ORDER_PAY_STATUS = #{record.orderPayStatus,jdbcType=VARCHAR}
-    <if test="_parameter != null" >
-      <include refid="Update_By_Example_Where_Clause" />
-    </if>
-  </update>
+ 
   <update id="updateByPrimaryKeySelective" parameterType="com.qt.sales.model.OrderBean" >
     update park.TB_ORDER
     <set >
+      <if test="orderNo != null" >
+        ORDER_NO =#{orderNo,jdbcType=VARCHAR},
+      </if>
       <if test="userId != null" >
         USER_ID = #{userId,jdbcType=VARCHAR},
       </if>
@@ -399,9 +321,6 @@
       </if>
       <if test="carNumber != null" >
         CAR_NUMBER = #{carNumber,jdbcType=VARCHAR},
-      </if>
-      <if test="outOrderNo != null" >
-        OUT_ORDER_NO = #{outOrderNo,jdbcType=VARCHAR},
       </if>
       <if test="orderStatus != null" >
         ORDER_STATUS = #{orderStatus,jdbcType=VARCHAR},
@@ -445,16 +364,78 @@
       <if test="orderSynStatus != null" >
         ORDER_SYN_STATUS = #{orderSynStatus,jdbcType=VARCHAR},
       </if>
-      <if test="orderPayStatus != null" >
-        ORDER_PAY_STATUS = #{orderPayStatus,jdbcType=VARCHAR},
+      <if test="carId != null" >
+        car_id = #{carId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where out_order_no = #{outOrderNo,jdbcType=VARCHAR}
+  </update>
+  
+    <update id="updateOrderPayByOrderNo" parameterType="com.qt.sales.model.OrderBean" >
+    update park.TB_ORDER_PAY
+    <set >
+      <if test="userId != null" >
+        USER_ID = #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="outParkingId != null" >
+        OUT_PARKING_ID = #{outParkingId,jdbcType=VARCHAR},
+      </if>
+      <if test="parkingName != null" >
+        PARKING_NAME = #{parkingName,jdbcType=VARCHAR},
+      </if>
+      <if test="carNumber != null" >
+        CAR_NUMBER = #{carNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="orderStatus != null" >
+        ORDER_STATUS = #{orderStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="orderTime != null" >
+        ORDER_TIME = #{orderTime,jdbcType=VARCHAR},
+      </if>
+      <if test="payTime != null" >
+        PAY_TIME = #{payTime,jdbcType=VARCHAR},
+      </if>
+      <if test="payType != null" >
+        PAY_TYPE = #{payType,jdbcType=VARCHAR},
+      </if>
+      <if test="payMoney != null" >
+        PAY_MONEY = #{payMoney,jdbcType=DECIMAL},
+      </if>
+      <if test="inTime != null" >
+        IN_TIME = #{inTime,jdbcType=VARCHAR},
+      </if>
+      <if test="parkingId != null" >
+        PARKING_ID = #{parkingId,jdbcType=VARCHAR},
+      </if>
+      <if test="inDuration != null" >
+        IN_DURATION = #{inDuration,jdbcType=VARCHAR},
+      </if>
+      <if test="cardNumber != null" >
+        CARD_NUMBER = #{cardNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="discountMoney != null" >
+        DISCOUNT_MONEY = #{discountMoney,jdbcType=DECIMAL},
+      </if>
+      <if test="paidMoney != null" >
+        PAID_MONEY = #{paidMoney,jdbcType=DECIMAL},
+      </if>
+      <if test="sellerId != null" >
+        SELLER_ID = #{sellerId,jdbcType=VARCHAR},
+      </if>
+      <if test="outTime != null" >
+        OUT_TIME = #{outTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="orderSynStatus != null" >
+        ORDER_SYN_STATUS = #{orderSynStatus,jdbcType=VARCHAR},
       </if>
       <if test="carId != null" >
         car_id = #{carId,jdbcType=VARCHAR},
       </if>
-      
     </set>
     where out_order_no = #{outOrderNo,jdbcType=VARCHAR}
   </update>
+  
+  
   <update id="updateByPrimaryKey" parameterType="com.qt.sales.model.OrderBean" >
     update park.TB_ORDER
     set USER_ID = #{userId,jdbcType=VARCHAR},
@@ -475,8 +456,7 @@
       PAID_MONEY = #{paidMoney,jdbcType=DECIMAL},
       SELLER_ID = #{sellerId,jdbcType=VARCHAR},
       OUT_TIME = #{outTime,jdbcType=TIMESTAMP},
-      ORDER_SYN_STATUS = #{orderSynStatus,jdbcType=VARCHAR},
-      ORDER_PAY_STATUS = #{orderPayStatus,jdbcType=VARCHAR}
+      ORDER_SYN_STATUS = #{orderSynStatus,jdbcType=VARCHAR}
     where out_order_no = #{outOrderNo,jdbcType=VARCHAR}
   </update>
   

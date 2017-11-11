@@ -7,6 +7,7 @@ package com.qt.sales.service.impl;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -92,28 +93,24 @@ public class ParkServiceImpl implements ParkService {
 
     @Override
     public int countByExample(ParkBeanExample example) {
-        // TODO Auto-generated method stub
         return parkBeanMapper.countByExample(example);
     }
 
 
     @Override
     public int deleteByExample(ParkBeanExample example) {
-        // TODO Auto-generated method stub
-        return 0;
+        return parkBeanMapper.deleteByExample(example);
     }
 
 
     @Override
     public int deleteByPrimaryKey(String outParkingId) {
-        // TODO Auto-generated method stub
-        return 0;
+        return parkBeanMapper.deleteByPrimaryKey(outParkingId);
     }
 
 
     @Override
     public int insertSelective(ParkBean record) {
-        // TODO Auto-generated method stub
         return parkBeanMapper.insertSelective(record);
     }
 
@@ -350,6 +347,7 @@ public class ParkServiceImpl implements ParkService {
 		bean.setCarType(carType);
 		bean.setPayType("1");
 		bean.setOrderStatus(OrderStatus.create.getVal());
+		bean.setPaidMoney(new BigDecimal("0.00"));
 	  return orderBeanMapper.insert(bean);
 	}
 
@@ -416,7 +414,6 @@ public class ParkServiceImpl implements ParkService {
 
     @Override
     public List<ParkBean> selectAllParkBean(ParkBeanExample example) {
-        // TODO Auto-generated method stub
         return parkBeanMapper.selectAllParkBean(example);
     }
 	

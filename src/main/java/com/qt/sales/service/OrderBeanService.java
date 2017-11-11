@@ -52,4 +52,16 @@ public interface OrderBeanService {
 	     * <p/>
 	     */
 	    OrderBean selectByOrderNo(String orderNo);
+	    /**
+	     * 同步订单表
+	     * @param record
+	     * @return
+	     */
+	    int insertFromOrder(OrderBean record);
+	    /**
+	     * 更新订单
+	     * @param record
+	     * @return
+	     */
+	    int updateOrderPayByOrderNo(OrderBean record);
 }

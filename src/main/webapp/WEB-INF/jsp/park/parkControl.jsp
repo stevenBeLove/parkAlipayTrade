@@ -26,6 +26,24 @@ function carIn(){
 			'carColor':'白色'
 		},
 		success : function(obj) {
+			if (obj.success == 'true') {
+				alert(obj.message);
+			} else {
+				alert(obj.message);
+			}
+		},
+	});
+}
+
+function carOut(){
+	$.ajax({
+		type : "POST",
+		url : ctx + "/alipayPark/ecoMycarParkingExitinfoSync",
+		data : {
+			'carNumber':$("#carNumberOut").val(),
+			'outParkingId':$("#outParkingIdOut").val()
+		},
+		success : function(obj) {
 			alert(obj.message);
 			if (obj.success == 'true') {
 				alert(obj.message);
@@ -36,7 +54,8 @@ function carIn(){
 	});
 }
 
-// 点击payButton按钮后唤起收银台
+
+
 function createOrderButton(){
 	$.ajax({
 		type : "POST",
@@ -100,7 +119,6 @@ body.bootstrap-admin-with-small-navbar {
                                             </div>
                                         </fieldset>
                                 </div>
-                                
                             </div>
                             
                             
@@ -125,6 +143,30 @@ body.bootstrap-admin-with-small-navbar {
                                 </div>
                                 
                             </div>
+                            
+                            
+                            
+                             <div class="panel panel-default bootstrap-admin-no-table-panel">
+                                <div class="bootstrap-admin-no-table-panel-content bootstrap-admin-panel-content collapse in">
+                                        <fieldset>
+                                            <div class="form-group">
+                                            	<label class="col-lg-1 control-label" for="carNumberOut">车牌</label>
+                                                <div class="col-lg-2">
+                                                    <input type="text"  id="carNumberOut" class="form-control" />
+                                                </div>
+                                                <label class="col-lg-1 control-label" for="username">停车场ID</label>
+                                                <div class="col-lg-2">
+                                                    <input type="text"  id="outParkingIdOut" value="${outParkingId }" class="form-control" />
+                                                </div>
+                                                <div class="col-lg-2">
+                                                	<button id ="carOut" type="button" class="btn btn-primary" onclick="carOut();">车辆驶出</button>
+                                                </div>
+                                            </div>
+                                        </fieldset>
+                                </div>
+                            </div>
+                            
+                            
                         </div>
                     </div>  
 			

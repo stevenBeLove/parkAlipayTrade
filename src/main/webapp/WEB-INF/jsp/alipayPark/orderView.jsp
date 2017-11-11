@@ -27,7 +27,9 @@
     			data : {
     				'outOrderNo':$("#outOrderNo").val(),
     				'payMoney':$("#payMoney").val(),
-    				'inDuration':$("#inDuration").val()
+    				'inDuration':$("#inDuration").val(),
+    				'orderTime':$("#orderTime").val()
+    				
     			},
     			beforeSend : function() {
     			},
@@ -90,9 +92,10 @@
 <br />
 <br /><br /><br />
 <hr />
-<input  type ="hidden" value="${payMoney }" id="payMoney" name="payMoney"/>
-<input  type ="hidden" value="${outOrderNo }" id="outOrderNo" name="outOrderNo"/>
-<input  type ="hidden" value="${inDuration }" id="inDuration" name="inDuration"/>
+payMoney：<input  type ="text" value="${payMoney }" id="payMoney" name="payMoney"/><br />
+<input  type ="text" value="${outOrderNo }" id="outOrderNo" name="outOrderNo"/><br />
+<input  type ="text" value="${inDuration }" id="inDuration" name="inDuration"/><br />
+<input  type ="text" value="${orderTime }" id="orderTime" name="orderTime"/><br />
 
 应付金额：${payMoney }
 已付金额：${paidMoney}

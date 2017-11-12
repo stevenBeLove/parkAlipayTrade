@@ -88,5 +88,6 @@ public class RSConsts {
     public static final String sys_service_provider_id = "sys_service_provider_id"; 
     public static final String timeout_express = "timeout_express"; 
     public static final String business_params = "business_params"; 
+    public static final String app_auth_token = "app_auth_token"; 
     
 }

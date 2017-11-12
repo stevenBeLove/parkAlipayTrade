@@ -48,8 +48,14 @@ public class OrderBean {
 
     private String outTime;
 
+    /**
+     * 订单是否同步
+     */
     private String orderSynStatus;
 
+    /**
+     * 订单是否支付
+     */
 //    private String orderPayStatus;
     
     /**
@@ -62,9 +68,27 @@ public class OrderBean {
     
     private String carColor;
 
+  //订单状态
+    public enum OrderStatus {
+        /**
+         * 成功
+         */
+        sucess("0"),
+        /**
+         * 失败
+         */
+        failed("1");
+        private String val;
+        private OrderStatus(String val) {
+            this.val = val;
+        }
+        public String getVal() {
+            return val;
+        }
+    }
     
     //订单状态
-    public enum OrderStatus {
+    public enum OrderSynStatus {
         /**
          * 创建
          */
@@ -78,7 +102,7 @@ public class OrderBean {
          */
         paysucess("2");
         private String val;
-        private OrderStatus(String val) {
+        private OrderSynStatus(String val) {
             this.val = val;
         }
         public String getVal() {

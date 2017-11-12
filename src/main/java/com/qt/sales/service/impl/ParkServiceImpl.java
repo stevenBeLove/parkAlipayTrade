@@ -42,6 +42,7 @@ import com.qt.sales.dao.VehicleBeanMapper;
 import com.qt.sales.exception.QTException;
 import com.qt.sales.model.OrderBean;
 import com.qt.sales.model.OrderBean.OrderStatus;
+import com.qt.sales.model.OrderBean.OrderSynStatus;
 import com.qt.sales.model.ParkBean;
 import com.qt.sales.model.ParkBeanExample;
 import com.qt.sales.model.VehicleBean;
@@ -346,8 +347,9 @@ public class ParkServiceImpl implements ParkService {
 		bean.setCarColor(carColor);
 		bean.setCarType(carType);
 		bean.setPayType("1");
-		bean.setOrderStatus(OrderStatus.create.getVal());
+		bean.setOrderStatus(OrderStatus.sucess.getVal());
 		bean.setPaidMoney(new BigDecimal("0.00"));
+		bean.setOrderSynStatus(OrderSynStatus.create.getVal());
 	  return orderBeanMapper.insert(bean);
 	}
 

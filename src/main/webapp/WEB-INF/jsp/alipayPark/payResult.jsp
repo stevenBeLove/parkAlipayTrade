@@ -4,22 +4,19 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
 	<head>
-	<title>支付宝统一下单并支付</title>
+	<title>结果详情</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-			<script type="text/javascript" src="${ctx}/js/jquery-2.0.3.min.js"></script>
+	<link rel="stylesheet" href="${ctx}/js/antui/dist/antui.min.css"/>
+	<script type="text/javascript" src="${ctx}/js/jquery-2.0.3.min.js"></script>
 	<script src="https://as.alipayobjects.com/g/component/antbridge/1.1.1/antbridge.min.js"></script>
+	<script src="${ctx}/js/antui/dist/antui.min.js"></script>
 </head>
 <body text=#000000 bgColor="#ffffff" leftMargin=0 topMargin=4>
-	<p id="result">result: </p>
-
-<script type="application/javascript">
-    
-</script>
-<br />
-<br /><br /><br />
-
-<h1>${msg }</h1>
-
+	<div class="am-message result" role="alert">
+	  <i class="am-icon result pay" aria-hidden="true"></i>
+	  <div class="am-message-main">支付成功</div>
+	  <div class="am-message-sub">支付成功副提示</div>
+	</div>
 
 </body>
 </html>

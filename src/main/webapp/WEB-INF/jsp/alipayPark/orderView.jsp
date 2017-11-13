@@ -64,7 +64,6 @@
              AlipayJSBridge.call("tradePay", {
                   tradeNO: tradeNO
              }, function (data) {
-                 alert(JSON.stringify(data));
                  if ("9000" == data.resultCode) {
                 	 //alert("支付成功");
                 	 location.href = "${ctx}/alipayPark/OrderSync/"+tradeNO;
@@ -80,7 +79,7 @@
                 if ("6001" == data.resultCode) {
                   	  Ali.alert({
                             title: '亲',
-                            message: '用户中途取消',
+                            message: '中途取消',
                             button: '确定'
                         });
                  }
@@ -88,7 +87,6 @@
         });
     }
 </script>
-<style>
 <style>
 html{height: 100%;}
 body{height:100%;overflow-x: hidden;}
@@ -329,34 +327,40 @@ body{height:100%;overflow-x: hidden;}
 	}
 }
 </style>
-</style>
 
 </head>
 <body ontouchstart="">
-<!-- <script type="text/html" id="tpl-list"> -->
-<div class="demo demo-list">
-	<div class="demo-header">列表 & 表单</div>
-	<div class="demo-header-brief">List</div>
-<div class="demo-content">
-		<div class="am-list am-list-twoline-side">
-        <div class="am-list-header-sp">左右文字组合列表</div>
+
+<c:if test="${empty msg }">
+
+<div class="widget-demo-show-panel" style="top:5px;background-color: #fff; text-align: center;">
+  <div class="demo demo-list">
+  <div class="demo-header-brief" >
+  	  <div class="am-captcha-figure fn-cent" >
+          <img style="width:50px;" src="https://t.alipayobjects.com/images/rmsweb/T1lFlgXepkXXXXXXXX.png" />	康果乐停车场
+      </div>
+  
+  </div>
+    <div class="am-ft-20">
+  		${payMoney }
+	</div>
+    </div>
+</div>
+<div class="am-list">
+<div class="am-list-content">
         <div class="am-list-body">
 	          <div class="am-list-item">
-	            <!-- <div class="am-list-thumb"><img src="https://os.alipayobjects.com/rmsportal/OhSzVdRBnfwiuCK.png" alt=""></div> -->
 	            <div class="am-list-content">
 	              <div class="am-list-title">应付金额</div>
 	              <div class="am-list-title">已付金额</div>
 	              <div class="am-list-title">优惠金额</div>
-	              <!-- <div class="am-list-brief">内容一</div> -->
 	            </div>
 	            <div class="am-list-extra">
-	             <!--  <div class="am-list-title"></div> -->
 	              <div class="am-list-brief">${payMoney }</div>
 	              <div class="am-list-brief">${paidMoney}</div>
-	              <div class="am-list-brief">${discountMoney}</div>
+	              <div class="am-list-brief">${discountMoney }</div>
 	            </div>
 	          </div>
-	          
 	           <div class="am-list-item">
 	            <div class="am-list-content">
 	              <div class="am-list-title">车牌号</div>
@@ -364,26 +368,41 @@ body{height:100%;overflow-x: hidden;}
 	              <div class="am-list-title">停车时长</div>
 	            </div>
 	            <div class="am-list-extra">
-	              <div class="am-list-brief">${car_number}</div>
-	              <div class="am-list-brief">${inTime}</div>
-	              <div class="am-list-brief">${timeDiffer}</div>
+	              <div class="am-list-brief">${car_number }</div>
+	              <div class="am-list-brief">${inTime }</div>
+	              <div class="am-list-brief">${timeDiffer }</div>
 	            </div>
 	          </div>
 	          
-        </div>
       </div>
-   <div class="am-button-wrap"><button class="am-button blue">提交</button></div>
-
+</div>
+</div>
+ <div class="am-list-header">
+	  <div class="am-list-thumb right fn-left" aria-hidden="true">
+	       <i class="am-icon form list"></i>
+	   </div>
+	   <div class="am-ft-sm">
+	 	&nbsp; 请于付款后15分钟内离场，超时将加收停车费
+	</div>
+ </div>
+<div class="am-button-wrap">
+	<button  name="payButton"  id ="payButton"  class="am-button blue">立即支付</button>
 </div>
 
-</div>
-
+</c:if>
 <input  type ="hidden" value="${payMoney }" id="payMoney" name="payMoney"/><br />
 <input  type ="hidden" value="${outOrderNo }" id="outOrderNo" name="outOrderNo"/><br />
 <input  type ="hidden" value="${inDuration }" id="inDuration" name="inDuration"/><br />
 <input  type ="hidden" value="${orderTime }" id="orderTime" name="orderTime"/><br />
 <input  type ="hidden" value="${discountMoney }" id="discountMoney" name="discountMoney"/><br />
+<c:if test="${not empty msg}">
 
-
+<div class="am-page-result">
+        <div class="am-page-result-wrap combine-page">
+          <div class="am-page-result-pic am-icon page-err"></div>
+          <div class="am-page-result-title">${msg}</div>
+        </div>
+      </div>
+</c:if>
 </body>
 </html>

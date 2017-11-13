@@ -717,4 +717,10 @@ public class AlipayParkController {
         return data.toJSONString();
     }
  
+    //展现页
+    @RequestMapping(value = "/payView", method = RequestMethod.GET)
+    public String payView(Model model) {
+        return "alipayPark/orderView_ali";
+    }
+    
 }

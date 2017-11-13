@@ -351,9 +351,9 @@ body{height:100%;overflow-x: hidden;}
 	            </div>
 	            <div class="am-list-extra">
 	             <!--  <div class="am-list-title"></div> -->
-	              <div class="am-list-brief">${payMoney }</div>
-	              <div class="am-list-brief">${paidMoney}</div>
-	              <div class="am-list-brief">${discountMoney}</div>
+	              <div class="am-list-brief">12.00</div>
+	              <div class="am-list-brief">0.00</div>
+	              <div class="am-list-brief">0.00</div>
 	            </div>
 	          </div>
 	          
@@ -364,9 +364,9 @@ body{height:100%;overflow-x: hidden;}
 	              <div class="am-list-title">停车时长</div>
 	            </div>
 	            <div class="am-list-extra">
-	              <div class="am-list-brief">${car_number}</div>
-	              <div class="am-list-brief">${inTime}</div>
-	              <div class="am-list-brief">${timeDiffer}</div>
+	              <div class="am-list-brief">沪CXXXX</div>
+	              <div class="am-list-brief">2017-09-09</div>
+	              <div class="am-list-brief">24234234</div>
 	            </div>
 	          </div>
 	          
@@ -378,11 +378,6 @@ body{height:100%;overflow-x: hidden;}
 
 </div>
 
-<input  type ="hidden" value="${payMoney }" id="payMoney" name="payMoney"/><br />
-<input  type ="hidden" value="${outOrderNo }" id="outOrderNo" name="outOrderNo"/><br />
-<input  type ="hidden" value="${inDuration }" id="inDuration" name="inDuration"/><br />
-<input  type ="hidden" value="${orderTime }" id="orderTime" name="orderTime"/><br />
-<input  type ="hidden" value="${discountMoney }" id="discountMoney" name="discountMoney"/><br />
 
 
 </body>

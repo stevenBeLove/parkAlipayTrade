@@ -334,7 +334,7 @@ body{height:100%;overflow-x: hidden;}
   <div class="demo demo-list">
   <div class="demo-header-brief" >
   	  <div class="am-captcha-figure fn-cent" >
-          <img style="width:50px;" src="https://t.alipayobjects.com/images/rmsweb/T1lFlgXepkXXXXXXXX.png" />	康果乐停车场
+          <img style="width:30px;" src="https://t.alipayobjects.com/images/rmsweb/T1lFlgXepkXXXXXXXX.png" />	康果乐停车场
       </div>
   
   </div>
@@ -386,12 +386,6 @@ body{height:100%;overflow-x: hidden;}
 	<button class="am-button blue">提交</button>
 </div>
 
-
-<div class="am-message result" role="alert">
-  <i class="am-icon result pay" aria-hidden="true"></i>
-  <div class="am-message-main">支付成功</div>
-  <div class="am-message-sub">支付成功副提示</div>
-</div>
 
 </body>
 </html>

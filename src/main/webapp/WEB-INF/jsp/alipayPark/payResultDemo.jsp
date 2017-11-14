@@ -5,13 +5,7 @@
 <html>
 	<head>
 	<title>结果详情</title>
-	  <meta charset="utf-8" />
-	  <meta name="description" content="" />
-	  <meta name="keywords" content="" />
-	  <meta name="apple-mobile-web-app-capable" content="yes" />
-	  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
-	  <meta name="format-detection" content="telephone=no, email=no" />
-	  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0" />
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<link rel="stylesheet" href="${ctx}/js/antui/dist/antui.min.css"/>
 	<script type="text/javascript" src="${ctx}/js/jquery-2.0.3.min.js"></script>
 	<script src="https://as.alipayobjects.com/g/component/antbridge/1.1.1/antbridge.min.js"></script>
@@ -21,9 +15,8 @@
 	<div class="am-message result" role="alert">
 	  <i class="am-icon result pay" aria-hidden="true"></i>
 	  <div class="am-message-main am-ft-blue">支付成功</div>
-	  
-	   <div class="am-message-sub am-ft-20">${paidMoney }</div>
-	  <div class="am-message-sub am-ft-lightgray">请于15分钟内离场，超时将加收停车费</div>
+	   <div class="am-message-sub"><b>20</b></div>
+	  <div class="am-message-sub am-ft-lightgray" style="font-size:20px">请于15分钟内离场，超时将加收停车费</div>
 	</div>
 </body>
 </html>

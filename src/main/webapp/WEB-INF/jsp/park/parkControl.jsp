@@ -44,7 +44,6 @@ function carOut(){
 			'outParkingId':$("#outParkingIdOut").val()
 		},
 		success : function(obj) {
-			alert(obj.message);
 			if (obj.success == 'true') {
 				alert(obj.message);
 			} else {

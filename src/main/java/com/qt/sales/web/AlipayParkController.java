@@ -527,7 +527,6 @@ public class AlipayParkController {
 			e.printStackTrace();
 			ajaxinfo.setSuccess(AjaxReturnInfo.FALSE_RESULT);
 			ajaxinfo.setMessage("调用失败！");
-			System.out.println("调用失败");
 		}
 		return ajaxinfo;
 	}
@@ -680,6 +679,7 @@ public class AlipayParkController {
             if (response.isSuccess()) {
                 logger.debug("调用成功");
                 model.addAttribute("msg", "支付成功！");
+                model.addAttribute("paidMoney", orderBean.getPaidMoney());
                 orderBeanService.updateByPrimaryKeySelective(orderBean);
                 orderBeanService.insertFromOrder(orderBean);
             } else {
@@ -722,5 +722,11 @@ public class AlipayParkController {
     public String payView(Model model) {
         return "alipayPark/orderView_ali";
     }
+    //结果页面
+    @RequestMapping(value = "/payResultDemo", method = RequestMethod.GET)
+    public String payResultDemo(Model model) {
+        return "alipayPark/payResultDemo";
+    }
+    
     
 }

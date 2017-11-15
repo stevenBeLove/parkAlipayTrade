@@ -2,7 +2,9 @@ package com.qt.sales.dao;
 
 import com.qt.sales.model.OrderBean;
 import com.qt.sales.model.OrderBeanExample;
+
 import java.util.List;
+
 import org.apache.ibatis.annotations.Param;
 
 public interface OrderBeanMapper {
@@ -58,4 +60,19 @@ public interface OrderBeanMapper {
      * @return
      */
     int updateOrderPayByOrderNo(OrderBean record);
+    
+    /**
+     * 
+     * 【方法名】    : (退单接口). <br/> 
+     * 【作者】: yinghui zhang .<br/>
+     * 【时间】： 2017年11月15日 下午2:30:34 .<br/>
+     * 【参数】： .<br/>
+     * @param orderNo
+     * @return .<br/>
+     * <p>
+     * 修改记录.<br/>
+     * 修改人:  yinghui zhang 修改描述： .<br/>
+     * <p/>
+     */
+    public OrderBean selectPayOrderByOrderNo(String orderNo);
 }

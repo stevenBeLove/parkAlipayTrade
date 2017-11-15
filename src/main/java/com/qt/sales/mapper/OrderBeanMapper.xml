@@ -461,8 +461,17 @@
   </update>
   
   <select id="queryPaidMoneyWithOrderNo" parameterType="string" resultType="string">
-  	select nvl(sum(p.pay_money),0) from park.TB_ORDER_pay p where  p.out_order_no = #{outOrderNo,jdbcType=VARCHAR}
+  	select nvl(sum(p.pay_money),0) from park.TB_ORDER_PAY p where  p.out_order_no = #{outOrderNo,jdbcType=VARCHAR}
   </select>
+  
+  
+   <select id="selectPayOrderByOrderNo" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from park.TB_ORDER_PAY
+    where ORDER_NO = #{orderNo,jdbcType=VARCHAR}
+  </select>
+  
   
   
 </mapper>

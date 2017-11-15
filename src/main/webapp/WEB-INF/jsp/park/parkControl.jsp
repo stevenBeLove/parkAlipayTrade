@@ -81,6 +81,26 @@ function tardeOrder(){
 	location.href = ctx+"/park/orderView/"+tradeNO;
 }
 
+
+function tradeRefundButton(){
+	$.ajax({
+		type : "POST",
+		url :  "${ctx}/alipayPark/tradeRefund",
+		data : {
+			'tradeNO':$("#tradeNORefund").val()
+		},
+		beforeSend : function() {
+		},
+		success : function(obj) {
+			if (obj.success == 'true') {
+				alert(obj.message);
+			} else {
+				alert(obj.message);
+			}
+		}
+	});
+}
+
 </script>
 <meta name="viewport"
 	content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
@@ -165,6 +185,25 @@ body.bootstrap-admin-with-small-navbar {
                                 </div>
                             </div>
                             
+                            
+                            
+                             <div class="panel panel-default bootstrap-admin-no-table-panel">
+                                <div class="bootstrap-admin-no-table-panel-content bootstrap-admin-panel-content collapse in">
+                                        <fieldset>
+                                            <div class="form-group">
+                                            	<label class="col-lg-1 control-label" for="tradeNORefund">支付宝订单编号</label>
+                                                <div class="col-lg-2">
+                                                    <input type="text"  id="tradeNORefund" name ="tradeNORefund" class="form-control" />
+                                                </div>
+                                                
+                                                <div class="col-lg-2">
+                                                	<button  type="button" class="btn btn-primary" onclick="tradeRefundButton();">退款</button>
+                                                </div>
+                                            </div>
+                                        </fieldset>
+                                </div>
+                                
+                            </div>
                             
                              <div class="panel panel-default bootstrap-admin-no-table-panel">
                                 <div class="bootstrap-admin-no-table-panel-content bootstrap-admin-panel-content collapse in">

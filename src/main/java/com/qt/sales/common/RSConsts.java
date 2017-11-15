@@ -89,5 +89,10 @@ public class RSConsts {
     public static final String timeout_express = "timeout_express"; 
     public static final String business_params = "business_params"; 
     public static final String app_auth_token = "app_auth_token"; 
+    public static final String trade_no = "trade_no"; 
+    public static final String refund_amount = "refund_amount"; 
+    public static final String refund_reason = "refund_reason"; 
+    public static final String refund_reason_des = "正常退款"; 
+    public static final String out_request_no = "out_request_no"; 
     
 }

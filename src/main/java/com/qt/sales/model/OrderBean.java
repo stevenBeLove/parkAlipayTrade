@@ -77,7 +77,11 @@ public class OrderBean {
         /**
          * 失败
          */
-        failed("1");
+        failed("1"),
+        /**
+         * 退款
+         */
+        refund("2");
         private String val;
         private OrderStatus(String val) {
             this.val = val;

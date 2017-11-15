@@ -88,6 +88,12 @@ public class OrderBeanServiceImpl implements OrderBeanService {
     }
     
     @Override
+    public OrderBean selectPayOrderByOrderNo(String orderNo) {
+        return orderBeanMapper.selectPayOrderByOrderNo(orderNo);
+    }
+    
+    
+    @Override
     public int insertFromOrder(OrderBean record){
     	return orderBeanMapper.insertFromOrder(record);
     }

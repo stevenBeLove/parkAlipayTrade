@@ -64,4 +64,18 @@ public interface OrderBeanService {
 	     * @return
 	     */
 	    int updateOrderPayByOrderNo(OrderBean record);
+	    
+	    /**
+	     * 【方法名】    : (退单接口). <br/> 
+	     * 【作者】: yinghui zhang .<br/>
+	     * 【时间】： 2017年11月15日 下午2:29:05 .<br/>
+	     * 【参数】： .<br/>
+	     * @param orderNo
+	     * @return .<br/>
+	     * <p>
+	     * 修改记录.<br/>
+	     * 修改人:  yinghui zhang 修改描述： .<br/>
+	     * <p/>
+	     */
+	    public OrderBean selectPayOrderByOrderNo(String orderNo);
 }

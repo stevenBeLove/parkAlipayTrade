@@ -398,7 +398,12 @@ body{height:100%;overflow-x: hidden;}
 	</div>
  </div>
 	<div class="am-button-wrap">
-		<button id ="payButton" class="am-button blue">立即支付</button>
+		<c:if test="${empty payBtn}">
+			<button id ="payButton" class="am-button blue">立即支付</button>
+		</c:if>
+		<c:if test="${not empty payBtn}">
+			<button disabled="disabled" class="am-button disabled" class="am-button blue">立即支付</button>
+		</c:if>
 	</div>
 	<input  type ="hidden" value="${payMoney }" id="payMoney" name="payMoney"/><br />
 	<input  type ="hidden" value="${outOrderNo }" id="outOrderNo" name="outOrderNo"/><br />

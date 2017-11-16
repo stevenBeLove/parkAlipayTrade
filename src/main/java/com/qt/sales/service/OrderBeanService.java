@@ -37,6 +37,14 @@ public interface OrderBeanService {
 	     */
 	    String queryPaidMoneyWithOrderNo(String outOrderNo);
 	    
+	    
+	    /**
+	     * 临时订单表已经支付的金额
+	     * @param orderTrade
+	     * @return
+	     */
+	    String queryTempPaidWithOrderTrade(String orderTrade);
+	    
 	    /**
 	     * 根据订单ID获取订单
 	     * 【方法名】    : (这里用一句话描述这个方法的作用). <br/> 
@@ -78,4 +86,10 @@ public interface OrderBeanService {
 	     * <p/>
 	     */
 	    public OrderBean selectPayOrderByOrderNo(String orderNo);
+	    /**
+	     * 删除订单
+	     * @param orderTrade
+	     * @return
+	     */
+	    int deleteWithOrderTrade(String orderTrade);
 }

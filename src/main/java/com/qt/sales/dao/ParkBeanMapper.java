@@ -32,4 +32,6 @@ public interface ParkBeanMapper {
     int updateByPrimaryKey(ParkBean record);
     
     List<ParkBean> selectAllParkBean(ParkBeanExample example);
+    
+    public ParkBean selectByPrimaryParkingId(String parkingId);
 }

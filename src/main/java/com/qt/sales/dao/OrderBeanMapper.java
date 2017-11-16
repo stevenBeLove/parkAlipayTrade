@@ -35,6 +35,13 @@ public interface OrderBeanMapper {
      * @return
      */
     String queryPaidMoneyWithOrderNo(String outOrderNo);
+    
+    /**
+     * 临时订单表已经支付的金额
+     * @param orderTrade
+     * @return
+     */
+    String queryTempPaidWithOrderTrade(String orderTrade);
     /**
      * 【注意】: (根据订单ID获取订单).<br/> 
      * 【作者】: yinghui zhang .<br/>
@@ -75,4 +82,11 @@ public interface OrderBeanMapper {
      * <p/>
      */
     public OrderBean selectPayOrderByOrderNo(String orderNo);
+    
+    /**
+     * 删除订单
+     * @param orderTrade
+     * @return
+     */
+    int deleteWithOrderTrade(String orderTrade);
 }

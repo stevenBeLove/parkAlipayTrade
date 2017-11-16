@@ -72,7 +72,7 @@ public interface ParkService {
      * 修改人:  yinghui zhang 修改描述： .<br/>
      * <p/>
      */
-    public int enterinfoSyncEnter(ParkBean park,String carNumber, String in_time,String carType,String carColor);
+    public String enterinfoSyncEnter(ParkBean park,String order_trade,String carNumber, String in_time,String carType,String carColor);
     
     /**
      * 【方法名】    : (车辆驶出). <br/> 
@@ -130,5 +130,12 @@ public interface ParkService {
      * <p/>
      */
     List<ParkBean> selectAllParkBean(ParkBeanExample example);
+    
+    /**
+     * 根据ParkingID查找停车场
+     * @param parkingId
+     * @return
+     */
+    public ParkBean selectByPrimaryParkingId(String parkingId);
 }
 

@@ -67,8 +67,20 @@ public class OrderBean {
     private String carType;
     
     private String carColor;
+    
+    private String orderTrade;
+    
+    
 
-  //订单状态
+  public String getOrderTrade() {
+		return orderTrade;
+	}
+
+	public void setOrderTrade(String orderTrade) {
+		this.orderTrade = orderTrade;
+	}
+
+	//订单状态
     public enum OrderStatus {
         /**
          * 成功

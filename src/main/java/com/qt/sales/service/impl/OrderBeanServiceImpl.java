@@ -103,4 +103,14 @@ public class OrderBeanServiceImpl implements OrderBeanService {
 		return orderBeanMapper.updateOrderPayByOrderNo(record);
 	}
 
+	@Override
+	public String queryTempPaidWithOrderTrade(String orderTrade) {
+		return orderBeanMapper.queryTempPaidWithOrderTrade(orderTrade);
+	}
+
+	@Override
+	public int deleteWithOrderTrade(String orderTrade) {
+		return orderBeanMapper.deleteWithOrderTrade(orderTrade);
+	}
+
 }

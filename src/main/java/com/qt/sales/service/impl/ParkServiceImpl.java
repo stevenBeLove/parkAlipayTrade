@@ -79,6 +79,10 @@ public class ParkServiceImpl implements ParkService {
         return parkBeanMapper.selectByPrimaryKey(outParkingId);
     }
 
+    @Override
+    public ParkBean selectByPrimaryParkingId(String parkingId){
+        return parkBeanMapper.selectByPrimaryParkingId(parkingId);
+    }
 
     @Override
     public int updateByPrimaryKey(ParkBean record) {
@@ -334,7 +338,7 @@ public class ParkServiceImpl implements ParkService {
 
 	public static Random random1 = new Random();
 	@Override
-	public int enterinfoSyncEnter(ParkBean park,String carNumber, String in_time,String carType,String carColor) {
+	public String enterinfoSyncEnter(ParkBean park,String orderTrade, String carNumber, String in_time,String carType,String carColor) {
 		OrderBean bean = new OrderBean();//创建订单
 		bean.setParkingName(park.getMerchantName());
 		bean.setSellerId(park.getAlipayUserId());
@@ -342,7 +346,8 @@ public class ParkServiceImpl implements ParkService {
 		bean.setCarNumber(carNumber);
 		bean.setInTime(in_time);
 		bean.setOrderNo("0");//未同步
-		bean.setOutOrderNo(DateUtil.getCurrDateAndTime()+random1.nextInt(1000));//订单号
+		String outOrderNo = DateUtil.getCurrDateAndTime()+random1.nextInt(1000);
+		bean.setOutOrderNo(outOrderNo);//订单号
 		bean.setOutParkingId(park.getOutParkingId());
 		bean.setCarColor(carColor);
 		bean.setCarType(carType);
@@ -350,7 +355,13 @@ public class ParkServiceImpl implements ParkService {
 		bean.setOrderStatus(OrderStatus.sucess.getVal());
 		bean.setPaidMoney(new BigDecimal("0.00"));
 		bean.setOrderSynStatus(OrderSynStatus.create.getVal());
-	  return orderBeanMapper.insert(bean);
+		if(StringUtils.isEmpty(orderTrade)){
+			bean.setOrderTrade(outOrderNo);
+		}else{
+			bean.setOrderTrade(orderTrade);
+		}
+	    orderBeanMapper.insert(bean);
+	    return outOrderNo;
 	}
 
 

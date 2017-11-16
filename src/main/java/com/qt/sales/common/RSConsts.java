@@ -94,5 +94,8 @@ public class RSConsts {
     public static final String refund_reason = "refund_reason"; 
     public static final String refund_reason_des = "正常退款"; 
     public static final String out_request_no = "out_request_no"; 
+    public static final String paidMoney = "paidMoney"; 
+    public static final String payMoney = "payMoney"; 
+    public static final String payBtn = "payBtn"; 
     
 }

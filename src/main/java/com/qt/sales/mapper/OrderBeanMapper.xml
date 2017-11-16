@@ -20,7 +20,7 @@
     <result column="DISCOUNT_MONEY" property="discountMoney" jdbcType="DECIMAL" />
     <result column="PAID_MONEY" property="paidMoney" jdbcType="DECIMAL" />
     <result column="SELLER_ID" property="sellerId" jdbcType="VARCHAR" />
-    <result column="OUT_TIME" property="outTime" jdbcType="TIMESTAMP" />
+    <result column="OUT_TIME" property="outTime" jdbcType="VARCHAR" />
     <result column="ORDER_SYN_STATUS" property="orderSynStatus" jdbcType="VARCHAR" />
     <result column="car_id" property="carId" jdbcType="VARCHAR" />
     <result column="car_type" property="carType" jdbcType="VARCHAR" />
@@ -143,7 +143,7 @@
       #{payType,jdbcType=VARCHAR}, #{payMoney,jdbcType=DECIMAL}, #{inTime,jdbcType=VARCHAR}, 
       #{parkingId,jdbcType=VARCHAR}, #{inDuration,jdbcType=VARCHAR}, #{cardNumber,jdbcType=VARCHAR}, 
       #{discountMoney,jdbcType=DECIMAL}, #{paidMoney,jdbcType=DECIMAL}, #{sellerId,jdbcType=VARCHAR}, 
-      #{outTime,jdbcType=TIMESTAMP}, #{orderSynStatus,jdbcType=VARCHAR}, 
+      #{outTime,jdbcType=VARCHAR}, #{orderSynStatus,jdbcType=VARCHAR}, 
       #{carType,jdbcType=VARCHAR},#{carColor,jdbcType=VARCHAR}
       )
   </insert>
@@ -163,7 +163,7 @@
       #{payType,jdbcType=VARCHAR}, #{payMoney,jdbcType=DECIMAL}, #{inTime,jdbcType=VARCHAR}, 
       #{parkingId,jdbcType=VARCHAR}, #{inDuration,jdbcType=VARCHAR}, #{cardNumber,jdbcType=VARCHAR}, 
       #{discountMoney,jdbcType=DECIMAL}, #{paidMoney,jdbcType=DECIMAL}, #{sellerId,jdbcType=VARCHAR}, 
-      #{outTime,jdbcType=TIMESTAMP}, #{orderSynStatus,jdbcType=VARCHAR},
+      #{outTime,jdbcType=VARCHAR}, #{orderSynStatus,jdbcType=VARCHAR},
       #{carType,jdbcType=VARCHAR},#{carColor,jdbcType=VARCHAR}
       )
   </insert>
@@ -290,7 +290,7 @@
         #{sellerId,jdbcType=VARCHAR},
       </if>
       <if test="outTime != null" >
-        #{outTime,jdbcType=TIMESTAMP},
+        #{outTime,jdbcType=VARCHAR},
       </if>
       <if test="orderSynStatus != null" >
         #{orderSynStatus,jdbcType=VARCHAR},
@@ -359,7 +359,7 @@
         SELLER_ID = #{sellerId,jdbcType=VARCHAR},
       </if>
       <if test="outTime != null" >
-        OUT_TIME = #{outTime,jdbcType=TIMESTAMP},
+        OUT_TIME = #{outTime,jdbcType=VARCHAR},
       </if>
       <if test="orderSynStatus != null" >
         ORDER_SYN_STATUS = #{orderSynStatus,jdbcType=VARCHAR},
@@ -423,7 +423,7 @@
         SELLER_ID = #{sellerId,jdbcType=VARCHAR},
       </if>
       <if test="outTime != null" >
-        OUT_TIME = #{outTime,jdbcType=TIMESTAMP},
+        OUT_TIME = #{outTime,jdbcType=VARCHAR},
       </if>
       <if test="orderSynStatus != null" >
         ORDER_SYN_STATUS = #{orderSynStatus,jdbcType=VARCHAR},
@@ -455,7 +455,7 @@
       DISCOUNT_MONEY = #{discountMoney,jdbcType=DECIMAL},
       PAID_MONEY = #{paidMoney,jdbcType=DECIMAL},
       SELLER_ID = #{sellerId,jdbcType=VARCHAR},
-      OUT_TIME = #{outTime,jdbcType=TIMESTAMP},
+      OUT_TIME = #{outTime,jdbcType=VARCHAR},
       ORDER_SYN_STATUS = #{orderSynStatus,jdbcType=VARCHAR}
     where out_order_no = #{outOrderNo,jdbcType=VARCHAR}
   </update>

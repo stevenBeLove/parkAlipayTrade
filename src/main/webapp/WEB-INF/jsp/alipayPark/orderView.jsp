@@ -343,6 +343,9 @@ body{height:100%;overflow-x: hidden;}
 
 </head>
 <body ontouchstart="">
+
+<c:if test="${empty status}">
+
 <div class="widget-demo-show-panel" style="background-color: #fff; text-align: center; padding-top: 2px; padding-bottom: 20px;">
   	  <div class="am-captcha-figure fn-cent" style="font-size:15px" >
           <img style="width:30px;" src="https://t.alipayobjects.com/images/rmsweb/T1lFlgXepkXXXXXXXX.png" />	
@@ -394,20 +397,17 @@ body{height:100%;overflow-x: hidden;}
 	 	&nbsp; 请于付款后15分钟内离场，超时将加收停车费
 	</div>
  </div>
-<div class="am-button-wrap">
-	<button id ="payButton" class="am-button blue">立即支付</button>
-</div>
-
-
-
-<input  type ="hidden" value="${payMoney }" id="payMoney" name="payMoney"/><br />
-<input  type ="hidden" value="${outOrderNo }" id="outOrderNo" name="outOrderNo"/><br />
-<input  type ="hidden" value="${inDuration }" id="inDuration" name="inDuration"/><br />
-<input  type ="hidden" value="${orderTime }" id="orderTime" name="orderTime"/><br />
-<input  type ="hidden" value="${discountMoney }" id="discountMoney" name="discountMoney"/><br />
-
-<c:if test="${not empty msg}">
-		  <div class="am-page-result">
+	<div class="am-button-wrap">
+		<button id ="payButton" class="am-button blue">立即支付</button>
+	</div>
+	<input  type ="hidden" value="${payMoney }" id="payMoney" name="payMoney"/><br />
+	<input  type ="hidden" value="${outOrderNo }" id="outOrderNo" name="outOrderNo"/><br />
+	<input  type ="hidden" value="${inDuration }" id="inDuration" name="inDuration"/><br />
+	<input  type ="hidden" value="${orderTime }" id="orderTime" name="orderTime"/><br />
+	<input  type ="hidden" value="${discountMoney }" id="discountMoney" name="discountMoney"/><br />
+</c:if>
+<c:if test="${not empty status}">
+		  <div class="am-page-result" style="padding-top:0px;">
 	        <div class="am-page-result-wrap combine-page">
 	          <div class="am-page-result-pic am-icon page-err"></div>
 	          <div class="am-page-result-title">${msg}</div>

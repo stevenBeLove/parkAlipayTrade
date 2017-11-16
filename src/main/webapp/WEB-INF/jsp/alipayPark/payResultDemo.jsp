@@ -11,12 +11,19 @@
 	<script src="https://as.alipayobjects.com/g/component/antbridge/1.1.1/antbridge.min.js"></script>
 	<script src="${ctx}/js/antui/dist/antui.min.js"></script>
 </head>
-<body text=#000000 bgColor="#ffffff" leftMargin=0 topMargin=4>
+  <div class="am-page-result" style="padding-top:0px;">
+	        <div class="am-page-result-wrap combine-page">
+	          <div class="am-page-result-pic am-icon page-err"></div>
+	          <div class="am-page-result-title">${msg}</div>
+	        </div>
+	      </div>
+
+<!-- <body text=#000000 bgColor="#ffffff" leftMargin=0 topMargin=4>
 	<div class="am-message result" role="alert">
 	  <i class="am-icon result pay" aria-hidden="true"></i>
 	  <div class="am-message-main am-ft-blue">支付成功</div>
-	   <div class="am-message-sub"><b>20</b></div>
+	   <div class="am-message-sub" style="font-size:50px;"><b>20.00</b></div>
 	  <div class="am-message-sub am-ft-lightgray" style="font-size:20px">请于15分钟内离场，超时将加收停车费</div>
 	</div>
-</body>
+</body> -->
 </html>

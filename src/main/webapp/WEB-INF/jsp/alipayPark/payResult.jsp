@@ -22,7 +22,7 @@
 	  <i class="am-icon result pay" aria-hidden="true"></i>
 	  <div class="am-message-main am-ft-blue">支付成功</div>
 	  
-	   <div class="am-message-sub am-ft-20">${paidMoney }</div>
+	   <div class="am-message-sub" style="font-size:50px;">${paidMoney }</div>
 	  <div class="am-message-sub am-ft-lightgray">请于15分钟内离场，超时将加收停车费</div>
 	</div>
 </body>

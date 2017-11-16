@@ -31,6 +31,7 @@ import com.alipay.api.DefaultAlipayClient;
 import com.alipay.api.request.AlipayEcoMycarParkingEnterinfoSyncRequest;
 import com.alipay.api.request.AlipayEcoMycarParkingExitinfoSyncRequest;
 import com.alipay.api.request.AlipayEcoMycarParkingOrderSyncRequest;
+import com.alipay.api.request.AlipayEcoMycarParkingOrderUpdateRequest;
 import com.alipay.api.request.AlipayEcoMycarParkingVehicleQueryRequest;
 import com.alipay.api.request.AlipayOpenAuthTokenAppRequest;
 import com.alipay.api.request.AlipaySystemOauthTokenRequest;
@@ -39,6 +40,7 @@ import com.alipay.api.request.AlipayTradeRefundRequest;
 import com.alipay.api.response.AlipayEcoMycarParkingEnterinfoSyncResponse;
 import com.alipay.api.response.AlipayEcoMycarParkingExitinfoSyncResponse;
 import com.alipay.api.response.AlipayEcoMycarParkingOrderSyncResponse;
+import com.alipay.api.response.AlipayEcoMycarParkingOrderUpdateResponse;
 import com.alipay.api.response.AlipayEcoMycarParkingVehicleQueryResponse;
 import com.alipay.api.response.AlipayOpenAuthTokenAppResponse;
 import com.alipay.api.response.AlipaySystemOauthTokenResponse;
@@ -201,7 +203,7 @@ public class AlipayParkController {
 					System.out.println("responseBiz="+responseBiz.getBody());
 					// 获取相应数据
 					Map<String, String> responseParams = responseBiz.getParams();
-					System.out.println(responseParams.toString());
+					logger.info(responseParams.toString());
 					String car_number = responseBiz.getCarNumber();
 					model.addAttribute("car_number", car_number);
 					//创建订单
@@ -209,7 +211,7 @@ public class AlipayParkController {
 					OrderBeanExample.Criteria cr = example.createCriteria();
 					cr.andCarNumberEqualTo(car_number);
 					cr.andParkingIdEqualTo(parking_id);
-					cr.andOrderSynStatusEqualTo(OrderSynStatus.create.getVal());
+					//cr.andOrderSynStatusEqualTo(OrderSynStatus.create.getVal());
 					List<OrderBean> orderList = orderBeanService.selectByExample(example);
 					OrderBean order = null;
 					if(orderList!=null && orderList.size()>0){
@@ -235,13 +237,14 @@ public class AlipayParkController {
 						BigDecimal paid = new BigDecimal(paidMoney);
 						if(allMoney.compareTo(paid) == 1){
 							String payResult = allMoney.subtract(paid).floatValue()+"";
-							model.addAttribute("payMoney", payResult);
+							BigDecimal setScale = new BigDecimal(payResult).setScale(2,BigDecimal.ROUND_HALF_DOWN);
+							model.addAttribute("payMoney", setScale);
 						}
 					}else{
-						model.addAttribute("payMoney", money);
+						BigDecimal setScale = new BigDecimal(money).setScale(2,BigDecimal.ROUND_HALF_DOWN);
+						model.addAttribute("payMoney", setScale);
 					}
 					model.addAttribute("parkingName", order.getParkingName());
-					model.addAttribute("paidMoney", paidMoney);//已付款
 					model.addAttribute("discountMoney", getDiscountMoney(car_number,order.getOutParkingId()));//优惠金额
 					model.addAttribute("inTime", order.getInTime());
 					String nowTime =DateUtil.getCurrDate(DateUtil.STANDDATEFORMAT);
@@ -266,7 +269,7 @@ public class AlipayParkController {
 	
 
   public String getPayMoney(String carNumber,String outParkingId){
-	  return "20.00";
+	  return "29.00";
   }
   
   public String getDiscountMoney(String carNumber,String outParkingId){
@@ -707,6 +710,7 @@ public class AlipayParkController {
      * @return 页面路径
      */
     @RequestMapping(value = "/tradeRefund", method = RequestMethod.POST)
+    @ResponseBody
     public AjaxReturnInfo tradeRefund(String tradeNO) {
         AjaxReturnInfo ajaxinfo = new AjaxReturnInfo();
         try {
@@ -718,12 +722,15 @@ public class AlipayParkController {
             }
             AlipayTradeRefundRequest request = new AlipayTradeRefundRequest();
             request.setBizContent(getTradeRefundBizContent(orderBean));
+            String app_auth_token = (String) ParkServiceImpl.parkingStore.get(orderBean.getParkingId());
+            request.putOtherTextParam(RSConsts.app_auth_token, app_auth_token);
             AlipayTradeRefundResponse response = alipayClient.execute(request);
             if (response.isSuccess()) {
                 orderBean.setOrderStatus(OrderStatus.refund.getVal());
                 orderBeanService.updateOrderPayByOrderNo(orderBean);
                 ajaxinfo.setSuccess(AjaxReturnInfo.TURE_RESULT);
                 ajaxinfo.setMessage("退款成功");
+                orderUpdate(orderBean);
             } else {
                 ajaxinfo.setSuccess(AjaxReturnInfo.FALSE_RESULT);
                 ajaxinfo.setMessage(response.getBody());
@@ -733,9 +740,27 @@ public class AlipayParkController {
             logger.error(e.getMessage(),e);
             ajaxinfo.setSuccess(AjaxReturnInfo.FALSE_RESULT);
             ajaxinfo.setMessage("退款异常");
-        }
+        } catch (QTException e) {
+        	 logger.error(e.getMessage(),e);
+        	ajaxinfo.setSuccess(AjaxReturnInfo.FALSE_RESULT);
+            ajaxinfo.setMessage("退款异常");
+		}
         return ajaxinfo;
     }
+    
+    
+	public void orderUpdate(OrderBean order) throws AlipayApiException, QTException {
+		AlipayEcoMycarParkingOrderUpdateRequest request = new AlipayEcoMycarParkingOrderUpdateRequest();
+		String app_auth_token = (String) ParkServiceImpl.parkingStore.get(order.getParkingId());
+		request.putOtherTextParam(RSConsts.app_auth_token, app_auth_token);
+		request.setBizContent(getOrderUpdateBiz(order));
+		AlipayEcoMycarParkingOrderUpdateResponse response = alipayClient.execute(request);
+		if (response.isSuccess()) {
+			logger.info("调用成功");
+		} else {
+			throw new QTException("调用失败");
+		}
+	}
     
   //创建订单业务数据
     public String getTradeRefundBizContent(OrderBean order){
@@ -752,6 +777,20 @@ public class AlipayParkController {
     }
     
     
+    public String getOrderUpdateBiz(OrderBean order){
+    	JSONObject data = new JSONObject();
+    	data.put(RSConsts.user_id, order.getUserId());
+    	data.put(RSConsts.order_no, order.getOrderNo());
+    	data.put(RSConsts.order_status, OrderStatus.failed.getVal());
+    	return data.toJSONString();
+    }
+    
+    /**
+     * 订单支付成功
+     * @param tradeNO
+     * @param model
+     * @return
+     */
     @RequestMapping(value = "/OrderSync/{tradeNO}", method = RequestMethod.GET)
     public String OrderSync(@PathVariable("tradeNO") String tradeNO, Model model) {
         try {
@@ -763,7 +802,8 @@ public class AlipayParkController {
             orderBean.setOrderSynStatus(OrderSynStatus.paysucess.getVal());
             orderBean.setInDuration(DateUtil.getTimeDifferMin(orderBean.getInTime(), nowTime));
             model.addAttribute("msg", "支付成功！");
-            model.addAttribute("paidMoney", orderBean.getPaidMoney());
+            BigDecimal setScale = orderBean.getPaidMoney().setScale(2,BigDecimal.ROUND_HALF_DOWN);
+            model.addAttribute("paidMoney",setScale );
             orderBeanService.updateByPrimaryKeySelective(orderBean);
             orderBeanService.insertFromOrder(orderBean);
         } catch (ParseException e) {

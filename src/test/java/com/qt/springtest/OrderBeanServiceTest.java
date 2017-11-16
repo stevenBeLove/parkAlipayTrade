@@ -20,6 +20,7 @@ import com.qt.sales.model.ParkBean;
 import com.qt.sales.model.VehicleBean;
 import com.qt.sales.service.OrderBeanService;
 import com.qt.sales.service.ParkService;
+import com.qt.sales.utils.DateUtil;
 
 /** 
  * 类名: ParkServiceTest <br/> 
@@ -52,6 +53,23 @@ public class OrderBeanServiceTest {
         }
     }
     
+    
+    @Test
+    public void test11(){
+    	OrderBeanExample example = new OrderBeanExample();
+        OrderBeanExample.Criteria cr = example.createCriteria();
+        cr.andCarNumberEqualTo("沪C8H9K3");
+        cr.andOutParkingIdEqualTo("10002");
+        List<OrderBean> orderList = orderBeanService.selectByExample(example);
+        OrderBean orderBean = orderList.get(0);
+        // 驶出时间
+        String out_time = DateUtil.getCurrDate(DateUtil.STANDDATEFORMAT);
+    	// 更新车辆驶出订单
+        orderBean.setOutTime(out_time);
+        // 更新订单
+        orderBeanService.updateOrderPayByOrderNo(orderBean);
+    	
+    }
     
     
     public static String getBizContent(){

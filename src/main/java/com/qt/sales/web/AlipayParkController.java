@@ -265,7 +265,7 @@ public class AlipayParkController {
 					order.setCarId(car_id);
 					orderBeanService.updateByPrimaryKey(order);
 					model.addAttribute("outOrderNo", order.getOutOrderNo());
-					String paidMoney = orderBeanService.queryPaidMoneyWithOrderNo(order.getOutOrderNo());
+					String paidMoney = orderBeanService.queryTempPaidWithOrderTrade(order.getOrderTrade());
 					if(!"0".equals(paidMoney)){
 						BigDecimal paid = new BigDecimal(paidMoney);
 						if (money.compareTo(paid) == 1) {
@@ -274,13 +274,14 @@ public class AlipayParkController {
 							model.addAttribute(RSConsts.payMoney, setScale);
 							model.addAttribute(RSConsts.paidMoney, paid.setScale(2, BigDecimal.ROUND_HALF_DOWN));
 						}else if(money.compareTo(paid) == 0){
-							model.addAttribute(RSConsts.payMoney, "0.00");
+							model.addAttribute(RSConsts.payMoney, RSConsts.zero);
 							model.addAttribute(RSConsts.paidMoney, paid.setScale(2, BigDecimal.ROUND_HALF_DOWN));
 							model.addAttribute(RSConsts.payBtn, false);
 						}
 					}else{
 						BigDecimal setScale = money.setScale(2,BigDecimal.ROUND_HALF_DOWN);
 						model.addAttribute(RSConsts.payMoney, setScale);
+						model.addAttribute(RSConsts.paidMoney, RSConsts.zero);
 					}
 					model.addAttribute(RSConsts.parkingName, order.getParkingName());
 					model.addAttribute(RSConsts.discountMoney, getDiscountMoney(car_number,order.getOutParkingId()));//优惠金额
@@ -582,14 +583,16 @@ public class AlipayParkController {
         try {
             response = alipayClient.execute(request);
             if (response.isSuccess()) {
-                // 更新车辆驶出订单
-                order.setOutTime(out_time);
-                // 更新订单
-                orderBeanService.updateOrderPayByOrderNo(order);
-                // 同步订单
-                oderSyncSuccess(order);
-                // 删除订单
-                orderBeanService.deleteWithOrderTrade(order.getOrderTrade());
+                for (OrderBean orderBean : orderList) {
+                	// 更新车辆驶出订单
+                	orderBean.setOutTime(out_time);
+                    // 更新订单
+                    orderBeanService.updateOrderPayByOrderNo(orderBean);
+                    // 同步订单
+                    oderSyncSuccess(orderBean);
+                    // 删除订单
+                    orderBeanService.deleteWithOrderTrade(orderBean.getOrderTrade());
+				}
                 ajaxinfo.setSuccess(AjaxReturnInfo.TURE_RESULT);
                 ajaxinfo.setMessage("调用成功！");
             } else {
@@ -618,7 +621,6 @@ public class AlipayParkController {
           if (response.isSuccess()) {
               logger.debug("调用成功");
               orderBeanService.updateByPrimaryKeySelective(orderBean);
-              orderBeanService.insertFromOrder(orderBean);
           } else {
               logger.debug("调用失败");
               throw new QTException("同步订单失败!");

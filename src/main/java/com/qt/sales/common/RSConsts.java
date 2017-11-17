@@ -105,6 +105,7 @@ public class RSConsts {
     public static final String orderTime = "orderTime"; 
     public static final String msg = "msg"; 
     public static final String car_id = "car_id"; 
+    public static final String zero = "0.00"; 
     
     
     

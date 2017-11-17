@@ -54,9 +54,9 @@ public class AlipayEcoMycarParkingExitinfoSyncRequestTest {
     
     public static String getBizContent(){
         JSONObject data = new JSONObject();
-        data.put("parking_id", "PI1508920124535365768");
-        data.put("car_number", "浙A88888");
-        data.put("out_time", "2017-10-25 12:00:00");
+        data.put("parking_id", "PI1509859569317717226");
+        data.put("car_number", "沪C8H9K3");
+        data.put("out_time", "2017-11-17 25:00:00");
         String jsonStr = JSON.toJSONString(data);
         System.out.println(jsonStr);
         return jsonStr;

@@ -140,7 +140,7 @@ body.bootstrap-admin-with-small-navbar {
                                 </div>
                             </div>
                             
-                            
+                            <%-- 
                              <div class="panel panel-default bootstrap-admin-no-table-panel">
                                 <div class="bootstrap-admin-no-table-panel-content bootstrap-admin-panel-content collapse in">
                                         <fieldset>
@@ -162,7 +162,7 @@ body.bootstrap-admin-with-small-navbar {
                                 </div>
                                 
                             </div>
-                            
+                            --%>
                             
                             
                              <div class="panel panel-default bootstrap-admin-no-table-panel">

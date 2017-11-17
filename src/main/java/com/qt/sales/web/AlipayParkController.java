@@ -195,7 +195,7 @@ public class AlipayParkController {
 				AlipayEcoMycarParkingVehicleQueryRequest requestBiz = new AlipayEcoMycarParkingVehicleQueryRequest();
 				
 				JSONObject data = new JSONObject();
-				data.put("car_id", car_id);
+				data.put(RSConsts.car_id, car_id);
 				requestBiz.setBizContent(JSON.toJSONString(data));// 业务数据
 				AlipayEcoMycarParkingVehicleQueryResponse responseBiz = alipayClient.execute(requestBiz, access_token);
 				// 判断调用是否成功
@@ -205,7 +205,7 @@ public class AlipayParkController {
 					Map<String, String> responseParams = responseBiz.getParams();
 					logger.info(responseParams.toString());
 					String car_number = responseBiz.getCarNumber();
-					model.addAttribute("car_number", car_number);
+					model.addAttribute(RSConsts.car_number, car_number);
 					
 					//显示订单信息
 					BigDecimal money =getPayMoney(car_number,parking_id);//调用接口查询费用
@@ -264,11 +264,8 @@ public class AlipayParkController {
 					order.setUserId(uid);
 					order.setCarId(car_id);
 					orderBeanService.updateByPrimaryKey(order);
-					
-					
 					model.addAttribute("outOrderNo", order.getOutOrderNo());
 					String paidMoney = orderBeanService.queryPaidMoneyWithOrderNo(order.getOutOrderNo());
-					
 					if(!"0".equals(paidMoney)){
 						BigDecimal paid = new BigDecimal(paidMoney);
 						if (money.compareTo(paid) == 1) {
@@ -279,27 +276,27 @@ public class AlipayParkController {
 						}else if(money.compareTo(paid) == 0){
 							model.addAttribute(RSConsts.payMoney, "0.00");
 							model.addAttribute(RSConsts.paidMoney, paid.setScale(2, BigDecimal.ROUND_HALF_DOWN));
-							model.addAttribute("payBtn", false);
+							model.addAttribute(RSConsts.payBtn, false);
 						}
 					}else{
 						BigDecimal setScale = money.setScale(2,BigDecimal.ROUND_HALF_DOWN);
-						model.addAttribute("payMoney", setScale);
+						model.addAttribute(RSConsts.payMoney, setScale);
 					}
-					model.addAttribute("parkingName", order.getParkingName());
-					model.addAttribute("discountMoney", getDiscountMoney(car_number,order.getOutParkingId()));//优惠金额
-					model.addAttribute("inTime", order.getInTime());
+					model.addAttribute(RSConsts.parkingName, order.getParkingName());
+					model.addAttribute(RSConsts.discountMoney, getDiscountMoney(car_number,order.getOutParkingId()));//优惠金额
+					model.addAttribute(RSConsts.inTime, order.getInTime());
 					String nowTime =DateUtil.getCurrDate(DateUtil.STANDDATEFORMAT);
-					model.addAttribute("timeDiffer", DateUtil.getTimeDiffer(order.getInTime(), nowTime));
-					model.addAttribute("inDuration", DateUtil.getTimeDifferMin(order.getInTime(), nowTime));
-					model.addAttribute("orderTime", DateUtil.getCurrDate(new Date(), DateUtil.STANDDATEFORMAT));
+					model.addAttribute(RSConsts.timeDiffer, DateUtil.getTimeDiffer(order.getInTime(), nowTime));
+					model.addAttribute(RSConsts.inDuration, DateUtil.getTimeDifferMin(order.getInTime(), nowTime));
+					model.addAttribute(RSConsts.orderTime, DateUtil.getCurrDate(new Date(), DateUtil.STANDDATEFORMAT));
 				} else {
-					// 调用失败处理逻辑
-					System.out.println(responseBiz.getBody());
-					 model.addAttribute("msg", "查询车牌异常，请联系管理员！");
+					 // 调用失败处理逻辑
+					 System.out.println(responseBiz.getBody());
+					 model.addAttribute(RSConsts.msg, "查询车牌异常，请联系管理员！");
 				}
 			} else {
 				// 换取令牌失败逻辑处理
-			    model.addAttribute("msg", "查询车牌异常，请联系管理员！");
+			    model.addAttribute(RSConsts.msg, "查询车牌异常，请联系管理员！");
 			}
 		} catch (AlipayApiException e) {
 			e.printStackTrace();

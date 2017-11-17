@@ -97,5 +97,16 @@ public class RSConsts {
     public static final String paidMoney = "paidMoney"; 
     public static final String payMoney = "payMoney"; 
     public static final String payBtn = "payBtn"; 
+    public static final String parkingName = "parkingName"; 
+    public static final String discountMoney = "discountMoney"; 
+    public static final String inTime = "inTime"; 
+    public static final String timeDiffer = "timeDiffer"; 
+    public static final String inDuration = "inDuration"; 
+    public static final String orderTime = "orderTime"; 
+    public static final String msg = "msg"; 
+    public static final String car_id = "car_id"; 
+    
+    
+    
     
 }

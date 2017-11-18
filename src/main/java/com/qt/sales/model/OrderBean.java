@@ -144,6 +144,31 @@ public class OrderBean {
         }
     }
     
+    
+    
+    public enum AgreementStatus {
+        /**
+         * 车牌代扣状态，0：为支持代扣，1：为不支持代扣
+         */
+        agree("0"),
+        /**
+         * 支付宝代扣
+         */
+        disagree("1");
+        private String val;
+        private AgreementStatus(String val) {
+            this.val = val;
+        }
+        public String getVal() {
+            return val;
+        }
+    }
+    
+    
+    
+    
+    
+    
     /**
      * 描述：获取属性值.<br/>
      * 创建人：yinghui zhang <br/>

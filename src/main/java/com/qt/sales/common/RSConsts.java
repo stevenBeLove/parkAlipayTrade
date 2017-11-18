@@ -106,6 +106,15 @@ public class RSConsts {
     public static final String msg = "msg"; 
     public static final String car_id = "car_id"; 
     public static final String zero = "0.00"; 
+    public static final String total_fee = "total_fee"; 
+    /**
+     * 卖家支付宝账号，可以为email或者手机号。如果seller_id不为空，则以seller_id的值作为卖家账号，忽略本参数。
+     */
+    public static final String seller_logon_id = "seller_logon_id"; 
+    public static final String agent_id = "agent_id";
+    public static final String agent_value = "";
+    public static final String car_number_color = "car_number_color";
+    
     
     
     

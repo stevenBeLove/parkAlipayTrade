@@ -27,6 +27,7 @@ import sun.misc.BASE64Encoder;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alipay.api.AlipayApiException;
+import com.alipay.api.AlipayClient;
 import com.alipay.api.request.AlipayEcoMycarParkingConfigSetRequest;
 import com.alipay.api.request.AlipayEcoMycarParkingOrderSyncRequest;
 import com.alipay.api.request.AlipayEcoMycarParkingParkinglotinfoCreateRequest;
@@ -35,6 +36,7 @@ import com.alipay.api.response.AlipayEcoMycarParkingConfigSetResponse;
 import com.alipay.api.response.AlipayEcoMycarParkingOrderSyncResponse;
 import com.alipay.api.response.AlipayEcoMycarParkingParkinglotinfoCreateResponse;
 import com.alipay.api.response.AlipayEcoMycarParkingParkinglotinfoUpdateResponse;
+import com.qt.sales.common.AliPayUtil;
 import com.qt.sales.common.RSConsts;
 import com.qt.sales.dao.OrderBeanMapper;
 import com.qt.sales.dao.ParkBeanMapper;
@@ -72,6 +74,9 @@ public class ParkServiceImpl implements ParkService {
     
     @Resource
     private OrderBeanMapper orderBeanMapper;
+    
+	@Resource(name = "aliPayUtil")
+	private AliPayUtil aliPayUtil;
     
     
     @Override
@@ -150,12 +155,13 @@ public class ParkServiceImpl implements ParkService {
 //        if(StringUtils.isEmpty(park) && StringUtils.isEmpty(park.getAppAuthToken())){
 //            throw new QTException("未获得商家授权！请先授权");
 //        }
+        AlipayClient alipayClient = aliPayUtil.getInstance();
         AlipayEcoMycarParkingConfigSetRequest request = new AlipayEcoMycarParkingConfigSetRequest();
         request.setBizContent(getBizContent(park));//业务数据
         request.putOtherTextParam("app_auth_token",park.getAppAuthToken());
         AlipayEcoMycarParkingConfigSetResponse  response;
         try {
-            response = AlipayParkController.alipayClient.execute(request);
+            response = alipayClient.execute(request);
             if (response.isSuccess()) {
                 logger.debug("调用成功");
                 return true;
@@ -236,7 +242,8 @@ public class ParkServiceImpl implements ParkService {
         request.putOtherTextParam("app_auth_token", park.getAppAuthToken());
         AlipayEcoMycarParkingParkinglotinfoCreateResponse response;
         try {
-            response = AlipayParkController.alipayClient.execute(request);
+        	AlipayClient alipayClient = aliPayUtil.getInstance();
+            response = alipayClient.execute(request);
             if (response.isSuccess()) {
                 park.setParkingId(response.getParkingId());
                 updateByPrimaryKeySelective(park);
@@ -298,8 +305,9 @@ public class ParkServiceImpl implements ParkService {
 		request.setBizContent(getParkingCreateBizContent(park));
 		request.putOtherTextParam("app_auth_token", park.getAppAuthToken());
 		AlipayEcoMycarParkingParkinglotinfoUpdateResponse response;
+		AlipayClient alipayClient = aliPayUtil.getInstance();
 		try {
-			response = AlipayParkController.alipayClient.execute(request);
+			response = alipayClient.execute(request);
 			if (response.isSuccess()) {
 				returnjson.put(RSConsts.STATUS, RSConsts.SUCCESS_CODE);
 				returnjson.put(RSConsts.MESSAGE, "更新停车场成功!");
@@ -386,10 +394,10 @@ public class ParkServiceImpl implements ParkService {
 			String token = (String) ParkServiceImpl.parkingStore.get("");
 			OrderBean order = new OrderBean();
 			
-			
+			AlipayClient alipayClient = aliPayUtil.getInstance();
 			request.setBizContent(orderSynBiz(order));
 			request.putOtherTextParam("app_auth_token", token);
-			AlipayEcoMycarParkingOrderSyncResponse response = AlipayParkController.alipayClient.execute(request);
+			AlipayEcoMycarParkingOrderSyncResponse response = alipayClient.execute(request);
 			if(response.isSuccess()){
 			System.out.println("调用成功");
 			} else {

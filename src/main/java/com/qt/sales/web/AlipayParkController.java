@@ -503,6 +503,159 @@ public class AlipayParkController {
     
     
     /**
+     * 查询费用
+     * 
+     * @return
+     */
+    @RequestMapping(value = "/queryCarFee", method = { RequestMethod.POST })
+    @ResponseBody
+    public AjaxReturnInfo queryCarFee(String outParkingId, String carNumber) {
+        AjaxReturnInfo ajaxinfo = new AjaxReturnInfo();
+        ParkBean parkBean = parkService.selectByPrimaryKey(outParkingId);
+        if (StringUtils.isEmpty(parkBean.getAppAuthToken())) {
+            ajaxinfo.setSuccess(AjaxReturnInfo.FALSE_RESULT);
+            ajaxinfo.setMessage("未授权！");
+            return ajaxinfo;
+        }
+        OrderBeanExample example = new OrderBeanExample();
+        OrderBeanExample.Criteria cr = example.createCriteria();
+        cr.andCarNumberEqualTo(carNumber);
+        cr.andOutParkingIdEqualTo(outParkingId);
+        List<OrderBean> orderList = orderBeanService.selectByExample(example);
+        if (orderList == null || orderList.size() == 0) {
+            ajaxinfo.setSuccess(AjaxReturnInfo.FALSE_RESULT);
+            ajaxinfo.setMessage("无法找到该车入场记录，请人工处理！");
+            return ajaxinfo;
+        }
+       String agreeStatus =AgreementStatus.disagree.getVal();
+        //判断是否开启免密支付
+       try {
+		 agreeStatus = agreementQueryRequest(carNumber,parkBean.getAppAuthToken());
+		} catch (Exception e1) {
+			logger.error(e1.getMessage(),e1);
+			agreeStatus = AgreementStatus.disagree.getVal();
+		}
+       //首先查询是否存在未付款的订单
+		OrderBean order = null;
+		boolean haveNoPaid = false;
+		boolean haveTimeOut = false;
+		for (OrderBean orderBean : orderList) {
+			//有未付款的订单
+			if(OrderSynStatus.create.getVal().equals(orderBean.getOrderSynStatus())){
+				order = orderBean;
+				haveNoPaid = true;
+			}
+		}
+		
+		//是否开启免密支付功能
+        if(AgreementStatus.agree.getVal().equals(agreeStatus) && haveNoPaid){
+        	//使用免密支付自动扣款
+        	autoOrderPay(order,parkBean,carNumber);
+        	orderList = orderBeanService.selectByExample(example);
+        }
+        
+		//再次查询订单状态
+		if(haveNoPaid){
+			  OrderBeanExample countExample = new OrderBeanExample();
+	          OrderBeanExample.Criteria crCount = countExample.createCriteria();
+	          crCount.andCarNumberEqualTo(carNumber);
+	          crCount.andOutParkingIdEqualTo(outParkingId);
+	          crCount.andOrderSynStatusEqualTo(OrderSynStatus.create.getVal());
+			  int count = orderBeanService.countByExample(countExample);
+			  if(count > 0){
+				  ajaxinfo.setSuccess(AjaxReturnInfo.FALSE_RESULT);
+		          ajaxinfo.setMessage("还有未付款的订单，请付款！");
+		          return ajaxinfo;
+			  }
+		}
+		//没有找到未付款的订单，找下已经付款的订单
+		if(StringUtils.isEmpty(order)){
+			boolean haveOrder = false;
+			for (OrderBean orderBean : orderList) {
+				//找到已经付款的订单
+				if(OrderSynStatus.paysucess.getVal().equals(orderBean.getOrderSynStatus())){
+					order = orderBean;
+					haveOrder = true;
+				}
+			}
+			if(haveOrder){
+				//显示订单信息
+				BigDecimal money =getPayMoney(carNumber, order.getOutParkingId());
+				//判断订单的金额是否已经超时产生费用
+				String paidMoney =orderBeanService.queryTempPaidWithOrderTrade(order.getOrderTrade());
+				BigDecimal tradePaidMoney = new BigDecimal(paidMoney);
+				if(money.compareTo(tradePaidMoney) == 1){
+					//创建未支付订单
+					ParkBean bean = parkService.selectByPrimaryParkingId(order.getParkingId());
+					String in_time = DateUtil.getCurrDate(DateUtil.STANDDATEFORMAT);
+					String outOrderNo = parkService.enterinfoSyncEnter(bean, order.getOrderTrade(), order.getCarNumber(), in_time, order.getCarType(), order.getCarColor());
+					OrderBean noPaidOrder = orderBeanService.selectByPrimaryKey(outOrderNo);
+					order = noPaidOrder;
+					haveTimeOut = true;
+				}
+			}
+		}
+		
+		//是否开启免密支付功能
+        if(AgreementStatus.agree.getVal().equals(agreeStatus) && haveTimeOut){
+        	//使用免密支付自动扣款
+        	autoOrderPay(order, parkBean, carNumber);
+        	orderList = orderBeanService.selectByExample(example);
+        }
+		if (haveTimeOut) {
+			OrderBeanExample countExample = new OrderBeanExample();
+			OrderBeanExample.Criteria crCount = countExample.createCriteria();
+			crCount.andCarNumberEqualTo(carNumber);
+			crCount.andOutParkingIdEqualTo(outParkingId);
+			crCount.andOrderSynStatusEqualTo(OrderSynStatus.create.getVal());
+			int count = orderBeanService.countByExample(countExample);
+			if (count > 0) {
+				ajaxinfo.setSuccess(AjaxReturnInfo.FALSE_RESULT);
+				ajaxinfo.setMessage("有超时订单未支付，请付款！");
+				return ajaxinfo;
+			}
+		}
+		
+        // 驶出时间
+        String out_time = DateUtil.getCurrDate(DateUtil.STANDDATEFORMAT);
+        AlipayEcoMycarParkingExitinfoSyncRequest request = new AlipayEcoMycarParkingExitinfoSyncRequest();
+        request.putOtherTextParam(RSConsts.app_auth_token, parkBean.getAppAuthToken());
+        request.setBizContent(ecoMycarParkingExitinfoSyncContent(parkBean.getParkingId(), carNumber, out_time));// 业务数据
+        AlipayEcoMycarParkingExitinfoSyncResponse response;
+        try {
+            response = alipayClient.execute(request);
+            if (response.isSuccess()) {
+                for (OrderBean orderBean : orderList) {
+                	// 更新车辆驶出订单
+                	orderBean.setOutTime(out_time);
+                    // 更新订单
+                    orderBeanService.updateOrderPayByOrderNo(orderBean);
+                    // 同步订单
+                    oderSyncSuccess(orderBean);
+                    // 删除订单
+                    orderBeanService.deleteWithOrderTrade(orderBean.getOrderTrade());
+				}
+                ajaxinfo.setSuccess(AjaxReturnInfo.TURE_RESULT);
+                ajaxinfo.setMessage("调用成功！");
+            } else {
+                ajaxinfo.setSuccess(AjaxReturnInfo.FALSE_RESULT);
+                ajaxinfo.setMessage("调用失败！");
+            }
+        } catch (AlipayApiException e) {
+            logger.error(e.getMessage(), e);
+            ajaxinfo.setSuccess(AjaxReturnInfo.FALSE_RESULT);
+            ajaxinfo.setMessage("调用失败！");
+        } catch (QTException e) {
+            logger.error(e.getMessage(), e);
+            ajaxinfo.setSuccess(AjaxReturnInfo.FALSE_RESULT);
+            ajaxinfo.setMessage(e.getMessage());
+        }
+        return ajaxinfo;
+    }
+    
+    
+    
+    /**
      * 车辆驶出接口
      * 
      * @return

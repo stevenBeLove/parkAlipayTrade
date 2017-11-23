@@ -101,6 +101,27 @@ function tradeRefundButton(){
 	});
 }
 
+
+function carqueryFee(){
+	$.ajax({
+		type : "POST",
+		url :  "${ctx}/alipayPark/queryCarFee",
+		data : {
+			'outParkingId':$("#outParkingIdOut1").val(),
+			'carNumber':$("#carNumberOut1").val()
+		},
+		beforeSend : function() {
+		},
+		success : function(obj) {
+			if (obj.success == 'true') {
+				alert(obj.message);
+			} else {
+				alert(obj.message);
+			}
+		}
+	});
+}
+
 </script>
 <meta name="viewport"
 	content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
@@ -164,6 +185,25 @@ body.bootstrap-admin-with-small-navbar {
                             </div>
                             --%>
                             
+                             <div class="panel panel-default bootstrap-admin-no-table-panel">
+                                <div class="bootstrap-admin-no-table-panel-content bootstrap-admin-panel-content collapse in">
+                                        <fieldset>
+                                            <div class="form-group">
+                                            	<label class="col-lg-1 control-label" for="carNumberOut1">车牌</label>
+                                                <div class="col-lg-2">
+                                                    <input type="text"  id="carNumberOut1" class="form-control" />
+                                                </div>
+                                                <label class="col-lg-1 control-label" for="outParkingIdOut1">停车场ID</label>
+                                                <div class="col-lg-2">
+                                                    <input type="text"  id="outParkingIdOut1" value="${outParkingId }" class="form-control" />
+                                                </div>
+                                                <div class="col-lg-2">
+                                                	<button id ="carqueryFee" type="button" class="btn btn-primary" onclick="carqueryFee();">结算费用</button>
+                                                </div>
+                                            </div>
+                                        </fieldset>
+                                </div>
+                            </div>
                             
                              <div class="panel panel-default bootstrap-admin-no-table-panel">
                                 <div class="bootstrap-admin-no-table-panel-content bootstrap-admin-panel-content collapse in">
@@ -184,6 +224,8 @@ body.bootstrap-admin-with-small-navbar {
                                         </fieldset>
                                 </div>
                             </div>
+                            
+                 
                             
                             
                             

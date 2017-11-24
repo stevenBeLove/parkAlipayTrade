@@ -6,88 +6,85 @@ import java.util.Date;
 import com.qt.sales.common.RSConsts;
 
 public class OrderBean {
-    
-    
-    private String orderNo;
 
-    private String userId;
+    private String     orderNo;
 
-    private String outParkingId;
+    private String     userId;
 
-    private String parkingName;
+    private String     outParkingId;
 
-    private String carNumber;
+    private String     parkingName;
 
-    private String outOrderNo;
+    private String     carNumber;
+
+    private String     outOrderNo;
 
     /**
-     * 订单状态
-     * 0：创建   1支付宝同步创建  2支付成功
+     * 订单状态 0：创建 1支付宝同步创建 2支付成功
      */
-    private String orderStatus;
+    private String     orderStatus;
 
-    private String orderTime;
+    private String     orderTime;
 
-    private String payTime;
+    private String     payTime;
 
-    private String payType;
+    private String     payType;
 
     private BigDecimal payMoney;
 
-    private String inTime;
+    private String     inTime;
 
-    private String parkingId;
+    private String     parkingId;
 
-    private String inDuration;
+    private String     inDuration;
 
-    private String cardNumber;
+    private String     cardNumber;
 
     private BigDecimal discountMoney;
 
     private BigDecimal paidMoney;
 
-    private String sellerId;
+    private String     sellerId;
 
-    private String outTime;
+    private String     outTime;
 
     /**
      * 订单是否同步
      */
-    private String orderSynStatus;
+    private String     orderSynStatus;
 
     /**
-     * 订单是否支付
+     * 订单支付状态
      */
-//    private String orderPayStatus;
-    
+     private String orderPayStatus;
+
     /**
      * 车辆ID
      */
-    private String carId;
-    
-    
-    private String carType;
-    
-    private String carColor;
-    
-    private String orderTrade;
-    
+    private String     carId;
+
+    private String     carType;
+
+    private String     carColor;
+
+    /**
+     * 交易号
+     */
+    private String     orderTrade;
+
     /**
      * 车牌颜色
      */
-    private String carNumberColor = RSConsts.car_number_color_blue;
+    private String     carNumberColor = RSConsts.car_number_color_blue;
+
+    /**
+     * 外部申请退款请求流水，ISV唯一
+     */
+    private String     outRefundNo;
     
-    
 
-  public String getOrderTrade() {
-		return orderTrade;
-	}
 
-	public void setOrderTrade(String orderTrade) {
-		this.orderTrade = orderTrade;
-	}
-
-	//订单状态
+    // 订单状态
     public enum OrderStatus {
         /**
          * 成功
@@ -102,15 +99,17 @@ public class OrderBean {
          */
         refund("2");
         private String val;
+
         private OrderStatus(String val) {
             this.val = val;
         }
+
         public String getVal() {
             return val;
         }
     }
-    
-    //订单状态
+
+    // 订单状态
     public enum OrderSynStatus {
         /**
          * 创建
@@ -125,14 +124,16 @@ public class OrderBean {
          */
         paysucess("2");
         private String val;
+
         private OrderSynStatus(String val) {
             this.val = val;
         }
+
         public String getVal() {
             return val;
         }
     }
-    
+
     public enum PayTypeStatus {
         /**
          * 在线缴费
@@ -143,16 +144,16 @@ public class OrderBean {
          */
         insteadAlipay("2");
         private String val;
+
         private PayTypeStatus(String val) {
             this.val = val;
         }
+
         public String getVal() {
             return val;
         }
     }
-    
-    
-    
+
     public enum AgreementStatus {
         /**
          * 车牌代扣状态，0：为支持代扣，1：为不支持代扣
@@ -163,19 +164,69 @@ public class OrderBean {
          */
         disagree("1");
         private String val;
+
         private AgreementStatus(String val) {
             this.val = val;
         }
+
         public String getVal() {
             return val;
         }
     }
+
+    public enum OrderPayStatus {
+        /**
+         * 交易成功
+         */
+        success("0"),
+        /**
+         * 退款成功
+         */
+        refund("1"),
+        /**
+         * 退款失败
+         */
+        refundFailed("2");
+        private String val;
+
+        private OrderPayStatus(String val) {
+            this.val = val;
+        }
+
+        public String getVal() {
+            return val;
+        }
+    }
+
     
-    
-    
-    
-    
-    
+
+    /**
+     * 描述：获取属性值.<br/>
+     * 创建人：yinghui zhang <br/>
+     * 外部申请退款请求流水，ISV唯一
+     * 返回类型：@return outRefundNo .<br/>
+     */
+    public String getOutRefundNo() {
+        return outRefundNo;
+    }
+
+    /**
+     * 创建人：yinghui zhang <br/>
+     * 创建时间：2017年11月24日 下午9:12:08 <br/>
+     * 外部申请退款请求流水，ISV唯一
+     * 参数: @param  outRefundNo 设置值.  <br/>
+     */
+    public void setOutRefundNo(String outRefundNo) {
+        this.outRefundNo = outRefundNo;
+    }
+
+    public String getOrderTrade() {
+        return orderTrade;
+    }
+
+    public void setOrderTrade(String orderTrade) {
+        this.orderTrade = orderTrade;
+    }
     /**
      * 描述：获取属性值.<br/>
      * 创建人：yinghui zhang <br/>
@@ -188,7 +239,7 @@ public class OrderBean {
     /**
      * 创建人：yinghui zhang <br/>
      * 创建时间：2017年11月9日 下午1:48:24 <br/>
-     * 参数: @param  carType 设置值.  <br/>
+     * 参数: @param carType 设置值. <br/>
      */
     public void setCarType(String carType) {
         this.carType = carType;
@@ -206,7 +257,7 @@ public class OrderBean {
     /**
      * 创建人：yinghui zhang <br/>
      * 创建时间：2017年11月9日 下午1:48:24 <br/>
-     * 参数: @param  carColor 设置值.  <br/>
+     * 参数: @param carColor 设置值. <br/>
      */
     public void setCarColor(String carColor) {
         this.carColor = carColor;
@@ -368,7 +419,7 @@ public class OrderBean {
     /**
      * 创建人：yinghui zhang <br/>
      * 创建时间：2017年11月10日 下午5:53:08 <br/>
-     * 参数: @param  outTime 设置值.  <br/>
+     * 参数: @param outTime 设置值. <br/>
      */
     public void setOutTime(String outTime) {
         this.outTime = outTime;
@@ -381,22 +432,24 @@ public class OrderBean {
     public void setOrderSynStatus(String orderSynStatus) {
         this.orderSynStatus = orderSynStatus == null ? null : orderSynStatus.trim();
     }
-//
-//    public String getOrderPayStatus() {
-//        return orderPayStatus;
-//    }
-//
-//    public void setOrderPayStatus(String orderPayStatus) {
-//        this.orderPayStatus = orderPayStatus == null ? null : orderPayStatus.trim();
-//    }
 
-	public String getCarId() {
-		return carId;
-	}
+    //
+    // public String getOrderPayStatus() {
+    // return orderPayStatus;
+    // }
+    //
+    // public void setOrderPayStatus(String orderPayStatus) {
+    // this.orderPayStatus = orderPayStatus == null ? null :
+    // orderPayStatus.trim();
+    // }
 
-	public void setCarId(String carId) {
-		this.carId = carId;
-	}
+    public String getCarId() {
+        return carId;
+    }
+
+    public void setCarId(String carId) {
+        this.carId = carId;
+    }
 
     /**
      * 描述：获取属性值.<br/>
@@ -410,13 +463,30 @@ public class OrderBean {
     /**
      * 创建人：yinghui zhang <br/>
      * 创建时间：2017年11月24日 上午10:00:33 <br/>
-     * 参数: @param  carNumberColor 设置值.  <br/>
+     * 参数: @param carNumberColor 设置值. <br/>
      */
     public void setCarNumberColor(String carNumberColor) {
         this.carNumberColor = carNumberColor;
     }
+
+    /**
+     * 描述：获取属性值.<br/>
+     * 创建人：yinghui zhang <br/>
+     * 返回类型：@return orderPayStatus .<br/>
+     */
+    public String getOrderPayStatus() {
+        return orderPayStatus;
+    }
+
+    /**
+     * 创建人：yinghui zhang <br/>
+     * 创建时间：2017年11月24日 下午10:34:04 <br/>
+     * 参数: @param  orderPayStatus 设置值.  <br/>
+     */
+    public void setOrderPayStatus(String orderPayStatus) {
+        this.orderPayStatus = orderPayStatus;
+    }
     
     
-    
-    
+
 }

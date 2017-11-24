@@ -37,6 +37,7 @@ import com.alipay.api.response.AlipayEcoMycarParkingOrderSyncResponse;
 import com.alipay.api.response.AlipayEcoMycarParkingParkinglotinfoCreateResponse;
 import com.alipay.api.response.AlipayEcoMycarParkingParkinglotinfoUpdateResponse;
 import com.qt.sales.common.AliPayUtil;
+import com.qt.sales.common.PropertiesUtil;
 import com.qt.sales.common.RSConsts;
 import com.qt.sales.dao.OrderBeanMapper;
 import com.qt.sales.dao.ParkBeanMapper;
@@ -75,8 +76,11 @@ public class ParkServiceImpl implements ParkService {
     @Resource
     private OrderBeanMapper orderBeanMapper;
     
-	@Resource(name = "aliPayUtil")
-	private AliPayUtil aliPayUtil;
+  	@Resource(name = "aliPayUtil")
+  	private AliPayUtil aliPayUtil;
+  	
+    @Resource(name = "propertiesUtil")
+    private PropertiesUtil propertiesUtil;
     
     
     @Override
@@ -149,12 +153,10 @@ public class ParkServiceImpl implements ParkService {
      * 修改人:  yinghui zhang 修改描述： .<br/>
      * <p/>
      * @throws QTException 
+     * @throws IOException 
      */
-    public boolean parkingConfigSetRequest(String outParkingId) throws QTException{
+    public boolean parkingConfigSetRequest(String outParkingId) throws Exception{
         ParkBean park = this.selectByPrimaryKey(outParkingId);
-//        if(StringUtils.isEmpty(park) && StringUtils.isEmpty(park.getAppAuthToken())){
-//            throw new QTException("未获得商家授权！请先授权");
-//        }
         AlipayClient alipayClient = aliPayUtil.getInstance();
         AlipayEcoMycarParkingConfigSetRequest request = new AlipayEcoMycarParkingConfigSetRequest();
         request.setBizContent(getBizContent(park));//业务数据
@@ -187,13 +189,14 @@ public class ParkServiceImpl implements ParkService {
      * 修改记录.<br/>
      * 修改人:  yinghui zhang 修改描述： .<br/>
      * <p/>
+     * @throws IOException 
      */
-    private String getBizContent(ParkBean park){
+    private String getBizContent(ParkBean park) throws IOException{
         JSONObject data = new JSONObject();
         data.put(RSConsts.MERCHANT_NAME, park.getMerchantName());
         data.put(RSConsts.MERCHANT_SERVICE_PHONE, park.getMerchantServicePhone());
-        data.put(RSConsts.ACCOUNT_NO, park.getAccountNo());
-//        data.put(RSConsts.MERCHANT_LOGO, getImageStr());
+        data.put(RSConsts.ACCOUNT_NO, propertiesUtil.readValue("alipay.isvAccount"));
+        data.put(RSConsts.MERCHANT_LOGO, getImageStr());
         List<JSONObject> listJson = new ArrayList<JSONObject>();
         JSONObject list = new JSONObject();
         list.put(RSConsts.INTERFACE_NAME, "alipay.eco.mycar.parking.userpage.query");
@@ -209,7 +212,7 @@ public class ParkServiceImpl implements ParkService {
     public static String getImageStr() {
         //待处理的本地图片
         try {
-      String imgFile = "C:\\data\\logo\\27X27.png";
+      String imgFile = "/home/weblogc/logo.png";
       InputStream in = null;
       byte[] data = null;
       //读取图片字节数组

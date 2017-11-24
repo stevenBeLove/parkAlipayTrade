@@ -26,6 +26,7 @@
     <result column="car_type" property="carType" jdbcType="VARCHAR" />
     <result column="car_color" property="carColor" jdbcType="VARCHAR" />
     <result column="order_trade" property="orderTrade" jdbcType="VARCHAR" />
+    <result column="order_pay_status" property="orderPayStatus" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -104,33 +105,26 @@
       order by ${orderByClause}
     </if>
   </select>
-  
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
     <include refid="Base_Column_List" />
     from park.TB_ORDER
     where out_order_no = #{outOrderNo,jdbcType=VARCHAR}
   </select>
-  
     <select id="selectByOrderNo" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
     <include refid="Base_Column_List" />
     from park.TB_ORDER
     where ORDER_NO = #{orderNo,jdbcType=VARCHAR}
   </select>
-  
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
     delete from park.TB_ORDER
     where ORDER_NO = #{orderNo,jdbcType=VARCHAR}
   </delete>
-  
    <delete id="deleteWithOrderTrade" parameterType="java.lang.String" >
     delete from park.TB_ORDER
     where order_trade = #{orderTrade,jdbcType=VARCHAR}
   </delete>
-  
-  
-  
   <delete id="deleteByExample" parameterType="com.qt.sales.model.OrderBeanExample" >
     delete from park.TB_ORDER
     <if test="_parameter != null" >
@@ -177,135 +171,6 @@
       )
   </insert>
   
-  
-  <insert id="insertSelective" parameterType="com.qt.sales.model.OrderBean" >
-    insert into park.TB_ORDER
-    <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="orderNo != null" >
-        ORDER_NO,
-      </if>
-      <if test="userId != null" >
-        USER_ID,
-      </if>
-      <if test="outParkingId != null" >
-        OUT_PARKING_ID,
-      </if>
-      <if test="parkingName != null" >
-        PARKING_NAME,
-      </if>
-      <if test="carNumber != null" >
-        CAR_NUMBER,
-      </if>
-      <if test="outOrderNo != null" >
-        OUT_ORDER_NO,
-      </if>
-      <if test="orderStatus != null" >
-        ORDER_STATUS,
-      </if>
-      <if test="orderTime != null" >
-        ORDER_TIME,
-      </if>
-      <if test="payTime != null" >
-        PAY_TIME,
-      </if>
-      <if test="payType != null" >
-        PAY_TYPE,
-      </if>
-      <if test="payMoney != null" >
-        PAY_MONEY,
-      </if>
-      <if test="inTime != null" >
-        IN_TIME,
-      </if>
-      <if test="parkingId != null" >
-        PARKING_ID,
-      </if>
-      <if test="inDuration != null" >
-        IN_DURATION,
-      </if>
-      <if test="cardNumber != null" >
-        CARD_NUMBER,
-      </if>
-      <if test="discountMoney != null" >
-        DISCOUNT_MONEY,
-      </if>
-      <if test="paidMoney != null" >
-        PAID_MONEY,
-      </if>
-      <if test="sellerId != null" >
-        SELLER_ID,
-      </if>
-      <if test="outTime != null" >
-        OUT_TIME,
-      </if>
-      <if test="orderSynStatus != null" >
-        ORDER_SYN_STATUS,
-      </if>
-   
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="orderNo != null" >
-        #{orderNo,jdbcType=VARCHAR},
-      </if>
-      <if test="userId != null" >
-        #{userId,jdbcType=VARCHAR},
-      </if>
-      <if test="outParkingId != null" >
-        #{outParkingId,jdbcType=VARCHAR},
-      </if>
-      <if test="parkingName != null" >
-        #{parkingName,jdbcType=VARCHAR},
-      </if>
-      <if test="carNumber != null" >
-        #{carNumber,jdbcType=VARCHAR},
-      </if>
-      <if test="outOrderNo != null" >
-        #{outOrderNo,jdbcType=VARCHAR},
-      </if>
-      <if test="orderStatus != null" >
-        #{orderStatus,jdbcType=VARCHAR},
-      </if>
-      <if test="orderTime != null" >
-        #{orderTime,jdbcType=VARCHAR},
-      </if>
-      <if test="payTime != null" >
-        #{payTime,jdbcType=VARCHAR},
-      </if>
-      <if test="payType != null" >
-        #{payType,jdbcType=VARCHAR},
-      </if>
-      <if test="payMoney != null" >
-        #{payMoney,jdbcType=DECIMAL},
-      </if>
-      <if test="inTime != null" >
-        #{inTime,jdbcType=VARCHAR},
-      </if>
-      <if test="parkingId != null" >
-        #{parkingId,jdbcType=VARCHAR},
-      </if>
-      <if test="inDuration != null" >
-        #{inDuration,jdbcType=VARCHAR},
-      </if>
-      <if test="cardNumber != null" >
-        #{cardNumber,jdbcType=VARCHAR},
-      </if>
-      <if test="discountMoney != null" >
-        #{discountMoney,jdbcType=DECIMAL},
-      </if>
-      <if test="paidMoney != null" >
-        #{paidMoney,jdbcType=DECIMAL},
-      </if>
-      <if test="sellerId != null" >
-        #{sellerId,jdbcType=VARCHAR},
-      </if>
-      <if test="outTime != null" >
-        #{outTime,jdbcType=VARCHAR},
-      </if>
-      <if test="orderSynStatus != null" >
-        #{orderSynStatus,jdbcType=VARCHAR},
-      </if>
-    </trim>
-  </insert>
   <select id="countByExample" parameterType="com.qt.sales.model.OrderBeanExample" resultType="java.lang.Integer" >
     select count(*) from park.TB_ORDER
     <if test="_parameter != null" >
@@ -376,6 +241,9 @@
       <if test="carId != null" >
         car_id = #{carId,jdbcType=VARCHAR},
       </if>
+       <if test="orderPayStatus != null" >
+        order_pay_status = #{orderPayStatus,jdbcType=VARCHAR},
+      </if>
     </set>
     where out_order_no = #{outOrderNo,jdbcType=VARCHAR}
   </update>
@@ -440,6 +308,9 @@
       <if test="carId != null" >
         car_id = #{carId,jdbcType=VARCHAR},
       </if>
+      <if test="orderPayStatus != null" >
+        order_pay_status = #{orderPayStatus,jdbcType=VARCHAR},
+      </if>
     </set>
     where out_order_no = #{outOrderNo,jdbcType=VARCHAR}
   </update>
@@ -465,7 +336,8 @@
       PAID_MONEY = #{paidMoney,jdbcType=DECIMAL},
       SELLER_ID = #{sellerId,jdbcType=VARCHAR},
       OUT_TIME = #{outTime,jdbcType=VARCHAR},
-      ORDER_SYN_STATUS = #{orderSynStatus,jdbcType=VARCHAR}
+      ORDER_SYN_STATUS = #{orderSynStatus,jdbcType=VARCHAR},
+      order_pay_status = #{orderPayStatus,jdbcType=VARCHAR}
     where out_order_no = #{outOrderNo,jdbcType=VARCHAR}
   </update>
   
@@ -481,7 +353,7 @@
     select 
     <include refid="Base_Column_List" />
     from park.TB_ORDER_PAY
-    where ORDER_NO = #{orderNo,jdbcType=VARCHAR}
+    where ORDER_TRADE = #{orderTrade,jdbcType=VARCHAR}
   </select>
   
   

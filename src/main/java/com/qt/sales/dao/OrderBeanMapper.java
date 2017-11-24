@@ -8,6 +8,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 public interface OrderBeanMapper {
+    
     int countByExample(OrderBeanExample example);
 
     int deleteByExample(OrderBeanExample example);
@@ -15,8 +16,6 @@ public interface OrderBeanMapper {
     int deleteByPrimaryKey(String orderNo);
 
     int insert(OrderBean record);
-
-    int insertSelective(OrderBean record);
 
     List<OrderBean> selectByExample(OrderBeanExample example);
 

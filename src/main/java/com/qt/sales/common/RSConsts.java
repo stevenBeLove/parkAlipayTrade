@@ -115,9 +115,10 @@ public class RSConsts {
     public static final String agent_value = "";
     public static final String car_number_color = "car_number_color";
     public static final String car_number_color_blue = "blue";
-    
-    
-    
+    public static final String biz_trade_no = "biz_trade_no";
+    public static final String out_biz_trade_no = "out_biz_trade_no";
+    public static final String out_refund_no = "out_refund_no";
+    public static final String refund_fee = "refund_fee";
     
     
 }

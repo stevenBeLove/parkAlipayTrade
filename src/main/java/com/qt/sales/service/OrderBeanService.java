@@ -16,8 +16,6 @@ public interface OrderBeanService {
 
 	    int insert(OrderBean record);
 
-	    int insertSelective(OrderBean record);
-
 	    List<OrderBean> selectByExample(OrderBeanExample example);
 
 	    OrderBean selectByPrimaryKey(String orderNo);

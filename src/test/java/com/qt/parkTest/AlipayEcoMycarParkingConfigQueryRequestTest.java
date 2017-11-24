@@ -11,29 +11,12 @@ import com.alipay.api.AlipayClient;
 import com.alipay.api.DefaultAlipayClient;
 import com.alipay.api.request.AlipayEcoMycarParkingConfigQueryRequest;
 import com.alipay.api.response.AlipayEcoMycarParkingConfigQueryResponse;
-
 /**
  * <pre>
  * 【类型】: AlipayEcoMycarParkingConfigQueryRequestTest <br/> 
- * 【作用】: T停车ISV系统配置接口（alipay.eco.mycar.parking.config.set）. <br/>  
- * 【时间】：2017年10月24日 下午3:11:53 <br/> 
- * 【作者】：yinghui zhang <br/>
-{
-    "alipay_eco_mycar_parking_config_query_response": {
-        "merchant_service_phone": "021-25413215",
-        "merchant_logo": "",
-        "merchant_name": "杭州立方kanghao123",
-        "code": "10000",
-        "interface_info_list": [
-            {
-                "interface_type": "interface_page",
-                "interface_url": "https%3a%2f%2fkangguole.com.cn%2fparkAlipayTrade%2falipay",
-                "interface_name": "alipay.eco.mycar.parking.userpage.query"
-            }
-        ],
-        "msg": "Success",
-        "account_no": "qcxdac2965@sandbox.com"
-    },
+ * 【作用】: 查询配置接口. <br/>  
+ * 【时间】：2017年11月24日 下午11:25:40 <br/> 
+ * 【作者】：yinghui zhang <br/> 
  * </pre>
  */
 public class AlipayEcoMycarParkingConfigQueryRequestTest {

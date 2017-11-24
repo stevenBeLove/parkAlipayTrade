@@ -36,7 +36,7 @@ public interface ParkService {
 
     List<ParkBean> selectByExample(ParkBeanExample example);
     
-    public boolean parkingConfigSetRequest(String outParkingId) throws QTException;
+    public boolean parkingConfigSetRequest(String outParkingId) throws Exception;
     
     int updateByPrimaryKeySelective(ParkBean record);
     

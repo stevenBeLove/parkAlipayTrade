@@ -39,11 +39,11 @@ public class OrderBeanServiceImpl implements OrderBeanService {
 		return orderBeanMapper.insert(record);
 	}
 
-	@Override
-	public int insertSelective(OrderBean record) {
-		// TODO Auto-generated method stub
-		return orderBeanMapper.insertSelective(record);
-	}
+//	@Override
+//	public int insertSelective(OrderBean record) {
+//		// TODO Auto-generated method stub
+//		return orderBeanMapper.insertSelective(record);
+//	}
 
 	@Override
 	public List<OrderBean> selectByExample(OrderBeanExample example) {

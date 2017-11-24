@@ -449,6 +449,9 @@
       <if test="orderPayStatus != null" >
         ORDER_PAY_STATUS = #{orderPayStatus,jdbcType=VARCHAR},
       </if>
+      <if test="orderTrade != null" >
+        ORDER_TRADE = #{orderTrade,jdbcType=VARCHAR},
+      </if>
     </set>
     where ORDER_PAY_ID = #{orderPayId,jdbcType=VARCHAR}
   </update>

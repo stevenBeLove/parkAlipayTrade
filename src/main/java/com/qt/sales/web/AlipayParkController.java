@@ -737,6 +737,24 @@ public class AlipayParkController {
 		return result;
 	}
 
+	
+	/**
+	 * 
+	 * 【作者】: yinghui zhang .<br/>
+	 * 【时间】： 2017年11月24日 下午1:37:04 .<br/>
+	 * 【参数】： .<br/>
+	 * @param order
+	 * @return .<br/>
+	 * <p>
+	 * 1 selle_id 改为必填项
+    2 parking_id 改为必填项
+    3 out_parking_id 改为必填项
+    4 修改out_trade_no字段长度为32（原值64，但是超人只支持32）
+    5 出参增加user_id
+	 * 修改记录.<br/>
+	 * 修改人:  yinghui zhang 修改描述： .<br/>
+	 * <p/>
+	 */
     // 自动扣款业务参数
     public String orderPayBiz(OrderBean order) {
         JSONObject data = new JSONObject();
@@ -747,7 +765,7 @@ public class AlipayParkController {
         // data.put(RSConsts.seller_logon_id,);
         data.put(RSConsts.seller_id, order.getSellerId());
         data.put(RSConsts.parking_id, order.getParkingId());
-        // data.put(RSConsts.out_parking_id,);
+        data.put(RSConsts.out_parking_id,order.getOutParkingId());
         // data.put(RSConsts.agent_id,RSConsts.agent_value);//代扣
         data.put(RSConsts.car_number_color, order.getCarNumberColor());//车牌颜色
         return data.toJSONString();
@@ -787,6 +805,7 @@ public class AlipayParkController {
           AlipayEcoMycarParkingOrderSyncResponse response = alipayClient.execute(request);
           if (response.isSuccess()) {
               logger.debug("调用成功");
+//              orderBean.setOrderTrade(response.get);
               orderBeanService.updateByPrimaryKeySelective(orderBean);
           } else {
               logger.debug("调用失败");

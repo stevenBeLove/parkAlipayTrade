@@ -3,6 +3,8 @@ package com.qt.sales.model;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import com.qt.sales.common.RSConsts;
+
 public class OrderBean {
     
     
@@ -69,6 +71,11 @@ public class OrderBean {
     private String carColor;
     
     private String orderTrade;
+    
+    /**
+     * 车牌颜色
+     */
+    private String carNumberColor = RSConsts.car_number_color_blue;
     
     
 
@@ -390,6 +397,24 @@ public class OrderBean {
 	public void setCarId(String carId) {
 		this.carId = carId;
 	}
+
+    /**
+     * 描述：获取属性值.<br/>
+     * 创建人：yinghui zhang <br/>
+     * 返回类型：@return carNumberColor .<br/>
+     */
+    public String getCarNumberColor() {
+        return carNumberColor;
+    }
+
+    /**
+     * 创建人：yinghui zhang <br/>
+     * 创建时间：2017年11月24日 上午10:00:33 <br/>
+     * 参数: @param  carNumberColor 设置值.  <br/>
+     */
+    public void setCarNumberColor(String carNumberColor) {
+        this.carNumberColor = carNumberColor;
+    }
     
     
     

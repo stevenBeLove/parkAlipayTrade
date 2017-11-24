@@ -114,6 +114,7 @@ public class RSConsts {
     public static final String agent_id = "agent_id";
     public static final String agent_value = "";
     public static final String car_number_color = "car_number_color";
+    public static final String car_number_color_blue = "blue";
     
     
     

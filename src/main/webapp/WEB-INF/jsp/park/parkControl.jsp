@@ -233,6 +233,11 @@ body.bootstrap-admin-with-small-navbar {
                                 <div class="bootstrap-admin-no-table-panel-content bootstrap-admin-panel-content collapse in">
                                         <fieldset>
                                             <div class="form-group">
+                                            	<label class="col-lg-1 control-label" for="refundMoney">退款金额</label>
+                                                <div class="col-lg-2">
+                                                    <input type="text"  id="refundMoney" name ="refundMoney" class="form-control" />
+                                                </div>
+                                            
                                             	<label class="col-lg-1 control-label" for="tradeNORefund">支付宝订单编号</label>
                                                 <div class="col-lg-2">
                                                     <input type="text"  id="tradeNORefund" name ="tradeNORefund" class="form-control" />

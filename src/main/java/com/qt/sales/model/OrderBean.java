@@ -82,6 +82,12 @@ public class OrderBean {
      */
     private String     outRefundNo;
     
+    /**
+     * 退款金额
+     */
+    private BigDecimal refundMoney;
+    
+    
 
 
     // 订单状态
@@ -486,6 +492,14 @@ public class OrderBean {
     public void setOrderPayStatus(String orderPayStatus) {
         this.orderPayStatus = orderPayStatus;
     }
+
+	public BigDecimal getRefundMoney() {
+		return refundMoney;
+	}
+
+	public void setRefundMoney(BigDecimal refundMoney) {
+		this.refundMoney = refundMoney;
+	}
     
     
 

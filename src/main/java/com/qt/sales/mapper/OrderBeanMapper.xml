@@ -27,6 +27,7 @@
     <result column="car_color" property="carColor" jdbcType="VARCHAR" />
     <result column="order_trade" property="orderTrade" jdbcType="VARCHAR" />
     <result column="order_pay_status" property="orderPayStatus" jdbcType="VARCHAR" />
+    <result column="REFUND_MONEY" property="refundMoney" jdbcType="DECIMAL" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -89,7 +90,8 @@
   <sql id="Base_Column_List" >
     ORDER_NO, USER_ID, OUT_PARKING_ID, PARKING_NAME, CAR_NUMBER, OUT_ORDER_NO, ORDER_STATUS, 
     ORDER_TIME, PAY_TIME, PAY_TYPE, PAY_MONEY, IN_TIME, PARKING_ID, IN_DURATION, CARD_NUMBER, 
-    DISCOUNT_MONEY, PAID_MONEY, SELLER_ID, OUT_TIME, ORDER_SYN_STATUS, car_id,car_type,car_color,order_trade
+    DISCOUNT_MONEY, PAID_MONEY, SELLER_ID, OUT_TIME, ORDER_SYN_STATUS, car_id,car_type,car_color,order_trade,
+    REFUND_MONEY
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.qt.sales.model.OrderBeanExample" >
     select
@@ -138,7 +140,7 @@
       PAY_TYPE, PAY_MONEY, IN_TIME, 
       PARKING_ID, IN_DURATION, CARD_NUMBER, 
       DISCOUNT_MONEY, PAID_MONEY, SELLER_ID, 
-      OUT_TIME, ORDER_SYN_STATUS, car_type, car_color,order_trade
+      OUT_TIME, ORDER_SYN_STATUS, car_type, car_color,order_trade,order_pay_status
       )
     values (#{orderNo,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, #{outParkingId,jdbcType=VARCHAR}, 
       #{parkingName,jdbcType=VARCHAR}, #{carNumber,jdbcType=VARCHAR}, #{outOrderNo,jdbcType=VARCHAR}, 
@@ -147,7 +149,8 @@
       #{parkingId,jdbcType=VARCHAR}, #{inDuration,jdbcType=VARCHAR}, #{cardNumber,jdbcType=VARCHAR}, 
       #{discountMoney,jdbcType=DECIMAL}, #{paidMoney,jdbcType=DECIMAL}, #{sellerId,jdbcType=VARCHAR}, 
       #{outTime,jdbcType=VARCHAR}, #{orderSynStatus,jdbcType=VARCHAR}, 
-      #{carType,jdbcType=VARCHAR},#{carColor,jdbcType=VARCHAR},#{orderTrade,jdbcType=VARCHAR}
+      #{carType,jdbcType=VARCHAR},#{carColor,jdbcType=VARCHAR},#{orderTrade,jdbcType=VARCHAR},
+      #{orderPayStatus,jdbcType=VARCHAR}
       )
   </insert>
   
@@ -158,7 +161,7 @@
       PAY_TYPE, PAY_MONEY, IN_TIME, 
       PARKING_ID, IN_DURATION, CARD_NUMBER, 
       DISCOUNT_MONEY, PAID_MONEY, SELLER_ID, 
-      OUT_TIME, ORDER_SYN_STATUS, car_type, car_color,order_trade,OUT_REFUND_NO
+      OUT_TIME, ORDER_SYN_STATUS, car_type, car_color,order_trade,OUT_REFUND_NO,order_pay_status
       )
     values (park.seq_parkid.nextval,#{orderNo,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, #{outParkingId,jdbcType=VARCHAR}, 
       #{parkingName,jdbcType=VARCHAR}, #{carNumber,jdbcType=VARCHAR}, #{outOrderNo,jdbcType=VARCHAR}, 
@@ -167,7 +170,8 @@
       #{parkingId,jdbcType=VARCHAR}, #{inDuration,jdbcType=VARCHAR}, #{cardNumber,jdbcType=VARCHAR}, 
       #{discountMoney,jdbcType=DECIMAL}, #{paidMoney,jdbcType=DECIMAL}, #{sellerId,jdbcType=VARCHAR}, 
       #{outTime,jdbcType=VARCHAR}, #{orderSynStatus,jdbcType=VARCHAR},
-      #{carType,jdbcType=VARCHAR},#{carColor,jdbcType=VARCHAR},#{orderTrade,jdbcType=VARCHAR},#{outRefundNo,jdbcType=VARCHAR}
+      #{carType,jdbcType=VARCHAR},#{carColor,jdbcType=VARCHAR},#{orderTrade,jdbcType=VARCHAR},#{outRefundNo,jdbcType=VARCHAR},
+      #{orderPayStatus,jdbcType=VARCHAR}
       )
   </insert>
   
@@ -314,8 +318,11 @@
       <if test="orderPayStatus != null" >
         order_pay_status = #{orderPayStatus,jdbcType=VARCHAR},
       </if>
+      <if test="refundMoney != null" >
+        refund_money = #{refundMoney,jdbcType=VARCHAR},
+      </if>
     </set>
-    where out_order_no = #{outOrderNo,jdbcType=VARCHAR}
+    where out_order_no = #{outOrderNo,jdbcType=DECIMAL}
   </update>
   
   
@@ -340,7 +347,8 @@
       SELLER_ID = #{sellerId,jdbcType=VARCHAR},
       OUT_TIME = #{outTime,jdbcType=VARCHAR},
       ORDER_SYN_STATUS = #{orderSynStatus,jdbcType=VARCHAR},
-      order_pay_status = #{orderPayStatus,jdbcType=VARCHAR}
+      order_pay_status = #{orderPayStatus,jdbcType=VARCHAR},
+      refund_money = #{refundMoney,jdbcType=VARCHAR}
     where out_order_no = #{outOrderNo,jdbcType=VARCHAR}
   </update>
   

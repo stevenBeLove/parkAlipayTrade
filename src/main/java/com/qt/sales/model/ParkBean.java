@@ -77,7 +77,7 @@ public class ParkBean {
 
     private String refreshToken;
 
-    private byte[] merchantLogo;
+    private String merchantLogo;
 
     public String getOutParkingId() {
         return outParkingId;
@@ -375,11 +375,13 @@ public class ParkBean {
         this.refreshToken = refreshToken == null ? null : refreshToken.trim();
     }
 
-    public byte[] getMerchantLogo() {
-        return merchantLogo;
-    }
+	public String getMerchantLogo() {
+		return merchantLogo;
+	}
 
-    public void setMerchantLogo(byte[] merchantLogo) {
-        this.merchantLogo = merchantLogo;
-    }
+	public void setMerchantLogo(String merchantLogo) {
+		this.merchantLogo = merchantLogo;
+	}
+
+   
 }

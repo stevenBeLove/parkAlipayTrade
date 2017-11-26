@@ -39,9 +39,7 @@
     <result column="ALIPAY_USER_ID" property="alipayUserId" jdbcType="VARCHAR" />
     <result column="RE_EXPIRES_IN" property="reExpiresIn" jdbcType="VARCHAR" />
     <result column="REFRESH_TOKEN" property="refreshToken" jdbcType="VARCHAR" />
-  </resultMap>
-  <resultMap id="ResultMapWithBLOBs" type="com.qt.sales.model.ParkBean" extends="BaseResultMap" >
-    <result column="MERCHANT_LOGO" property="merchantLogo" jdbcType="BLOB" />
+    <result column="MERCHANT_LOGO" property="merchantLogo" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -107,28 +105,10 @@
     PARKING_LOT_TYPE, PARKING_TYPE, PAYMENT_MODE, PAY_TYPE, SHOPINGMALL_ID, PARKING_FEE_DESCRIPTION, 
     CONTACT_NAME, CONTACT_MOBILE, CONTACT_TEL, CONTACT_EMALI, CONTACT_WEIXIN, CONTACT_ALIPAY, 
     PARKING_NAME, TIME_OUT, CREATE_USERID, MODIFY_USERID, CREATE_DATETIME, MODIFY_DATETIME, 
-    STATUS, PARKING_ID, APP_AUTH_TOKEN, EXPIRES_IN, ALIPAY_USER_ID, RE_EXPIRES_IN, REFRESH_TOKEN
+    STATUS, PARKING_ID, APP_AUTH_TOKEN, EXPIRES_IN, ALIPAY_USER_ID, RE_EXPIRES_IN, REFRESH_TOKEN,MERCHANT_LOGO
   </sql>
-  <sql id="Blob_Column_List" >
-    MERCHANT_LOGO
-  </sql>
-  <select id="selectByExampleWithBLOBs" resultMap="ResultMapWithBLOBs" parameterType="com.qt.sales.model.ParkBeanExample" >
-    select
-    <if test="distinct" >
-      distinct
-    </if>
-    <include refid="Base_Column_List" />
-    ,
-    <include refid="Blob_Column_List" />
-    from park.TB_PARK
-    <if test="_parameter != null" >
-      <include refid="Example_Where_Clause" />
-    </if>
-    <if test="orderByClause != null" >
-      order by ${orderByClause}
-    </if>
-  </select>
-  
+ 
+ 
   <select id="selectAllParkBean" resultMap="BaseResultMap" parameterType="com.qt.sales.model.ParkBeanExample" >
    	select
     <include refid="Base_Column_List" />
@@ -155,11 +135,9 @@
     ) tmp_page where rownum <![CDATA[ <= ${end} ]]>  ) where row_id <![CDATA[  > ${start} ]]>
   </select>
   
-  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.String" >
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
     <include refid="Base_Column_List" />
-    ,
-    <include refid="Blob_Column_List" />
     from park.TB_PARK
     where OUT_PARKING_ID = #{outParkingId,jdbcType=VARCHAR}
   </select>
@@ -207,7 +185,7 @@
       #{modifyUserid,jdbcType=VARCHAR}, #{createDatetime,jdbcType=TIMESTAMP}, #{modifyDatetime,jdbcType=TIMESTAMP}, 
       #{status,jdbcType=VARCHAR}, #{parkingId,jdbcType=VARCHAR}, #{appAuthToken,jdbcType=VARCHAR}, 
       #{expiresIn,jdbcType=VARCHAR}, #{alipayUserId,jdbcType=VARCHAR}, #{reExpiresIn,jdbcType=VARCHAR}, 
-      #{refreshToken,jdbcType=VARCHAR}, #{merchantLogo,jdbcType=BLOB})
+      #{refreshToken,jdbcType=VARCHAR}, #{merchantLogo,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.qt.sales.model.ParkBean" >
     insert into park.TB_PARK
@@ -440,7 +418,7 @@
         #{refreshToken,jdbcType=VARCHAR},
       </if>
       <if test="merchantLogo != null" >
-        #{merchantLogo,jdbcType=BLOB},
+        #{merchantLogo,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -565,7 +543,7 @@
         REFRESH_TOKEN = #{record.refreshToken,jdbcType=VARCHAR},
       </if>
       <if test="record.merchantLogo != null" >
-        MERCHANT_LOGO = #{record.merchantLogo,jdbcType=BLOB},
+        MERCHANT_LOGO = #{record.merchantLogo,jdbcType=VARCHAR},
       </if>
     </set>
     <if test="_parameter != null" >
@@ -611,7 +589,7 @@
       ALIPAY_USER_ID = #{record.alipayUserId,jdbcType=VARCHAR},
       RE_EXPIRES_IN = #{record.reExpiresIn,jdbcType=VARCHAR},
       REFRESH_TOKEN = #{record.refreshToken,jdbcType=VARCHAR},
-      MERCHANT_LOGO = #{record.merchantLogo,jdbcType=BLOB}
+      MERCHANT_LOGO = #{record.merchantLogo,jdbcType=VARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -771,7 +749,7 @@
         REFRESH_TOKEN = #{refreshToken,jdbcType=VARCHAR},
       </if>
       <if test="merchantLogo != null" >
-        MERCHANT_LOGO = #{merchantLogo,jdbcType=BLOB},
+        MERCHANT_LOGO = #{merchantLogo,jdbcType=VARCHAR},
       </if>
     </set>
     where OUT_PARKING_ID = #{outParkingId,jdbcType=VARCHAR}
@@ -814,7 +792,7 @@
       ALIPAY_USER_ID = #{alipayUserId,jdbcType=VARCHAR},
       RE_EXPIRES_IN = #{reExpiresIn,jdbcType=VARCHAR},
       REFRESH_TOKEN = #{refreshToken,jdbcType=VARCHAR},
-      MERCHANT_LOGO = #{merchantLogo,jdbcType=BLOB}
+      MERCHANT_LOGO = #{merchantLogo,jdbcType=VARCHAR}
     where OUT_PARKING_ID = #{outParkingId,jdbcType=VARCHAR}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.qt.sales.model.ParkBean" >

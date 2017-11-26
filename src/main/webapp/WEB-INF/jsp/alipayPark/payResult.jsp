@@ -15,7 +15,10 @@
 	<link rel="stylesheet" href="${ctx}/js/antui/dist/antui.min.css"/>
 	<script type="text/javascript" src="${ctx}/js/jquery-2.0.3.min.js"></script>
 	<script src="https://as.alipayobjects.com/g/component/antbridge/1.1.1/antbridge.min.js"></script>
-	<script src="${ctx}/js/antui/dist/antui.min.js"></script>
+	<script src="${ctx}/js/antui/dist/antui.min.js"></script><script type="text/javascript"> 
+//3秒钟之后跳转到指定的页面 
+setTimeout(window.location.href='https://mycar-parkingplatformsit.alipay-eco.com/pbizplatform/park/parking/stayPayCarList',3); 
+</script> 
 </head>
 <body text=#000000 bgColor="#ffffff" leftMargin=0 topMargin=4>
 	<div class="am-message result" role="alert">

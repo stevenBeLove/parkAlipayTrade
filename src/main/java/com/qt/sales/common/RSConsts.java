@@ -119,6 +119,7 @@ public class RSConsts {
     public static final String out_biz_trade_no = "out_biz_trade_no";
     public static final String out_refund_no = "out_refund_no";
     public static final String refund_fee = "refund_fee";
+    public static final String merchantLogo = "merchantLogo";
     
     
 }

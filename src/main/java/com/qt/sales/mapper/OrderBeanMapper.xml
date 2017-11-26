@@ -158,7 +158,7 @@
       PAY_TYPE, PAY_MONEY, IN_TIME, 
       PARKING_ID, IN_DURATION, CARD_NUMBER, 
       DISCOUNT_MONEY, PAID_MONEY, SELLER_ID, 
-      OUT_TIME, ORDER_SYN_STATUS, car_type, car_color,order_trade
+      OUT_TIME, ORDER_SYN_STATUS, car_type, car_color,order_trade,OUT_REFUND_NO
       )
     values (park.seq_parkid.nextval,#{orderNo,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, #{outParkingId,jdbcType=VARCHAR}, 
       #{parkingName,jdbcType=VARCHAR}, #{carNumber,jdbcType=VARCHAR}, #{outOrderNo,jdbcType=VARCHAR}, 
@@ -167,7 +167,7 @@
       #{parkingId,jdbcType=VARCHAR}, #{inDuration,jdbcType=VARCHAR}, #{cardNumber,jdbcType=VARCHAR}, 
       #{discountMoney,jdbcType=DECIMAL}, #{paidMoney,jdbcType=DECIMAL}, #{sellerId,jdbcType=VARCHAR}, 
       #{outTime,jdbcType=VARCHAR}, #{orderSynStatus,jdbcType=VARCHAR},
-      #{carType,jdbcType=VARCHAR},#{carColor,jdbcType=VARCHAR},#{orderTrade,jdbcType=VARCHAR}
+      #{carType,jdbcType=VARCHAR},#{carColor,jdbcType=VARCHAR},#{orderTrade,jdbcType=VARCHAR},#{outRefundNo,jdbcType=VARCHAR}
       )
   </insert>
   
@@ -243,6 +243,9 @@
       </if>
        <if test="orderPayStatus != null" >
         order_pay_status = #{orderPayStatus,jdbcType=VARCHAR},
+      </if>
+       <if test="outRefundNo != null" >
+        OUT_REFUND_NO = #{outRefundNo,jdbcType=VARCHAR},
       </if>
     </set>
     where out_order_no = #{outOrderNo,jdbcType=VARCHAR}
@@ -342,20 +345,18 @@
   </update>
   
   <select id="queryPaidMoneyWithOrderNo" parameterType="string" resultType="string">
-  	select nvl(sum(p.pay_money),0) from park.TB_ORDER_PAY p where  p.order_trade = #{orderTrade,jdbcType=VARCHAR}
+  	select nvl(sum(p.paid_money),0) from park.TB_ORDER_PAY p where  p.order_trade = #{orderTrade,jdbcType=VARCHAR}
   </select>
   
   <select id="queryTempPaidWithOrderTrade" parameterType="string" resultType="string">
-  	select nvl(sum(p.pay_money),0) from park.TB_ORDER p where  p.order_trade = #{orderTrade,jdbcType=VARCHAR}
+  	select nvl(sum(p.paid_money),0) from park.TB_ORDER p where  p.order_trade = #{orderTrade,jdbcType=VARCHAR}
   </select>
   
    <select id="selectPayOrderByOrderNo" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
     <include refid="Base_Column_List" />
     from park.TB_ORDER_PAY
-    where ORDER_TRADE = #{orderTrade,jdbcType=VARCHAR}
+    where  ORDER_NO = #{orderNo,jdbcType=VARCHAR}
   </select>
-  
-  
   
 </mapper>

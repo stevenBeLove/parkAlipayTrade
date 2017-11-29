@@ -87,6 +87,11 @@ public class OrderBean {
      */
     private BigDecimal refundMoney;
     
+    /**
+     * 是否支持免密支付
+     */
+    private String agreementStatus;
+    
     
 
 
@@ -500,6 +505,24 @@ public class OrderBean {
 	public void setRefundMoney(BigDecimal refundMoney) {
 		this.refundMoney = refundMoney;
 	}
+
+    /**
+     * 描述：获取属性值.<br/>
+     * 创建人：yinghui zhang <br/>
+     * 返回类型：@return agreementStatus .<br/>
+     */
+    public String getAgreementStatus() {
+        return agreementStatus;
+    }
+
+    /**
+     * 创建人：yinghui zhang <br/>
+     * 创建时间：2017年11月29日 下午4:59:53 <br/>
+     * 参数: @param  agreementStatus 设置值.  <br/>
+     */
+    public void setAgreementStatus(String agreementStatus) {
+        this.agreementStatus = agreementStatus;
+    }
     
     
 

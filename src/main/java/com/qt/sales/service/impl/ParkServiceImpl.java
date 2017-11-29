@@ -28,10 +28,12 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
+import com.alipay.api.request.AlipayEcoMycarParkingAgreementQueryRequest;
 import com.alipay.api.request.AlipayEcoMycarParkingConfigSetRequest;
 import com.alipay.api.request.AlipayEcoMycarParkingOrderSyncRequest;
 import com.alipay.api.request.AlipayEcoMycarParkingParkinglotinfoCreateRequest;
 import com.alipay.api.request.AlipayEcoMycarParkingParkinglotinfoUpdateRequest;
+import com.alipay.api.response.AlipayEcoMycarParkingAgreementQueryResponse;
 import com.alipay.api.response.AlipayEcoMycarParkingConfigSetResponse;
 import com.alipay.api.response.AlipayEcoMycarParkingOrderSyncResponse;
 import com.alipay.api.response.AlipayEcoMycarParkingParkinglotinfoCreateResponse;
@@ -349,7 +351,7 @@ public class ParkServiceImpl implements ParkService {
 
 	public static Random random1 = new Random();
 	@Override
-	public String enterinfoSyncEnter(ParkBean park,String orderTrade, String carNumber, String in_time,String carType,String carColor) {
+	public String enterinfoSyncEnter(ParkBean park,String orderTrade, String carNumber, String in_time,String carType,String carColor,String agreementStatus) {
 		OrderBean bean = new OrderBean();//创建订单
 		bean.setParkingName(park.getMerchantName());
 		bean.setSellerId(park.getAlipayUserId());
@@ -362,6 +364,20 @@ public class ParkServiceImpl implements ParkService {
 		bean.setOutParkingId(park.getOutParkingId());
 		bean.setCarColor(carColor);
 		bean.setCarType(carType);
+		if(StringUtils.isEmpty(agreementStatus)){
+	        try {
+	         String   agreement = agreementQueryRequest(carNumber,park.getAppAuthToken());
+	         bean.setAgreementStatus(agreement);
+	        } catch (AlipayApiException e) {
+	            // TODO Auto-generated catch block
+	            e.printStackTrace();
+	        } catch (QTException e) {
+	            // TODO Auto-generated catch block
+	            e.printStackTrace();
+	        }
+		}else{
+		    bean.setAgreementStatus(agreementStatus); 
+		}
 		bean.setPayType("1");
 		bean.setOrderStatus(OrderStatus.sucess.getVal());
 		bean.setPaidMoney(new BigDecimal("0.00"));
@@ -374,6 +390,31 @@ public class ParkServiceImpl implements ParkService {
 	    orderBeanMapper.insert(bean);
 	    return outOrderNo;
 	}
+	
+    /**
+     * 查询是否开通免密支付
+     * 
+     * @throws AlipayApiException
+     * @throws QTException
+     */
+    public String agreementQueryRequest(String carNumber, String appToken) throws AlipayApiException, QTException {
+        AlipayEcoMycarParkingAgreementQueryRequest request = new AlipayEcoMycarParkingAgreementQueryRequest();
+        JSONObject data = new JSONObject();
+        data.put(RSConsts.car_number, carNumber);
+        request.setBizContent(JSON.toJSONString(data));
+        request.putOtherTextParam(RSConsts.app_auth_token, appToken);
+        AlipayClient alipayClient = aliPayUtil.getInstance();
+        AlipayEcoMycarParkingAgreementQueryResponse response = alipayClient.execute(request);
+        String agreementStatus = "1";// 车牌代扣状态，0：为支持代扣，1：为不支持代扣
+        if (response.isSuccess()) {
+            agreementStatus = response.getAgreementStatus();
+            logger.info("调用免密状态成功");
+        } else {
+            logger.error("调用免密状态失败");
+            throw new QTException("调用失败，请重试!");
+        }
+        return agreementStatus;
+    }
 
 
 	@Override

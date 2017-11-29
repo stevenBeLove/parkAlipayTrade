@@ -257,7 +257,7 @@ public class AlipayParkController {
 								//创建未支付订单
 								ParkBean bean = parkService.selectByPrimaryParkingId(parking_id);
 								String in_time = DateUtil.getCurrDate(DateUtil.STANDDATEFORMAT);
-								String outOrderNo = parkService.enterinfoSyncEnter(bean, order.getOrderTrade(), car_number, in_time, order.getCarType(), order.getCarColor());
+								String outOrderNo = parkService.enterinfoSyncEnter(bean, order.getOrderTrade(), car_number, in_time, order.getCarType(), order.getCarColor(),order.getAgreementStatus());
 								OrderBean noPaidOrder = orderBeanService.selectByPrimaryKey(outOrderNo);
 								order = noPaidOrder;
 							}
@@ -484,7 +484,7 @@ public class AlipayParkController {
             AlipayClient alipayClient = aliPayUtil.getInstance();
             response = alipayClient.execute(request);
             if (response.isSuccess()) {
-                parkService.enterinfoSyncEnter(bean, "", carNumber, in_time, carType, carColor);
+                parkService.enterinfoSyncEnter(bean, "", carNumber, in_time, carType, carColor,"");
                 ajaxinfo.setSuccess(AjaxReturnInfo.TURE_RESULT);
                 ajaxinfo.setMessage("驶入成功");
             } else {
@@ -536,14 +536,14 @@ public class AlipayParkController {
             ajaxinfo.setMessage("无该车入场记录，请人工处理！");
             return ajaxinfo;
         }
-        String agreeStatus = AgreementStatus.disagree.getVal();
+        
         // 判断是否开启免密支付
-        try {
-            agreeStatus = agreementQueryRequest(carNumber, parkBean.getAppAuthToken());
-        } catch (Exception e1) {
-            logger.error(e1.getMessage(), e1);
-            agreeStatus = AgreementStatus.disagree.getVal();
-        }
+//        try {
+//            agreeStatus = agreementQueryRequest(carNumber, parkBean.getAppAuthToken());
+//        } catch (Exception e1) {
+//            logger.error(e1.getMessage(), e1);
+//            agreeStatus = AgreementStatus.disagree.getVal();
+//        }
         // 首先查询是否存在未付款的订单
         OrderBean order = null;
         boolean haveNoPaid = false;
@@ -555,7 +555,7 @@ public class AlipayParkController {
                 haveNoPaid = true;
             }
         }
-
+        String agreeStatus = order.getPayType();
         // 是否开启免密支付功能
         if (AgreementStatus.agree.getVal().equals(agreeStatus) && haveNoPaid) {
             // 使用免密支付自动扣款
@@ -573,7 +573,7 @@ public class AlipayParkController {
             int count = orderBeanService.countByExample(countExample);
             if (count > 0) {
                 ajaxinfo.setSuccess(AjaxReturnInfo.FALSE_RESULT);
-                ajaxinfo.setMessage("还有未付款的订单，请付款！");
+                ajaxinfo.setMessage("不支持代扣，您还有未付款的订单，请付款！");
                 return ajaxinfo;
             }
         }
@@ -597,7 +597,7 @@ public class AlipayParkController {
                     // 创建未支付订单
                     ParkBean bean = parkService.selectByPrimaryParkingId(order.getParkingId());
                     String in_time = DateUtil.getCurrDate(DateUtil.STANDDATEFORMAT);
-                    String outOrderNo = parkService.enterinfoSyncEnter(bean, order.getOrderTrade(), order.getCarNumber(), in_time, order.getCarType(), order.getCarColor());
+                    String outOrderNo = parkService.enterinfoSyncEnter(bean, order.getOrderTrade(), order.getCarNumber(), in_time, order.getCarType(), order.getCarColor(), order.getAgreementStatus());
                     OrderBean noPaidOrder = orderBeanService.selectByPrimaryKey(outOrderNo);
                     order = noPaidOrder;
                     haveTimeOut = true;
@@ -620,7 +620,7 @@ public class AlipayParkController {
             int count = orderBeanService.countByExample(countExample);
             if (count > 0) {
                 ajaxinfo.setSuccess(AjaxReturnInfo.FALSE_RESULT);
-                ajaxinfo.setMessage("有超时订单未支付，请付款！");
+                ajaxinfo.setMessage("不支持代扣，有超时订单未支付，请付款！");
                 return ajaxinfo;
             }
         }
@@ -628,6 +628,8 @@ public class AlipayParkController {
         ajaxinfo.setMessage("付款成功！");
         return ajaxinfo;
     }
+    
+    
 
     /**
      * 车辆驶出接口
@@ -697,15 +699,23 @@ public class AlipayParkController {
 		BigDecimal money = getPayMoney(carNumber, parkBean.getParkingId());// 调用接口查询费用
 		// 查询已经付款的车费
 		String paidMoney = orderBeanService.queryTempPaidWithOrderTrade(order.getOrderTrade());
-		BigDecimal paid = new BigDecimal(paidMoney);
-		if (money.compareTo(paid) == 1) {
-			String payResult = money.subtract(paid).floatValue() + "";
-			BigDecimal setScale = new BigDecimal(payResult).setScale(2, BigDecimal.ROUND_HALF_DOWN);
-			order.setPaidMoney(setScale);
-            order.setPayMoney(setScale);
-		} else {
-			order.setPaidMoney(paid);
-			order.setPayMoney(paid);
+	  BigDecimal paid = new BigDecimal(paidMoney);
+		if("0".equals(paidMoney)){
+		    order.setPaidMoney(paid);
+	      order.setPayMoney(paid);
+		}else{
+		    if (money.compareTo(paid) == 1) {//计算的停车费用大于已经付款的费用
+		        // 创建未支付订单
+            ParkBean bean = parkService.selectByPrimaryParkingId(order.getParkingId());
+            String in_time = DateUtil.getCurrDate(DateUtil.STANDDATEFORMAT);
+            String outOrderNo = parkService.enterinfoSyncEnter(bean, order.getOrderTrade(), order.getCarNumber(), in_time, order.getCarType(), order.getCarColor(), order.getAgreementStatus());
+            OrderBean noPaidOrder = orderBeanService.selectByPrimaryKey(outOrderNo);
+            order = noPaidOrder;
+		        String payResult = money.subtract(paid).floatValue() + "";
+		        BigDecimal setScale = new BigDecimal(payResult).setScale(2, BigDecimal.ROUND_HALF_DOWN);
+		        order.setPaidMoney(setScale);
+		        order.setPayMoney(setScale);
+		      } 
 		}
 		try {
 			AlipayEcoMycarParkingOrderPayRequest request = new AlipayEcoMycarParkingOrderPayRequest();
@@ -781,29 +791,29 @@ public class AlipayParkController {
         return data.toJSONString();
     }
     
-    /**
-	 * 查询是否开通免密支付
-	 * @throws AlipayApiException 
-	 * @throws QTException 
-	 */
-	public String agreementQueryRequest(String carNumber,String appToken) throws AlipayApiException, QTException {
-		AlipayEcoMycarParkingAgreementQueryRequest request = new AlipayEcoMycarParkingAgreementQueryRequest();
-		JSONObject data = new JSONObject();
-	    data.put(RSConsts.car_number, carNumber);
-		request.setBizContent(JSON.toJSONString(data));
-		 request.putOtherTextParam(RSConsts.app_auth_token, appToken);
-		 AlipayClient alipayClient = aliPayUtil.getInstance();
-		AlipayEcoMycarParkingAgreementQueryResponse response = alipayClient.execute(request);
-		String agreementStatus ="1";//车牌代扣状态，0：为支持代扣，1：为不支持代扣
-		if (response.isSuccess()) {
-			agreementStatus = response.getAgreementStatus();
-			logger.info("调用免密状态成功");
-		} else {
-			logger.error("调用免密状态失败");
-			throw new QTException("调用失败，请重试!");
-		}
-		return agreementStatus;
-	}
+//    /**
+//	 * 查询是否开通免密支付
+//	 * @throws AlipayApiException 
+//	 * @throws QTException 
+//	 */
+//	public String agreementQueryRequest(String carNumber,String appToken) throws AlipayApiException, QTException {
+//		AlipayEcoMycarParkingAgreementQueryRequest request = new AlipayEcoMycarParkingAgreementQueryRequest();
+//		JSONObject data = new JSONObject();
+//	    data.put(RSConsts.car_number, carNumber);
+//		request.setBizContent(JSON.toJSONString(data));
+//		 request.putOtherTextParam(RSConsts.app_auth_token, appToken);
+//		 AlipayClient alipayClient = aliPayUtil.getInstance();
+//		AlipayEcoMycarParkingAgreementQueryResponse response = alipayClient.execute(request);
+//		String agreementStatus ="1";//车牌代扣状态，0：为支持代扣，1：为不支持代扣
+//		if (response.isSuccess()) {
+//			agreementStatus = response.getAgreementStatus();
+//			logger.info("调用免密状态成功");
+//		} else {
+//			logger.error("调用免密状态失败");
+//			throw new QTException("调用失败，请重试!");
+//		}
+//		return agreementStatus;
+//	}
     
 	
     private void oderSyncSuccess(OrderBean orderBean) throws  QTException {

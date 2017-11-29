@@ -1,9 +1,11 @@
 package com.qt.sales.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 
+import com.qt.sales.exception.QTException;
 import com.qt.sales.model.OrderBean;
 import com.qt.sales.model.OrderBeanExample;
 
@@ -90,4 +92,11 @@ public interface OrderBeanService {
 	     * @return
 	     */
 	    int deleteWithOrderTrade(String orderTrade);
+	    
+	    /**
+	     * 免密状态变更
+	     * @param params
+	     * @throws QTException
+	     */
+	    public void updateAgreementNotify(Map<String, String> params) throws QTException;
 }

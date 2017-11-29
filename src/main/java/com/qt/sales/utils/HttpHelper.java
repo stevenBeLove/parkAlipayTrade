@@ -13,8 +13,6 @@ import java.net.URL;
  * Http工具类
  * <p>
  * 提供一个通过get和post方式访问url的工具
- * 
- * @author 杜忠(Michael.Du)
  * @version 1.0
  * @since 1.5
  */

@@ -88,4 +88,11 @@ public interface OrderBeanMapper {
      * @return
      */
     int deleteWithOrderTrade(String orderTrade);
+    
+    /**
+     * 更新免密状态
+     * @param record
+     * @return
+     */
+    int updateAgreementStatus(OrderBean record);
 }

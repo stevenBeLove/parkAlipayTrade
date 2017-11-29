@@ -92,6 +92,11 @@ public class OrderBean {
      */
     private String agreementStatus;
     
+    /**
+     *状态变更时间
+     */
+    private String updateTime;
+    
     
 
 
@@ -523,6 +528,14 @@ public class OrderBean {
     public void setAgreementStatus(String agreementStatus) {
         this.agreementStatus = agreementStatus;
     }
+
+	public String getUpdateTime() {
+		return updateTime;
+	}
+
+	public void setUpdateTime(String updateTime) {
+		this.updateTime = updateTime;
+	}
     
     
 

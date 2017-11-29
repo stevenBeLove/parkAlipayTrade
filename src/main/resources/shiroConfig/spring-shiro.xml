@@ -131,6 +131,7 @@
             <value>
             	/static/** = anon
             	/alipayPark/** = anon
+            	/parkAlipayTrade/**=anon
             	/js/** = anon
             	/css/** = anon	
                 /login = authc

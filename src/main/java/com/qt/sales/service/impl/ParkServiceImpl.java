@@ -379,6 +379,7 @@ public class ParkServiceImpl implements ParkService {
 		    bean.setAgreementStatus(agreementStatus); 
 		}
 		bean.setPayType("1");
+		bean.setUpdateTime(in_time);
 		bean.setOrderStatus(OrderStatus.sucess.getVal());
 		bean.setPaidMoney(new BigDecimal("0.00"));
 		bean.setOrderSynStatus(OrderSynStatus.create.getVal());

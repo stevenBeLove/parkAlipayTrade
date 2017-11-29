@@ -1,15 +1,20 @@
 package com.qt.sales.service.impl;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 
+import com.alibaba.fastjson.JSONObject;
+import com.alipay.api.internal.util.StringUtils;
 import com.qt.sales.dao.OrderBeanMapper;
+import com.qt.sales.exception.QTException;
 import com.qt.sales.model.OrderBean;
 import com.qt.sales.model.OrderBeanExample;
 import com.qt.sales.service.OrderBeanService;
+
 
 @Service("orderBeanService")
 public class OrderBeanServiceImpl implements OrderBeanService {
@@ -112,5 +117,29 @@ public class OrderBeanServiceImpl implements OrderBeanService {
 	public int deleteWithOrderTrade(String orderTrade) {
 		return orderBeanMapper.deleteWithOrderTrade(orderTrade);
 	}
+	
+	@Override
+	public void updateAgreementNotify(Map<String, String> params) throws QTException{
+        //获取内容信息
+        String bizContent = params.get("biz_content");
+        if (StringUtils.isEmpty(bizContent)) {
+            throw new QTException("无法取得业务内容信息");
+        }
+        //将XML转化成json对象
+        JSONObject bizContentJson = JSONObject.parseObject(bizContent);
+        // 1.获取消息类型信息 
+        String agreementStatus = bizContentJson.getString("agreement_status");
+        if (StringUtils.isEmpty(agreementStatus)) {
+            throw new QTException("无法取得变更状态");
+        }
+        String carNumber = bizContentJson.getString("car_number");
+        String updateTime = bizContentJson.getString("update_time");
+        OrderBean bean = new OrderBean();
+        bean.setCarNumber(carNumber);
+        bean.setAgreementStatus(agreementStatus);
+        bean.setUpdateTime(updateTime);
+        orderBeanMapper.updateAgreementStatus(bean);
+	}
+	
 
 }

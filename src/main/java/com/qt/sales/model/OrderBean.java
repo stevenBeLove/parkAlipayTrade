@@ -97,6 +97,11 @@ public class OrderBean {
      */
     private String updateTime;
     
+    /**
+     * 计费类型
+     */
+    private String billingTyper;
+    
     
 
 
@@ -213,8 +218,22 @@ public class OrderBean {
             return val;
         }
     }
-
     
+    public enum billingTyper {
+    	/**
+    	 * 月卡
+    	 */
+    	M,
+    	/**
+    	 * 临时
+    	 */
+    	L,
+    	/**
+    	 * 免费
+    	 */
+    	F
+    }
+   
 
     /**
      * 描述：获取属性值.<br/>
@@ -535,6 +554,14 @@ public class OrderBean {
 
 	public void setUpdateTime(String updateTime) {
 		this.updateTime = updateTime;
+	}
+
+	public String getBillingTyper() {
+		return billingTyper;
+	}
+
+	public void setBillingTyper(String billingTyper) {
+		this.billingTyper = billingTyper;
 	}
     
     

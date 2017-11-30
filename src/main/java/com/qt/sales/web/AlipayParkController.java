@@ -5,7 +5,6 @@
 package com.qt.sales.web;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.util.Date;
@@ -15,7 +14,6 @@ import java.util.Random;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,8 +29,6 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
-import com.alipay.api.AlipayConstants;
-import com.alipay.api.internal.util.AlipaySignature;
 import com.alipay.api.request.AlipayEcoMycarParkingEnterinfoSyncRequest;
 import com.alipay.api.request.AlipayEcoMycarParkingExitinfoSyncRequest;
 import com.alipay.api.request.AlipayEcoMycarParkingOrderPayRequest;
@@ -72,8 +68,6 @@ import com.qt.sales.service.ParkService;
 import com.qt.sales.service.impl.ParkServiceImpl;
 import com.qt.sales.utils.DateUtil;
 import com.qt.sales.utils.LogPay;
-import com.qt.sales.utils.LogUtil;
-import com.qt.sales.utils.RequestUtil;
 
 /**
  * 类名: AlipayParkController <br/>
@@ -148,7 +142,7 @@ public class AlipayParkController {
 	        // 换取调用
 	    	AlipayClient alipayClient = aliPayUtil.getInstance();
 	        AlipayOpenAuthTokenAppResponse response = alipayClient.execute(tokenRequest);
-	        System.out.println(response.getBody());
+	        logger.info(response.getBody());
 	        if (response.isSuccess()) {
 	          // 调用成功
 	          ParkBean park = parkService.selectByPrimaryKey(outParkingId);
@@ -220,8 +214,7 @@ public class AlipayParkController {
 					String car_number = responseBiz.getCarNumber();
 					model.addAttribute(RSConsts.car_number, car_number);
 					
-					//显示订单信息
-					BigDecimal money =getPayMoney(car_number,parking_id);//调用接口查询费用
+					
 					//创建订单
 					OrderBeanExample example = new OrderBeanExample();
 					OrderBeanExample.Criteria cr = example.createCriteria();
@@ -243,6 +236,8 @@ public class AlipayParkController {
 							order = orderBean;
 						}
 					}
+					//显示订单信息
+					BigDecimal money =getPayMoney(car_number,parking_id);//调用接口查询费用
 					//没有找到未付款的订单，找下已经付款的订单
 					if(StringUtils.isEmpty(order)){
 						boolean haveOrder = false;
@@ -321,8 +316,16 @@ public class AlipayParkController {
 	}
 	
 
+  /**
+   * 计费
+   * @param carNumber
+   * @param parkingId
+   * @return
+   */
   public BigDecimal getPayMoney(String carNumber,String parkingId){
 	  String conate =   parkService.selectByPrimaryParkingId("10002").getContactName();
+	  
+	  
 	  return new BigDecimal(conate);
   }
   

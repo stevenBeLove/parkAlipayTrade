@@ -5,7 +5,9 @@
 package com.qt.springtest;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -14,6 +16,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.qt.sales.exception.QTException;
 import com.qt.sales.model.OrderBean;
 import com.qt.sales.model.OrderBeanExample;
 import com.qt.sales.model.ParkBean;
@@ -70,6 +73,20 @@ public class OrderBeanServiceTest {
         orderBeanService.updateOrderPayByOrderNo(orderBean);
     	
     }
+    
+    @Test
+    public void orderupdate(){
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("biz_content", "{\"update_time\":\"2017-11-29 23:53:33\",\"agreement_status\":\"1\",\"car_number\":\"沪A6B521\"}");
+        try {
+            orderBeanService.updateAgreementNotify(params);
+        } catch (QTException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+    
+    
     
     
     public static String getBizContent(){

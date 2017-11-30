@@ -378,7 +378,7 @@
   
   
   <update id="updateAgreementStatus" parameterType="com.qt.sales.model.OrderBean">
-  update tb_order o where o.agreement_status =  #{agreementStatus,jdbcType=VARCHAR} where o.car_number = #{carNumber,jdbcType=VARCHAR} and 
+  update tb_order o set o.agreement_status =  #{agreementStatus,jdbcType=VARCHAR} ,o.update_time = #{updateTime,jdbcType=VARCHAR}  where o.car_number = #{carNumber,jdbcType=VARCHAR} and 
   to_date(o.update_time,'yyyy-mm-dd hh24:mi:ss') &lt; to_date(#{updateTime,jdbcType=VARCHAR},'yyyy-mm-dd hh24:mi:ss')
   </update>
   

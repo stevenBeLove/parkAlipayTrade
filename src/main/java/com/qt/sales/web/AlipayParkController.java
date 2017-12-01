@@ -61,6 +61,7 @@ import com.qt.sales.model.OrderBean.OrderPayStatus;
 import com.qt.sales.model.OrderBean.OrderStatus;
 import com.qt.sales.model.OrderBean.OrderSynStatus;
 import com.qt.sales.model.OrderBean.PayTypeStatus;
+import com.qt.sales.model.OrderBean.billingTyper;
 import com.qt.sales.model.OrderBeanExample;
 import com.qt.sales.model.ParkBean;
 import com.qt.sales.service.OrderBeanService;
@@ -461,16 +462,23 @@ public class AlipayParkController {
      */
     @RequestMapping(value = "/enterinfoSync", method = { RequestMethod.POST })
     @ResponseBody
-    public AjaxReturnInfo enterinfoSync(String outParkingId, String carNumber, String carType, String carColor) {
+    public AjaxReturnInfo enterinfoSync(String outParkingId, String carNumber,String billingType, String carType, String carColor) {
         AjaxReturnInfo ajaxinfo = new AjaxReturnInfo();
         String in_time = DateUtil.getCurrDate(DateUtil.STANDDATEFORMAT);
         ParkBean bean = parkService.selectByPrimaryKey(outParkingId);
+        if(billingTyper.M.toString().equals(billingType.trim())||billingTyper.F.toString().equals(billingType.trim())){
+            parkService.enterinfoSyncEnter(bean, "", carNumber, in_time, carType, carColor,"");
+            ajaxinfo.setSuccess(AjaxReturnInfo.TURE_RESULT);
+            ajaxinfo.setMessage("驶入成功！");
+            return ajaxinfo;
+        }
+        
         if (StringUtils.isEmpty(bean.getAppAuthToken())) {
             ajaxinfo.setSuccess(AjaxReturnInfo.FALSE_RESULT);
             ajaxinfo.setMessage("未授权！");
             return ajaxinfo;
         }
-
+        
          OrderBeanExample example = new OrderBeanExample();
          OrderBeanExample.Criteria cr = example.createCriteria();
          cr.andCarNumberEqualTo(carNumber);

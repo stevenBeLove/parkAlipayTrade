@@ -17,11 +17,14 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayConstants;
 import com.alipay.api.internal.util.AlipaySignature;
 import com.qt.sales.common.AliPayUtil;
 import com.qt.sales.common.PropertiesUtil;
+import com.qt.sales.common.RSConsts;
 import com.qt.sales.exception.QTException;
 import com.qt.sales.service.OrderBeanService;
 import com.qt.sales.utils.LogUtil;
@@ -57,52 +60,51 @@ public class AlipayNotifyController {
      * @return
      */
     @RequestMapping(value = "/agreementNotify", method = {RequestMethod.POST, RequestMethod.GET})
-    public void agreementNotify(HttpServletRequest request, HttpServletResponse response){
-    	 //支付宝响应消息  
+    public void agreementNotify(HttpServletRequest request, HttpServletResponse response) {
+        // 支付宝响应消息
         String responseMsg = "";
-        //1. 解析请求参数
+        // 1. 解析请求参数
         Map<String, String> params = RequestUtil.getRequestParams(request);
-        //打印本次请求日志，开发者自行决定是否需要
+        // 打印本次请求日志，开发者自行决定是否需要
         LogUtil.log("支付宝请求串", params.toString());
         try {
-			//2. 验证签名
-			this.verifySign(params);
-			orderBeanService.updateAgreementNotify(params);
-			String code = "10000";
-	    	String msg = "success";
-	    	String econotify= "success";
-			responseMsg =  buildBaseAckMsg(code,msg,econotify);
-		} catch (AlipayApiException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (QTException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}finally {
-            //5. 响应结果加签及返回
+            // 2. 验证签名
+            this.verifySign(params);
+            orderBeanService.updateAgreementNotify(params);
+            String code = "10000";
+            String msg = "success";
+            String econotify = "success";
+            responseMsg = buildBaseAckMsg(code, msg, econotify);
+        } catch (AlipayApiException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (QTException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } finally {
+            // 5. 响应结果加签及返回
             try {
-                //对响应内容加签
-                responseMsg = encryptAndSign(responseMsg,
-                	propertiesUtil.readValue("alipay.public.key.RSA1"),
-                	propertiesUtil.readValue("alipay.app.private.key.RSA1"), propertiesUtil.readValue("alipay.charset"),
-                    false, true, propertiesUtil.readValue("alipay.public.signType.RSA1"));
-                //http 内容应答
+                // 对响应内容加签
+                // responseMsg = encryptAndSign(responseMsg,
+                // propertiesUtil.readValue("alipay.public.key.RSA1"),
+                // propertiesUtil.readValue("alipay.app.private.key.RSA1"),
+                // propertiesUtil.readValue("alipay.charset"),
+                // false, true,
+                // propertiesUtil.readValue("alipay.public.signType.RSA1"));
+                // http 内容应答
                 response.reset();
                 response.setContentType("text/xml;charset=GBK");
                 PrintWriter printWriter = response.getWriter();
                 printWriter.print(responseMsg);
                 LogUtil.log("返回值", params.toString());
                 response.flushBuffer();
-            } catch (AlipayApiException alipayApiException) {
-                //开发者可以根据异常自行进行处理
-                alipayApiException.printStackTrace();
             } catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
         }
     }
     
@@ -127,13 +129,12 @@ public class AlipayNotifyController {
      * @return
      */
     private String buildBaseAckMsg(String code,String msg,String econotify) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("<XML>");
-        sb.append("<code><![CDATA[" + code + "]]></code>");
-        sb.append("<msg><![CDATA[" + msg + "]]></msg>");
-        sb.append("<econotify><![CDATA[" + econotify + "]]></econotify>");
-        sb.append("</XML>");
-        return sb.toString();
+        JSONObject data = new JSONObject();
+        data.put("code", code);
+        data.put("msg", msg);
+        data.put("econotify", econotify);
+        String jsonStr = JSON.toJSONString(data);
+        return jsonStr;
     }
     
 	public static String encryptAndSign(String bizContent, String alipayPublicKey, String cusPrivateKey, String charset,

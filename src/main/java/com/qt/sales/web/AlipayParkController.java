@@ -540,7 +540,9 @@ public class AlipayParkController {
     
     /**
      * 查询费用（代扣结算）
-     * 
+     * 修改：
+     * 1、无返回内容
+     * 2、费用云端计算
      * @return
      */
     @RequestMapping(value = "/queryCarFee", method = { RequestMethod.POST })

@@ -169,7 +169,8 @@ public class ParkController {
 						//创建未支付订单
 						ParkBean bean = parkService.selectByPrimaryParkingId(parking_id);
 						String in_time = DateUtil.getCurrDate(DateUtil.STANDDATEFORMAT);
-						String outOrderNo = parkService.enterinfoSyncEnter(bean, order.getOrderTrade(), car_number, in_time, order.getCarType(), order.getCarColor(), order.getAgreementStatus());
+						String outOrderNo = parkService.enterinfoSyncEnter(bean, order.getOrderTrade(), car_number, in_time, order.getCarType(), order.getCarColor(), order.getAgreementStatus(),
+								order.getBillingTyper(),order.getCarNumberColor(),order.getLane());
 						OrderBean noPaidOrder = orderBeanService.selectByPrimaryKey(outOrderNo);
 						order = noPaidOrder;
 					}

@@ -351,7 +351,8 @@ public class ParkServiceImpl implements ParkService {
 
 	public static Random random1 = new Random();
 	@Override
-	public String enterinfoSyncEnter(ParkBean park,String orderTrade, String carNumber, String in_time,String carType,String carColor,String agreementStatus) {
+	public String enterinfoSyncEnter(ParkBean park,String orderTrade, String carNumber, String in_time,
+			String carType,String carColor,String agreementStatus,String billingType,String carNumberColor,String lane) {
 		OrderBean bean = new OrderBean();//创建订单
 		bean.setParkingName(park.getMerchantName());
 		bean.setSellerId(park.getAlipayUserId());
@@ -388,6 +389,9 @@ public class ParkServiceImpl implements ParkService {
 		}else{
 			bean.setOrderTrade(orderTrade);
 		}
+		bean.setBillingTyper(billingType);
+		bean.setCarNumberColor(carNumberColor);
+		bean.setLane(lane);
 	    orderBeanMapper.insert(bean);
 	    return outOrderNo;
 	}

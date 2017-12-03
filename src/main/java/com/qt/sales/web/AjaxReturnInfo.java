@@ -31,6 +31,12 @@ public class AjaxReturnInfo {
      * 返回的数据
      */
     private Exception                  exception;
+    
+    /**
+     * 车牌号
+     */
+    private String 					carNumber;
+    
     /**
      * date
      */
@@ -98,7 +104,13 @@ public class AjaxReturnInfo {
      */
     public void setDatas(Map<String, Object> datas) {
         this.datas = datas;
-    } 
+    }
+	public String getCarNumber() {
+		return carNumber;
+	}
+	public void setCarNumber(String carNumber) {
+		this.carNumber = carNumber;
+	} 
 
   
 

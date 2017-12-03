@@ -72,7 +72,8 @@ public interface ParkService {
      * 修改人:  yinghui zhang 修改描述： .<br/>
      * <p/>
      */
-    public String enterinfoSyncEnter(ParkBean park,String order_trade,String carNumber, String in_time,String carType,String carColor,String agreementStatus);
+    public String enterinfoSyncEnter(ParkBean park,String order_trade,String carNumber, String in_time,
+    		String carType,String carColor,String agreementStatus,String billingType, String carNumberColor,String lane);
     
     /**
      * 【方法名】    : (车辆驶出). <br/> 

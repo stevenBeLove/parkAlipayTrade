@@ -63,8 +63,14 @@ public class OrderBean {
      */
     private String     carId;
 
+    /**
+     * 车辆类型
+     */
     private String     carType;
 
+    /**
+     * 车辆颜色
+     */
     private String     carColor;
 
     /**
@@ -101,6 +107,11 @@ public class OrderBean {
      * 计费类型
      */
     private String billingTyper;
+    
+    /**
+     * 车道
+     */
+    private String lane;
     
     
 
@@ -562,6 +573,14 @@ public class OrderBean {
 
 	public void setBillingTyper(String billingTyper) {
 		this.billingTyper = billingTyper;
+	}
+
+	public String getLane() {
+		return lane;
+	}
+
+	public void setLane(String lane) {
+		this.lane = lane;
 	}
     
     

@@ -326,8 +326,6 @@ public class AlipayParkController {
    */
   public BigDecimal getPayMoney(String carNumber,String parkingId){
 	  String conate =   parkService.selectByPrimaryParkingId("10002").getContactName();
-	  
-	  
 	  return new BigDecimal(conate);
   }
   
@@ -547,7 +545,7 @@ public class AlipayParkController {
      */
     @RequestMapping(value = "/queryCarFee", method = { RequestMethod.POST })
     @ResponseBody
-    public AjaxReturnInfo queryCarFee(String outParkingId, String carNumber, String payMoney) {
+    public AjaxReturnInfo queryCarFee(String outParkingId, String carNumber) {
         AjaxReturnInfo ajaxinfo = new AjaxReturnInfo();
         ajaxinfo.setCarNumber(carNumber);
         ParkBean parkBean = parkService.selectByPrimaryKey(outParkingId);
@@ -610,9 +608,8 @@ public class AlipayParkController {
              ajaxinfo.setMessage("代扣状态未开启,请扫码到缴费页面支付！");
              return ajaxinfo;
         }else{
-        	BigDecimal money = new BigDecimal(payMoney);
         	 // 显示订单信息
-//            BigDecimal money = getPayMoney(carNumber, order.getOutParkingId());
+            BigDecimal money = getPayMoney(carNumber, order.getOutParkingId());
             // 判断订单的金额是否已经超时产生费用
             String paidMoney = orderBeanService.queryTempPaidWithOrderTrade(order.getOrderTrade());
             BigDecimal tradePaidMoney = new BigDecimal(paidMoney);
@@ -812,26 +809,21 @@ public class AlipayParkController {
     }
     
 	
-    private void oderSyncSuccess(OrderBean orderBean) throws  QTException {
-    	  try {
-			AlipayEcoMycarParkingOrderSyncRequest request = new AlipayEcoMycarParkingOrderSyncRequest();
-			  request.setBizContent(getEcoMycarParkingOrderBizContent(orderBean));
-			  String app_auth_token = (String) ParkServiceImpl.parkingStore.get(orderBean.getParkingId());
-			  request.putOtherTextParam(RSConsts.app_auth_token, app_auth_token);
-			  AlipayClient alipayClient = aliPayUtil.getInstance();
-			  AlipayEcoMycarParkingOrderSyncResponse response = alipayClient.execute(request);
-			  if (response.isSuccess()) {
-			      logger.debug("调用成功");
-			      orderBeanService.updateByPrimaryKeySelective(orderBean);
-			  } else {
-			      logger.debug("同步订单失败");
-			      throw new QTException(response.getSubMsg());
-			  }
-		} catch (AlipayApiException e) {
-			logger.error(e.getMessage(),e);
-			throw new QTException("订单同步失败!");
-		}
-    }
+  private void oderSyncSuccess(OrderBean orderBean) throws  QTException, AlipayApiException {
+		AlipayEcoMycarParkingOrderSyncRequest request = new AlipayEcoMycarParkingOrderSyncRequest();
+		  request.setBizContent(getEcoMycarParkingOrderBizContent(orderBean));
+		  String app_auth_token = (String) ParkServiceImpl.parkingStore.get(orderBean.getParkingId());
+		  request.putOtherTextParam(RSConsts.app_auth_token, app_auth_token);
+		  AlipayClient alipayClient = aliPayUtil.getInstance();
+		  AlipayEcoMycarParkingOrderSyncResponse response = alipayClient.execute(request);
+		  if (response.isSuccess()) {
+		      logger.debug("调用成功");
+		      orderBeanService.updateByPrimaryKeySelective(orderBean);
+		  } else {
+		      logger.debug("同步订单失败");
+		      throw new QTException(response.getSubMsg());
+		  }
+  }
   
   
   //创建订单业务数据
@@ -852,6 +844,7 @@ public class AlipayParkController {
       data.put(RSConsts.parking_id, order.getParkingId());
       data.put(RSConsts.in_duration, order.getInDuration());
       data.put(RSConsts.card_number, order.getCardNumber());
+      logger.debug("同步订单："+data.toJSONString());
       return data.toJSONString();
   }
 
@@ -927,7 +920,6 @@ public class AlipayParkController {
               BigDecimal pay = new BigDecimal(payMoney);
               BigDecimal setScale = pay.setScale(2,BigDecimal.ROUND_HALF_DOWN);
               orderBean.setPayMoney(setScale);
-
 //              BigDecimal allPaidMoney = orderBean.getPaidMoney().add(setScale);
               orderBean.setPaidMoney(setScale);//已支付
               orderBean.setInDuration(inDuration);//停车时长

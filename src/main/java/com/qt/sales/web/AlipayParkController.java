@@ -595,11 +595,11 @@ public class AlipayParkController {
             // 使用免密支付自动扣款
           String result =  autoOrderPay(order, parkBean, carNumber);
           if("0".equals(result)){
-        	  ajaxinfo.setSuccess(AjaxReturnInfo.TURE_RESULT);
+        	    ajaxinfo.setSuccess(AjaxReturnInfo.TURE_RESULT);
               ajaxinfo.setMessage("付款成功！");
               return ajaxinfo;
           }else{
-        	  ajaxinfo.setSuccess(AjaxReturnInfo.FALSE_RESULT);
+        	    ajaxinfo.setSuccess(AjaxReturnInfo.FALSE_RESULT);
               ajaxinfo.setMessage("代扣失败，请扫码到缴费页面支付！");
               return ajaxinfo;
           }

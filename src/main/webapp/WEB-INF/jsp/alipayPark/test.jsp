@@ -6,348 +6,94 @@
 <meta charset="utf-8" />
   <!-- A11Y：打开页面时，屏幕阅读器会首先阅读 title 的内容，确保 title 准确描述页面 -->
   <title>Examples</title>
-  <meta name="description" content="" />
-  <meta name="keywords" content="" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
-  <meta name="format-detection" content="telephone=no, email=no" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0" />
-  <!-- A11Y：如果有无障碍方面的需求，建议使用下面的 viewport 设置，不要禁止页面缩放 -->
-  <!--<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />-->
-  <link rel="stylesheet" type="text/css" href="../dist/antui.min.css" media="all">
-  <link rel="stylesheet" href="https://as.alipayobjects.com/g/component/swiper/3.2.7/swiper.min.css" />
-  <script src="../dist/antui.min.js"></script>
-  
-
-  
-    <style>
-html{height: 100%;}
-body{height:100%;overflow-x: hidden;}
-.widget-list-panel{
-	position: relative;
-	background: -webkit-linear-gradient(-120deg, #2288CD, #1471B2) top right no-repeat;
-	-webkit-background-size:100%;
-	height: 100%;
-}
-.widget-list-panel .header{
-	position:relative;
-	padding-bottom: 32px;
-	color: #fff;
-	text-align: center;
-	z-index: 1;
-}
-.widget-list-panel h1{
-	font-size: 40px;
-	line-height: 48px;
-	font-weight: 300;
-	padding-top: 32px;
-}
-.widget-list-panel .header-info{
-	font-size: 17px;
-	line-height: 21px;
-	padding-top: 6px;
-}
-.x-bg{
-	position: absolute;
-	width: 50%;
-	min-width: 325px;
-	height: 100%;
-	right: 0;
-	top: 0;
-	background: url('https://os.alipayobjects.com/rmsportal/ZbQiBgorAUacvlC.png') no-repeat right top;
-	background-size: 100% auto;
-	z-index: 1;
-}
-
-.widget-list{
-	padding: 0px 15px 15px 0;
-	list-style: none;
-	display:table;
-	table-layout: fixed;
-	box-sizing: border-box;
-	width: 100%;
-	max-width: 1200px;
-	margin: 0 auto;
-}
-.widget-list .widget-item {
-	display: inline-block;
-	list-style: none;
-	width: 50%;
-	padding: 15px 0 0 15px;
-	box-sizing: border-box;
-	text-align: center;
-}
-.widget-list .widget-wrap{
-	display: block;
-	width: 100%;
-	height: 100%;
-	background: rgba(255, 255, 255, 0.8);
-	border-radius: 3px;
-	padding: 23px 15px 20px;
-	box-sizing: border-box;
-}
-.widget-list .widget-wrap:active{
-	background: rgba(238, 238, 238, 0.85);
-	border-radius: 3px;
-}
-.widget-list .icon{
-	display: inline-block;
-	width: 30px;
-	height: 30px;
-	background: url('https://os.alipayobjects.com/rmsportal/ErzQirFUtUPzGTm.png') no-repeat center;
-	background-size: 32px auto;
-}
-.widget-list .icon.button{
-	background-position: -1px -1px;
-}
-
-.widget-list .icon.list {
-	background-position: -1px -65px;
-}
-.widget-list .icon.message {
-	background-position: -1px -97px;
-}
-.widget-list .icon.notice {
-	background-position: -1px -129px;
-}
-
-.widget-list .icon.popmenu {
-	background-position: -1px -193px;
-}
-.widget-list .icon.process {
-	background-position: -1px -225px;
-}
-
-.widget-list .icon.search {
-	background-position: -1px -289px;
-}
-
-.widget-list .icon.tab {
-	background-position: -1px -321px;
-}
-
-.widget-list .icon.dialog {
-	background-position: -1px -33px;
-}
-
-.widget-list .icon.loading {
-	background-position: -1px -256px;
-}
-
-.widget-list .icon.page-result {
-	background-position: -1px -160px;
-}
-
-.widget-list .name{
-	font-size: 15px;
-	color: #000;
-	margin: 9px 0 4px;
-	line-height: 17px;
-	font-weight: 300;
-}
-.widget-list .info{
-	font-size: 12px;
-	color: #888;
-}
-.widget-demo-show-panel{
-	background: #fff;
-}
-
-.demo .am-button, .demo .am-tab, .demo .am-message, .demo .am-notice, .demo .am-inform{
-	margin-bottom: 5px;
-}
-
-.demo .am-message.multi,
-.demo .am-button-wrap .am-button,
-.demo .am-button-group .am-button,
-.demo .am-button.bottom:last-child{
-	margin-bottom: 0;
-}
-.demo .am-button.bottom{
-	position: relative;
-}
-
-.demo .demo-content{
-	padding-bottom: 60px;
-}
-
-.demo.demo-button .demo-content:last-child,
-.demo.demo-loading .demo-content{
-	padding-bottom: 0;
-}
-
-.demo-dialog .demo-content{
-	min-height: 450px;
-	background: rgba(1,1,1,0.35);
-	position: relative;
-}
-.demo-toast .demo-content{
-	min-height: 300px;
-	position: relative;
-}
-.demo-toast .am-toast{
-	position: absolute;
-}
-.demo-page-result .demo-content{
-	min-height: 300px;
-}
-.demo-header{
-	text-align: center;
-	font-size: 30px;
-	padding-top: 32px;
-}
-.demo-header-brief{
-	text-align: center;
-	color: #888;
-	font-size: 18px;
-	padding-bottom: 32px;
-	font-weight: 300;
-	margin-bottom: -11px;
-}
-.demo-search .demo-type-title{
-	font-weight: 300;
-}
-.demo-search .demo-type-title,
-.demo-notice .demo-type-title{
-	color: #888;
-	font-size: 13px;
-	padding: 60px 15px 9px;
-	display: inline-block;
-	width: 100%;
-	box-sizing: border-box;
-}
-.demo-popmenu .demo-type-title,
-.demo-dialog .demo-type-title,
-.demo-page-result .demo-type-title,
-.demo-toast .demo-type-title,
-.demo-loading .demo-type-title{
-	margin-top: 50px;
-	font-size: 15px;
-	padding: 11px 15px;
-	background-color: #3a3a3a;
-	color: #fff;
-	text-align: center;
-	position: relative;
-}
-.demo-loading .demo-type-title{
-	margin-top: 0;
-}
-.demo-popmenu .demo-type-title i.dot{
-	position: absolute;
-	right: 15px;
-	top: 0px;
-	font-size: 24px;
-	line-height: 30px;
-}
-.demo-popmenu .demo-content{
-	position: relative;
-	min-height: 160px;
-}
-.demo-popmenu .am-popmenu-mask{
-	position: absolute;
-}
-
-.swiper-slide{
-	height: auto;
-	position: static;
-	display: block;
-
-}
-
-@media only screen and (min-width: 800px) {
-	.widget-list .widget-item{
-		width: 33%;
-	}
-}
-</style>
+ <meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+	<meta name="format-detection" content="telephone=no, email=no" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0" />
+	<link rel="stylesheet" href="https://a.alipayobjects.com/g/antui/antui/10.0.18/dpl/antui-all.css"/>
+	<script src="https://a.alipayobjects.com/g/antui/antui/10.0.18/antui.js"></script>
+ <style type="text/css">
+		.head {
+			position: relative;
+			background-color: #fff;
+		}
+		.head .logo {
+			padding-top: 8px;
+			font-size: 18px;
+			text-align: center;
+		}
+		.head .logo span {
+			position: relative;
+			top: -6px;
+			margin-left: 5px;
+		}
+		.pay-amount {
+			padding: 30px 0;
+			font-size: 40px;
+			font-weight: bold;
+		}
+		.am-list.conent-list {
+			padding: 0;
+		}
+		.footer {
+			padding-top: 15px;
+		}
+		.footer .am-message {
+			color: #888;
+		}
+		.contact {
+			padding-top: 30px;
+		}
+	</style>
 </head>
 <body>
-
-    <div class="widget-demo-show-panel" style="">
-	  <div class="demo demo-article">
-	  	 <div class="am-ft-center">
-		 		<img width="30px;" src="https://os.alipayobjects.com/rmsportal/OhSzVdRBnfwiuCK.png" alt=""> &nbsp;
-		 		 文字中对齐
+	<div class="head">
+		<div class="logo">
+			<img src="http://ecopublic-sit.oss-cn-hangzhou.aliyuncs.com/eco/carlife/parking/merchantlogo/yuntingfengchi4008208979.png">
+			<span>行呗停车场</span>
 		</div>
-	    <div class="demo-header">30.00</div>
-	    <div class="demo-header-brief"></div>
-	
-	    </div>
-	 </div>
-    
-    
-    <div class="am-flexbox-item">
-		<div class="am-list am-list-twoline-side">
-		
-		    <div class="am-list-body">
-		        <div class="am-list-item">
-		            <div class="am-list-content">
-		                <div class="am-list-title">标题一</div>
-		            </div>
-		            <div class="am-list-extra">
-		                <div class="am-list-brief">标题二</div>
-		            </div>
-		        </div>
-		        
-		         <div class="am-list-item">
-		            <div class="am-list-content">
-		                <div class="am-list-title">标题一</div>
-		            </div>
-		            <div class="am-list-extra">
-		                <div class="am-list-brief">标题二</div>
-		            </div>
-		        </div>
-		        <div class="am-list-item">
-		            <div class="am-list-content">
-		                <div class="am-list-title">标题一</div>
-		            </div>
-		            <div class="am-list-extra">
-		                <div class="am-list-brief">标题二</div>
-		            </div>
-		        </div>
-		    </div>
-		    
-		      <div class="am-list-body">
-		        <div class="am-list-item">
-		            <div class="am-list-content">
-		                <div class="am-list-title">标题一</div>
-		            </div>
-		            <div class="am-list-extra">
-		                <div class="am-list-brief">标题二</div>
-		            </div>
-		        </div>
-		        
-		         <div class="am-list-item">
-		            <div class="am-list-content">
-		                <div class="am-list-title">标题一</div>
-		            </div>
-		            <div class="am-list-extra">
-		                <div class="am-list-brief">标题二</div>
-		            </div>
-		        </div>
-		        <div class="am-list-item">
-		            <div class="am-list-content">
-		                <div class="am-list-title">标题一</div>
-		            </div>
-		            <div class="am-list-extra">
-		                <div class="am-list-brief">标题二</div>
-		            </div>
-		        </div>
-		    </div>
-		    
-		    
+		<div class="am-ft-center pay-amount">5.00元</div>
+	</div>
+	<div class="am-list conent-list">
+	    <a class="am-list-item">
+	        <div class="am-list-content am-list-cell-noflex">应付金额</div>
+	        <div class="am-list-extra">5.00</div>
+	    </a>
+	    <a class="am-list-item">
+	        <div class="am-list-content am-list-cell-noflex">已付金额</div>
+	        <div class="am-list-extra">0.00</div>
+	    </a>
+	    <a class="am-list-item">
+	        <div class="am-list-content am-list-cell-noflex">优惠金额</div>
+	        <div class="am-list-extra">0.00</div>
+	    </a>
+	</div>
+	<div class="am-list conent-list">   
+	    <a class="am-list-item">
+	        <div class="am-list-content am-list-cell-noflex">车牌号</div>
+	        <div class="am-list-extra">浙A5555530</div>
+	    </a>
+	    <a class="am-list-item">
+	        <div class="am-list-content am-list-cell-noflex">入场时间</div>
+	        <div class="am-list-extra">2016-12-12 16:21:02</div>
+	    </a>
+	    <a class="am-list-item">
+	        <div class="am-list-content am-list-cell-noflex">停车时长</div>
+	        <div class="am-list-extra">0小时20分钟13秒</div>
+	    </a>
+	</div>
+	<div class="footer">
+		<div class="am-message week" role="alert">
+		  <i class="am-icon message-week info" aria-hidden="true"></i>
+		  <div class="am-message-main">请于付款后15分钟内离场，超时将加收停车费</div>
 		</div>
-    
-    
-    <div class="demo-content" style="margin: 0 15px 60px;">
-    	  <button type="button" class="am-button blue">蓝色按钮(主按钮)</button>
-    </div>
-    
-    
-    
-    </div>
-
-
-
+		<div class="am-content">
+			<button type="button" class="am-button">立即付款</button>
+		</div>
+	</div>
+	<div class="am-ft-center contact">
+		<p>本服务由行呗提供</p>
+		<p><span>客服电话</span><a tel="400-0000-165">400-0000-165</a><span>(转3号线)</span></p>
+	</div>
 </body>
 </html>

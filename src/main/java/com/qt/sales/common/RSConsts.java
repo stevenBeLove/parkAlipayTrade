@@ -120,6 +120,8 @@ public class RSConsts {
     public static final String out_refund_no = "out_refund_no";
     public static final String refund_fee = "refund_fee";
     public static final String merchantLogo = "merchantLogo";
+    public static final String isvPhone = "isvPhone";
+    public static final String isvName = "isvName";
     
     
 }

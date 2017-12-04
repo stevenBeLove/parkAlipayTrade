@@ -301,6 +301,9 @@ public class AlipayParkController {
 					model.addAttribute(RSConsts.timeDiffer, DateUtil.getTimeDiffer(order.getInTime(), nowTime));
 					model.addAttribute(RSConsts.inDuration, DateUtil.getTimeDifferMin(order.getInTime(), nowTime));
 					model.addAttribute(RSConsts.orderTime, DateUtil.getCurrDate(new Date(), DateUtil.STANDDATEFORMAT));
+					model.addAttribute(RSConsts.isvPhone, propertiesUtil.readValue("alipay.isvPhone"));
+					model.addAttribute(RSConsts.isvName, propertiesUtil.readValue("alipay.isvName"));
+					
 				} else {
 					 // 调用失败处理逻辑
 				 	logger.error(responseBiz.getBody());
@@ -472,14 +475,16 @@ public class AlipayParkController {
         AjaxReturnInfo ajaxinfo = new AjaxReturnInfo();
         String in_time = DateUtil.getCurrDate(DateUtil.STANDDATEFORMAT);
         ParkBean bean = parkService.selectByPrimaryKey(outParkingId);
-        if(billingTyper.M.toString().equals(billingType.trim())||billingTyper.F.toString().equals(billingType.trim())){
-            parkService.enterinfoSyncEnter(bean, "", carNumber, in_time, carType, carColor,"",billingType,carNumberColor,lane);
-            ajaxinfo.setCarNumber(carNumber);
-            ajaxinfo.setSuccess(AjaxReturnInfo.TURE_RESULT);
-            ajaxinfo.setMessage("驶入成功！");
-            return ajaxinfo;
+        if(!StringUtils.isEmpty(billingType)){
+        	 if(billingTyper.M.toString().equals(billingType.trim())||billingTyper.F.toString().equals(billingType.trim())){
+                 parkService.enterinfoSyncEnter(bean, "", carNumber, in_time, 
+                 		carType, carColor,"",billingType,carNumberColor,lane);
+                 ajaxinfo.setCarNumber(carNumber);
+                 ajaxinfo.setSuccess(AjaxReturnInfo.TURE_RESULT);
+                 ajaxinfo.setMessage("驶入成功！");
+                 return ajaxinfo;
+             }
         }
-        
         if (StringUtils.isEmpty(bean.getAppAuthToken())) {
         	ajaxinfo.setCarNumber(carNumber);
             ajaxinfo.setSuccess(AjaxReturnInfo.FALSE_RESULT);
@@ -593,11 +598,11 @@ public class AlipayParkController {
             // 使用免密支付自动扣款
           String result =  autoOrderPay(order, parkBean, carNumber);
           if("0".equals(result)){
-        	    ajaxinfo.setSuccess(AjaxReturnInfo.TURE_RESULT);
-              ajaxinfo.setMessage("付款成功！");
+        	  ajaxinfo.setSuccess(AjaxReturnInfo.TURE_RESULT);
+              ajaxinfo.setMessage("代扣付款成功！");
               return ajaxinfo;
           }else{
-        	    ajaxinfo.setSuccess(AjaxReturnInfo.FALSE_RESULT);
+        	  ajaxinfo.setSuccess(AjaxReturnInfo.FALSE_RESULT);
               ajaxinfo.setMessage("代扣失败，请扫码到缴费页面支付！");
               return ajaxinfo;
           }
@@ -621,9 +626,13 @@ public class AlipayParkController {
                 		order.getBillingTyper(),order.getCarNumberColor(),order.getLane());
                 ajaxinfo.setSuccess(AjaxReturnInfo.FALSE_RESULT);
                 ajaxinfo.setMessage("存在超时订单未付款，请付款！");
+                return ajaxinfo;
             }
         }
+        ajaxinfo.setSuccess(AjaxReturnInfo.TURE_RESULT);
+        ajaxinfo.setMessage("付款成功！");
         return ajaxinfo;
+       
     }
     
     
@@ -703,7 +712,6 @@ public class AlipayParkController {
     
 	/**
 	 * 无感支付
-	 * 
 	 * @param order
 	 * @param parkBean
 	 * @param carNumber
@@ -725,14 +733,17 @@ public class AlipayParkController {
 				ParkBean bean = parkService.selectByPrimaryParkingId(order.getParkingId());
 				String in_time = DateUtil.getCurrDate(DateUtil.STANDDATEFORMAT);
 				String outOrderNo = parkService.enterinfoSyncEnter(bean, order.getOrderTrade(), order.getCarNumber(),
-						in_time, order.getCarType(), order.getCarColor(), order.getAgreementStatus(),order.getBillingTyper(),
-						order.getCarNumberColor(),order.getLane());
+						in_time, order.getCarType(), order.getCarColor(), order.getAgreementStatus(),
+						order.getBillingTyper(), order.getCarNumberColor(), order.getLane());
 				OrderBean noPaidOrder = orderBeanService.selectByPrimaryKey(outOrderNo);
 				order = noPaidOrder;
 				String payResult = money.subtract(paid).floatValue() + "";
 				BigDecimal setScale = new BigDecimal(payResult).setScale(2, BigDecimal.ROUND_HALF_DOWN);
 				order.setPaidMoney(setScale);
 				order.setPayMoney(setScale);
+			} else {
+				order.setPaidMoney(money);
+				order.setPayMoney(money);
 			}
 		}
 		try {
@@ -771,9 +782,9 @@ public class AlipayParkController {
 			logger.error(e.getMessage(), e);
 			result = "1";
 		} catch (IOException e1) {
-	    logger.error(e1.getMessage(), e1);
-      result = "1";
-    }
+			logger.error(e1.getMessage(), e1);
+			result = "1";
+		}
 		return result;
 	}
 
@@ -801,7 +812,7 @@ public class AlipayParkController {
         JSONObject data = new JSONObject();
         data.put(RSConsts.car_number, order.getCarNumber());
         data.put(RSConsts.out_trade_no, order.getOutOrderNo());
-        data.put(RSConsts.subject, order.getParkingId() + "代扣缴费");
+        data.put(RSConsts.subject, order.getParkingName()+ "代扣缴费");
         data.put(RSConsts.total_fee, order.getPaidMoney());// 交易金额保留小数点后两位
         // data.put(RSConsts.seller_logon_id,);
         data.put(RSConsts.seller_id, order.getSellerId());
@@ -848,7 +859,7 @@ public class AlipayParkController {
       data.put(RSConsts.parking_id, order.getParkingId());
       data.put(RSConsts.in_duration, order.getInDuration());
       data.put(RSConsts.card_number, order.getCardNumber());
-      logger.debug("同步订单："+data.toJSONString());
+      logger.debug("创建订单："+data.toJSONString());
       return data.toJSONString();
   }
 

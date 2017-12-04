@@ -174,7 +174,11 @@ public class OrderBean {
         /**
          * 支付宝代扣
          */
-        insteadAlipay("2");
+        insteadAlipay("2"),
+        /**
+         * 当面付
+         */
+        facetoFacePay("3");
         private String val;
 
         private PayTypeStatus(String val) {

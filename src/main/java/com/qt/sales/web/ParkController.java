@@ -283,6 +283,10 @@ public class ParkController {
         return res;
     }
     
+    @RequestMapping(value = "/showTest", method = RequestMethod.GET)
+    public String showTest(Model model) {
+        return "alipayPark/test";
+    }
     
     
 }

@@ -101,8 +101,8 @@ public class AlipayParkController {
 	private AliPayUtil aliPayUtil;
 	
 	
-    @Resource(name = "propertiesUtil")
-    private PropertiesUtil propertiesUtil;
+  @Resource(name = "propertiesUtil")
+  private PropertiesUtil propertiesUtil;
 	
 
 	/**
@@ -770,7 +770,10 @@ public class AlipayParkController {
 		} catch (AlipayApiException e) {
 			logger.error(e.getMessage(), e);
 			result = "1";
-		}
+		} catch (IOException e1) {
+	    logger.error(e1.getMessage(), e1);
+      result = "1";
+    }
 		return result;
 	}
 
@@ -791,9 +794,10 @@ public class AlipayParkController {
 	 * 修改记录.<br/>
 	 * 修改人:  yinghui zhang 修改描述： .<br/>
 	 * <p/>
+	 * @throws IOException 
 	 */
     // 自动扣款业务参数
-    public String orderPayBiz(OrderBean order) {
+    public String orderPayBiz(OrderBean order) throws IOException {
         JSONObject data = new JSONObject();
         data.put(RSConsts.car_number, order.getCarNumber());
         data.put(RSConsts.out_trade_no, order.getOutOrderNo());
@@ -803,7 +807,7 @@ public class AlipayParkController {
         data.put(RSConsts.seller_id, order.getSellerId());
         data.put(RSConsts.parking_id, order.getParkingId());
         data.put(RSConsts.out_parking_id,order.getOutParkingId());
-        // data.put(RSConsts.agent_id,RSConsts.agent_value);//代扣
+        data.put(RSConsts.agent_id, propertiesUtil.readValue("alipay.isvPid"));//代扣
         data.put(RSConsts.car_number_color, order.getCarNumberColor());//车牌颜色
         return data.toJSONString();
     }
@@ -936,16 +940,19 @@ public class AlipayParkController {
           }
       } catch (AlipayApiException e) {
           // TODO Auto-generated catch block
-          e.printStackTrace();
           logger.error(e.getMessage(),e);
           ajaxinfo.setSuccess(AjaxReturnInfo.FALSE_RESULT);
           ajaxinfo.setMessage("创建同步创建失败!");
-      }
+      } catch (IOException e) {
+          logger.error(e.getMessage(),e);
+          ajaxinfo.setSuccess(AjaxReturnInfo.FALSE_RESULT);
+          ajaxinfo.setMessage("创建同步创建失败!");
+    }
       return ajaxinfo;
   }
 
  //创建订单业务数据
- public String getTradeCreateBizContent(OrderBean order,String payMoney){
+ public String getTradeCreateBizContent(OrderBean order,String payMoney) throws IOException{
      JSONObject data = new JSONObject();
      data.put(RSConsts.out_trade_no, order.getOutOrderNo());//商户订单号
      data.put(RSConsts.seller_id, order.getSellerId());//卖家支付宝用户ID
@@ -969,10 +976,10 @@ public class AlipayParkController {
 //     data.put("goods_detail", goodsDetail.toJSONString());
      
      JSONObject extend_params = new JSONObject();
-     extend_params.put(RSConsts.sys_service_provider_id, SYS_SERVICE_PROVIDER_ID);//系统商编号 
+     extend_params.put(RSConsts.sys_service_provider_id, propertiesUtil.readValue("alipay.isvPid"));//系统商编号 
 //     extend_params.put("timeout_express", "");!
 //     extend_params.put("business_params", "");!
-//     data.put("extend_params", extend_params.toJSONString());
+     data.put(RSConsts.extend_params, extend_params.toJSONString());
      return data.toJSONString();
  }
 

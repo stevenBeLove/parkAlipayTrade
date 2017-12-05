@@ -990,7 +990,7 @@ public class AlipayParkController {
      extend_params.put(RSConsts.sys_service_provider_id, propertiesUtil.readValue("alipay.isvPid"));//系统商编号 
 //     extend_params.put("timeout_express", "");!
 //     extend_params.put("business_params", "");!
-     data.put(RSConsts.extend_params, extend_params.toJSONString());
+//     data.put(RSConsts.extend_params, extend_params.toJSONString());
      return data.toJSONString();
  }
 

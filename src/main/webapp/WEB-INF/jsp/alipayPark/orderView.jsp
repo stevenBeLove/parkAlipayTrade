@@ -166,15 +166,15 @@
 <div class="am-list conent-list">
 	    <a class="am-list-item">
 	        <div class="am-list-content am-list-cell-noflex">应付金额</div>
-	        <div class="am-list-extra">${payMoney }</div>
+	        <div class="am-list-extra">${payMoney }元</div>
 	    </a>
 	    <a class="am-list-item">
 	        <div class="am-list-content am-list-cell-noflex">已付金额</div>
-	        <div class="am-list-extra">${paidMoney}</div>
+	        <div class="am-list-extra">${paidMoney}元</div>
 	    </a>
 	    <a class="am-list-item">
 	        <div class="am-list-content am-list-cell-noflex">优惠金额</div>
-	        <div class="am-list-extra">${discountMoney }</div>
+	        <div class="am-list-extra">${discountMoney }元</div>
 	    </a>
 	    <a class="am-list-item">
 	        <div class="am-list-content am-list-cell-noflex">车牌号</div>
@@ -205,7 +205,7 @@
 </div>
 <div class="am-ft-center contact">
 	<p>本服务由${isvName }提供</p>
-	<p><span>客服电话</span><a tel="${isvPhone }">${isvPhone }</a><span></span></p>
+	<p><span>客服电话</span><a  href="tel:${isvPhone }" style="text-decoration:underline;">${isvPhone }</a><span></span></p>
 </div>
 
 	<input  type ="hidden" value="${payMoney }" id="payMoney" name="payMoney"/><br />

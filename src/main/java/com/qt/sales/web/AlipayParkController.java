@@ -1173,7 +1173,6 @@ public class AlipayParkController {
      * @param model
      * @return
      */
-//    @RequestMapping(value = "/OrderSync/{tradeNO}", method = RequestMethod.GET)
     @RequestMapping(value = "/OrderSync", method = RequestMethod.POST)
     @ResponseBody
     public AjaxReturnInfo OrderSync(String tradeNO) {
@@ -1214,5 +1213,23 @@ public class AlipayParkController {
     public String payResultDemo(Model model) {
         return "alipayPark/payResultDemo";
     }
+    
+    
+    /**
+     * 【方法名】    : (更改订单). <br/> 
+     * 【作者】: yinghui zhang .<br/>
+     * 【时间】： 2017年12月6日 下午5:01:15 .<br/>
+     * 【参数】： .<br/>
+     * @return .<br/>
+     * <p>
+     * 修改记录.<br/>
+     * 修改人:  yinghui zhang 修改描述： .<br/>
+     * <p/>
+     */
+    public AjaxReturnInfo modifyOrder(){
+        return null;
+    }
+    
+    
     
 }

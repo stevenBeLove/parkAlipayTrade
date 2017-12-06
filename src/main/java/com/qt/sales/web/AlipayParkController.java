@@ -1239,7 +1239,7 @@ public class AlipayParkController {
      * 修改人:  yinghui zhang 修改描述： .<br/>
      * <p/>
      */
-    public AjaxReturnInfo modifyOrder(){
+    public AjaxReturnInfo modifyCarNumber(String outParkingId, String odlCarNumber, String newCorNumber){
         return null;
     }
     

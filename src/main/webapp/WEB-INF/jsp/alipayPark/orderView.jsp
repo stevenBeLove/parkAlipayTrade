@@ -119,14 +119,14 @@
 	                 if ("4000" == data.resultCode) {
 	               	  Ali.alert({
 	                         title: '亲',
-	                         message: '您已主动取消支付',
+	                         message: '您的订单支付失败，请稍后再试！',
 	                         button: '确定'
 	                     });
 	                }
 	                if ("6001" == data.resultCode) {
 	                  	  Ali.alert({
 	                            title: '亲',
-	                            message: '用户中途取消',
+	                            message: '您已主动取消支付',
 	                            button: '确定'
 	                        });
 	                 }

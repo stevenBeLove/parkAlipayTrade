@@ -579,6 +579,13 @@ public class AlipayParkController {
                 haveNoPaid = true;
             }
         }
+        
+        if(order == null){
+        	 ajaxinfo.setSuccess(AjaxReturnInfo.FALSE_RESULT);
+             ajaxinfo.setMessage("已支付成功！");
+             return ajaxinfo;
+        }
+        
         //月卡或免费用户
         if(haveNoPaid){
         	String billType = order.getBillingTyper();
@@ -672,7 +679,11 @@ public class AlipayParkController {
                ajaxinfo.setMessage("驶出成功！");
                return ajaxinfo;
            }
-        	
+           if(OrderSynStatus.create.getVal().equals(orderBean.getOrderSynStatus())){
+        	   ajaxinfo.setSuccess(AjaxReturnInfo.FALSE_RESULT);
+               ajaxinfo.setMessage("亲！您还有未付款的订单！");
+               return ajaxinfo;
+           }
         }
         AlipayEcoMycarParkingExitinfoSyncRequest request = new AlipayEcoMycarParkingExitinfoSyncRequest();
         request.putOtherTextParam(RSConsts.app_auth_token, parkBean.getAppAuthToken());
@@ -725,7 +736,6 @@ public class AlipayParkController {
 		String paidMoney = orderBeanService.queryTempPaidWithOrderTrade(order.getOrderTrade());
 		BigDecimal paid = new BigDecimal(paidMoney);
 		if ("0".equals(paidMoney)) {
-			order.setPaidMoney(money);
 			order.setPayMoney(money);
 		} else {
 			if (money.compareTo(paid) == 1) {// 计算的停车费用大于已经付款的费用
@@ -739,10 +749,8 @@ public class AlipayParkController {
 				order = noPaidOrder;
 				String payResult = money.subtract(paid).floatValue() + "";
 				BigDecimal setScale = new BigDecimal(payResult).setScale(2, BigDecimal.ROUND_HALF_DOWN);
-				order.setPaidMoney(setScale);
 				order.setPayMoney(setScale);
 			} else {
-				order.setPaidMoney(money);
 				order.setPayMoney(money);
 			}
 		}
@@ -760,6 +768,7 @@ public class AlipayParkController {
 				order.setOrderNo(trade_no);
 				order.setUserId(user_id);
 				order.setPayTime(gmt_payment);
+				order.setPaidMoney(order.getPayMoney());
 				order.setOrderStatus(OrderStatus.sucess.getVal());
 				order.setCardNumber("*");
 				order.setOrderTime(gmt_payment);
@@ -813,7 +822,7 @@ public class AlipayParkController {
         data.put(RSConsts.car_number, order.getCarNumber());
         data.put(RSConsts.out_trade_no, order.getOutOrderNo());
         data.put(RSConsts.subject, order.getParkingName()+ "代扣缴费");
-        data.put(RSConsts.total_fee, order.getPaidMoney());// 交易金额保留小数点后两位
+        data.put(RSConsts.total_fee, order.getPayMoney().setScale(2, BigDecimal.ROUND_HALF_DOWN));// 交易金额保留小数点后两位
         // data.put(RSConsts.seller_logon_id,);
         data.put(RSConsts.seller_id, order.getSellerId());
         data.put(RSConsts.parking_id, order.getParkingId());
@@ -906,12 +915,13 @@ public class AlipayParkController {
 	
   /**
    * 创建订单
+ * @throws ParseException 
    * 
    */
   @RequestMapping(value = "/tradeCreate", method = {RequestMethod.POST, RequestMethod.GET})
   @ResponseBody
   public AjaxReturnInfo tradeCreate(String outOrderNo,String payMoney,String inDuration,String orderTime,
-		  String discountMoney) {
+		  String discountMoney) throws ParseException {
       AjaxReturnInfo ajaxinfo = new AjaxReturnInfo();
       try {
           AlipayTradeCreateRequest request = new AlipayTradeCreateRequest();
@@ -935,22 +945,29 @@ public class AlipayParkController {
               BigDecimal pay = new BigDecimal(payMoney);
               BigDecimal setScale = pay.setScale(2,BigDecimal.ROUND_HALF_DOWN);
               orderBean.setPayMoney(setScale);
-//              BigDecimal allPaidMoney = orderBean.getPaidMoney().add(setScale);
-              orderBean.setPaidMoney(setScale);//已支付
               orderBean.setInDuration(inDuration);//停车时长
               orderBean.setOrderNo(response.getTradeNo());//支付宝流水号
-//              orderBean.setOrderTrade(response.getTradeNo());//订单号
-              orderBean.setOrderSynStatus(OrderSynStatus.sync.getVal());//同步创建
+              orderBean.setOrderSynStatus(OrderSynStatus.create.getVal());//同步创建
               orderBean.setDiscountMoney(new BigDecimal(discountMoney));//优惠金额
               orderBeanService.updateByPrimaryKeySelective(orderBean);
               logger.debug("调用成功");
           } else {
-              ajaxinfo.setSuccess(AjaxReturnInfo.FALSE_RESULT);
-              ajaxinfo.setMessage("创建订单失败!");
-              logger.debug("调用失败");
+        	  if(RSConsts.TRADE_HAS_SUCCESS.equals(response.getSubCode())){//订单已经支付
+        		  String nowTime =DateUtil.getCurrDate(DateUtil.STANDDATEFORMAT);
+                  orderBean.setPayTime(nowTime);
+                  orderBean.setOrderStatus(OrderStatus.sucess.getVal());
+                  orderBean.setCardNumber("*");
+                  orderBean.setOrderSynStatus(OrderSynStatus.paysucess.getVal());
+                  orderBean.setInDuration(DateUtil.getTimeDifferMin(orderBean.getInTime(), nowTime));
+                  orderBean.setPaidMoney(orderBean.getPayMoney());//已支付
+                  orderBeanService.updateByPrimaryKeySelective(orderBean);
+                  orderBeanService.insertFromOrder(orderBean);
+        	  } 
+        	  ajaxinfo.setSuccess(AjaxReturnInfo.FALSE_RESULT);
+              ajaxinfo.setMessage(response.getSubMsg());
+              return ajaxinfo;
           }
       } catch (AlipayApiException e) {
-          // TODO Auto-generated catch block
           logger.error(e.getMessage(),e);
           ajaxinfo.setSuccess(AjaxReturnInfo.FALSE_RESULT);
           ajaxinfo.setMessage("创建同步创建失败!");
@@ -1185,21 +1202,17 @@ public class AlipayParkController {
             orderBean.setCardNumber("*");
             orderBean.setOrderSynStatus(OrderSynStatus.paysucess.getVal());
             orderBean.setInDuration(DateUtil.getTimeDifferMin(orderBean.getInTime(), nowTime));
-//            model.addAttribute("msg", "支付成功！");
+            orderBean.setPaidMoney(orderBean.getPayMoney());//已支付
             BigDecimal setScale = orderBean.getPaidMoney().setScale(2,BigDecimal.ROUND_HALF_DOWN);
-//            model.addAttribute("paidMoney",setScale );
             orderBeanService.updateByPrimaryKeySelective(orderBean);
             orderBeanService.insertFromOrder(orderBean);
             ajaxinfo.setSuccess(AjaxReturnInfo.TURE_RESULT);
             ajaxinfo.setMessage("success");
         } catch (ParseException e) {
-            // TODO Auto-generated catch block
             logger.error(e.getMessage(),e);
             ajaxinfo.setSuccess(AjaxReturnInfo.FALSE_RESULT);
             ajaxinfo.setMessage("error");
-//            model.addAttribute("msg", "异常！");
         }
-//        return "alipayPark/payResult";
         return ajaxinfo;
     }
      

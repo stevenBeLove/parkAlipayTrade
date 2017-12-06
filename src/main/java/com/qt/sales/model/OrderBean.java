@@ -147,14 +147,14 @@ public class OrderBean {
          * 创建
          */
         create("0"),
-        /**
-         * 同步创建
-         */
-        sync("1"),
+//        /**
+//         * 同步创建
+//         */
+//        sync("0"),
         /**
          * 支付成功
          */
-        paysucess("2");
+        paysucess("1");
         private String val;
 
         private OrderSynStatus(String val) {

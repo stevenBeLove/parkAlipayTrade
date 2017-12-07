@@ -670,6 +670,9 @@ public class AlipayParkController {
                 orderBean.setOutTime(out_time);
                 // 更新订单
                 orderBeanService.updateOrderPayByOrderNo(orderBean);
+                //添加订单
+                orderBean.setBillingTyper(billType);
+       		    orderBeanService.insertFromOrder(orderBean);
                 // 删除订单
                 orderBeanService.deleteWithOrderTrade(orderBean.getOrderTrade());
                 bill = true;
@@ -1229,7 +1232,7 @@ public class AlipayParkController {
     
     
     /**
-     * 【方法名】    : (更改订单). <br/> 
+     * 【方法名】    : (更改订单|纠正车牌). <br/> 
      * 【作者】: yinghui zhang .<br/>
      * 【时间】： 2017年12月6日 下午5:01:15 .<br/>
      * 【参数】： .<br/>
@@ -1281,6 +1284,8 @@ public class AlipayParkController {
                 AlipayClient alipayClient = aliPayUtil.getInstance();
                 response = alipayClient.execute(request);
                 if (response.isSuccess()) {
+            	     String  agreement = parkService.agreementQueryRequest(correctCarNumber,parkBean.getAppAuthToken());
+            	     orderBean.setAgreementStatus(agreement);
                      orderBean.setCarNumber(correctCarNumber);
                      orderBeanService.updateByPrimaryKey(orderBean);
                      exitAliPark(parkBean,mistakeCarNumber);
@@ -1295,7 +1300,11 @@ public class AlipayParkController {
                logger.error(e.getMessage(),e);
                ajaxinfo.setSuccess(AjaxReturnInfo.FALSE_RESULT);
                ajaxinfo.setMessage(e.getErrMsg());
-            }
+            } catch (QTException e) {
+        	   logger.error(e.getMessage(),e);
+               ajaxinfo.setSuccess(AjaxReturnInfo.FALSE_RESULT);
+               ajaxinfo.setMessage("纠正出错，请联系后台人员!");
+			}
             
         }
         return ajaxinfo;

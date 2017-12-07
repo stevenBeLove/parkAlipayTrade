@@ -6,6 +6,7 @@ package com.qt.sales.service;
 
 import java.util.List;
 
+import com.alipay.api.AlipayApiException;
 import com.qt.sales.exception.QTException;
 import com.qt.sales.model.ParkBean;
 import com.qt.sales.model.ParkBeanExample;
@@ -138,5 +139,13 @@ public interface ParkService {
      * @return
      */
     public ParkBean selectByPrimaryParkingId(String parkingId);
+    
+    /**
+     * 查询是否开通免密支付
+     * 
+     * @throws AlipayApiException
+     * @throws QTException
+     */
+    public String agreementQueryRequest(String carNumber, String appToken) throws AlipayApiException, QTException;
 }
 

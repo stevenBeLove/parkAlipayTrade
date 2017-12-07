@@ -23,7 +23,8 @@ function carIn(){
 			'carNumber':$("#carNumber").val(),
 			'outParkingId':$("#outParkingId").val(),
 			'carType':'1',
-			'carColor':'白色'
+			'carColor':'白色',
+			'billingType':$("#billingType").val()
 		},
 		success : function(obj) {
 			if (obj.success == 'true') {
@@ -122,6 +123,28 @@ function carqueryFee(){
 	});
 }
 
+function modifyCarNumber(){
+	$.ajax({
+		type : "POST",
+		url :  "${ctx}/alipayPark/modifyCarNumber",
+		data : {
+			'outParkingId':$("#outParkingIdModify").val(),
+			'mistakeCarNumber':$("#mistakeCarNumber").val(),
+			'correctCarNumber':$("#correctCarNumber").val(),
+			'billingType':$("#billingType").val()
+		},
+		beforeSend : function() {
+		},
+		success : function(obj) {
+			if (obj.success == 'true') {
+				alert(obj.message);
+			} else {
+				alert(obj.message);
+			}
+		}
+	});
+}
+
 </script>
 <meta name="viewport"
 	content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
@@ -149,6 +172,11 @@ body.bootstrap-admin-with-small-navbar {
                                                 <div class="col-lg-2">
                                                     <input type="text"  id="carNumber" class="form-control" />
                                                 </div>
+                                                <label class="col-lg-1 control-label" for="billingType">车辆类型</label>
+                                                <div class="col-lg-2">
+                                                    <input type="text"  id="billingType" class="form-control" />
+                                                </div>
+                                                
                                                 <label class="col-lg-1 control-label" for="username">停车场ID</label>
                                                 <div class="col-lg-2">
                                                     <input type="text"  id="outParkingId" value="${outParkingId }" class="form-control" />
@@ -225,6 +253,40 @@ body.bootstrap-admin-with-small-navbar {
                                 </div>
                             </div>
                             
+                 
+                 
+                 
+                  			 <div class="panel panel-default bootstrap-admin-no-table-panel">
+                                <div class="bootstrap-admin-no-table-panel-content bootstrap-admin-panel-content collapse in">
+                                        <fieldset>
+                                            <div class="form-group">
+                                            	<label class="col-lg-1 control-label" for="mistakeCarNumber">错误车牌</label>
+                                                <div class="col-lg-2">
+                                                    <input type="text"  id="mistakeCarNumber" class="form-control" />
+                                                </div>
+                                                <label class="col-lg-1 control-label" for="correctCarNumber">正确车牌</label>
+                                                <div class="col-lg-2">
+                                                    <input type="text"  id="correctCarNumber" class="form-control" />
+                                                </div>
+                                                <label class="col-lg-1 control-label" for="outParkingIdModify">停车场ID</label>
+                                                <div class="col-lg-2">
+                                                    <input type="text"  id="outParkingIdModify" value="${outParkingId }" class="form-control" />
+                                                </div>
+                                                 <label class="col-lg-1 control-label" for="billingType">车辆类型</label>
+                                                <div class="col-lg-2">
+                                                    <input type="text"  id="billingType"  class="form-control" />
+                                                </div>
+                                                
+                                                
+                                                <div class="col-lg-2">
+                                                	<button id ="modifyCarNumber" type="button" class="btn btn-primary" onclick="modifyCarNumber();">修正车牌</button>
+                                                </div>
+                                            </div>
+                                        </fieldset>
+                                </div>
+                             </div>
+                 
+                 
                  
                             
                             

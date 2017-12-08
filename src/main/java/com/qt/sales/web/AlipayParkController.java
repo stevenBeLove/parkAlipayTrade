@@ -29,6 +29,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
+import com.alipay.api.request.AlipayEcoMycarParkingConfigQueryRequest;
 import com.alipay.api.request.AlipayEcoMycarParkingEnterinfoSyncRequest;
 import com.alipay.api.request.AlipayEcoMycarParkingExitinfoSyncRequest;
 import com.alipay.api.request.AlipayEcoMycarParkingOrderPayRequest;
@@ -40,6 +41,7 @@ import com.alipay.api.request.AlipayOpenAuthTokenAppRequest;
 import com.alipay.api.request.AlipaySystemOauthTokenRequest;
 import com.alipay.api.request.AlipayTradeCreateRequest;
 import com.alipay.api.request.AlipayTradeRefundRequest;
+import com.alipay.api.response.AlipayEcoMycarParkingConfigQueryResponse;
 import com.alipay.api.response.AlipayEcoMycarParkingEnterinfoSyncResponse;
 import com.alipay.api.response.AlipayEcoMycarParkingExitinfoSyncResponse;
 import com.alipay.api.response.AlipayEcoMycarParkingOrderPayResponse;
@@ -419,17 +421,65 @@ public class AlipayParkController {
 		try {
 			boolean result = parkService.parkingConfigSetRequest(outParkingId);
 			if (result) {
+				parkingConfigQuery(outParkingId); 
 				ajaxinfo.setSuccess(AjaxReturnInfo.TURE_RESULT);
-				ajaxinfo.setMessage("添加成功！");
+        ajaxinfo.setMessage("设置成功！");
 			} else {
 				ajaxinfo.setSuccess(AjaxReturnInfo.FALSE_RESULT);
-				ajaxinfo.setMessage("添加失败！");
+				ajaxinfo.setMessage("设置失败！");
 			}
 		} catch (Exception e) {
 			LogPay.error(e.getMessage(), e);
 		}
 		return ajaxinfo;
 	}
+	
+	
+  /**
+   * 更新停车场信息
+   * 
+   * @return
+   */
+  @RequestMapping(value = "/parkingConfigQuery", method = { RequestMethod.POST })
+  @ResponseBody
+  public AjaxReturnInfo parkingConfigQuery(String outParkingId) {
+      AjaxReturnInfo ajaxinfo = new AjaxReturnInfo();
+      ParkBean parkBean = parkService.selectByPrimaryKey(outParkingId);
+      AlipayEcoMycarParkingConfigQueryRequest request = new AlipayEcoMycarParkingConfigQueryRequest();
+      request.putOtherTextParam(RSConsts.app_auth_token, parkBean.getAppAuthToken());
+      request.setBizContent(getConfigQueryBizContent());//业务数据
+      AlipayEcoMycarParkingConfigQueryResponse   response;
+      try {
+       // 换取调用
+          AlipayClient alipayClient = aliPayUtil.getInstance();
+          response = alipayClient.execute(request);
+          if (response.isSuccess()) {
+              parkBean.setMerchantLogo(response.getMerchantLogo());
+              parkService.updateByPrimaryKeySelective(parkBean);
+              logger.debug("调用成功");
+              ajaxinfo.setSuccess(AjaxReturnInfo.TURE_RESULT);
+              ajaxinfo.setMessage("更新成功！");
+          } else {
+              logger.debug(response.getBody());
+              ajaxinfo.setSuccess(AjaxReturnInfo.FALSE_RESULT);
+              ajaxinfo.setMessage(response.getSubMsg());
+          }
+      } catch (AlipayApiException e) {
+              logger.error(e.getMessage(),e);
+              ajaxinfo.setSuccess(AjaxReturnInfo.FALSE_RESULT);
+              ajaxinfo.setMessage("调用失败!");
+      }
+      return ajaxinfo;
+  }
+  
+  private  String getConfigQueryBizContent(){
+      JSONObject data = new JSONObject();
+      data.put("interface_name", "alipay.eco.mycar.parking.userpage.query");
+      data.put("interface_type", "interface_page");
+      String jsonStr = JSON.toJSONString(data);
+      System.out.println(jsonStr);
+      return jsonStr;
+  }
 
 	 /**
    * 【方法名】    : (添加停车场). <br/> 

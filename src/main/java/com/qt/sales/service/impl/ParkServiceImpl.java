@@ -214,7 +214,6 @@ public class ParkServiceImpl implements ParkService {
     public static String getImageStr() {
         //待处理的本地图片
         try {
-//      String imgFile = "E:\\home\\\weblogic\\logo.png";
       String imgFile = "E:\\home\\weblogic\\logo.png";
       InputStream in = null;
       byte[] data = null;

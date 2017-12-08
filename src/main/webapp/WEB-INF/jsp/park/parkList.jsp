@@ -51,7 +51,6 @@ function updatePark(){
 	   	   type:"GET",
 	       url:  ctx+"/alipayPark/parkingConfigSet/"+ids,
 	       success:function(obj){
-	    	   alert(obj.message);
 	    	  if(obj.success=='true'){
 					alert(obj.message);
 				}else{

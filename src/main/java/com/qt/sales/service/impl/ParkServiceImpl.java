@@ -214,7 +214,8 @@ public class ParkServiceImpl implements ParkService {
     public static String getImageStr() {
         //待处理的本地图片
         try {
-      String imgFile = "/home/weblogc/logo.png";
+//      String imgFile = "E:\\home\\\weblogic\\logo.png";
+      String imgFile = "E:\\home\\weblogic\\logo.png";
       InputStream in = null;
       byte[] data = null;
       //读取图片字节数组
@@ -259,7 +260,7 @@ public class ParkServiceImpl implements ParkService {
                 logger.debug("同步创建停车场成功!");
             } else {
                 returnjson.put(RSConsts.STATUS, RSConsts.FAILE_CODE);
-                returnjson.put(RSConsts.MESSAGE, response.getMsg());
+                returnjson.put(RSConsts.MESSAGE, response.getSubMsg());
                 returnjson.put(RSConsts.BODY, response.getBody());
             }
         } catch (AlipayApiException e) {

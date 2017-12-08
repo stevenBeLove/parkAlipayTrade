@@ -39,6 +39,29 @@ function createPark(){
 }     
 
 
+function updatePark(){
+	   var ids = $.map($('#mytab').bootstrapTable('getSelections'), function (row) {
+     		return row.outParkingId;
+ 		});
+		if(ids==''){
+ 		alert('请选择修改的记录!');
+ 		return;
+		}
+		$.ajax({   
+	   	   type:"GET",
+	       url:  ctx+"/alipayPark/parkingConfigSet/"+ids,
+	       success:function(obj){
+	    	   alert(obj.message);
+	    	  if(obj.success=='true'){
+					alert(obj.message);
+				}else{
+					alert(obj.message);
+				}
+	          }	          
+	     }); 
+}
+
+
 function carControl(){
 	var ids = $.map($('#mytab').bootstrapTable('getSelections'), function (row) {
         return row.outParkingId;
@@ -103,8 +126,8 @@ body.bootstrap-admin-with-small-navbar {
 							   <button id="btn_create" type="button" class="btn btn-default" onclick="createPark();">
 							    <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>创建停车场
 							   </button>&nbsp;&nbsp;
-							   <button id="btn_add" type="button" class="btn btn-default" onclick="addUser();">
-							    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>更新停车场信息
+							   <button id="btn_add" type="button" class="btn btn-default" onclick="updatePark();">
+							    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>修改停车场信息
 							   </button>
 							    <button id="btn_control" type="button" class="btn btn-default" onclick="carControl();">
 							    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>车场接口

@@ -4,10 +4,12 @@
  */
 package com.qt.sales.service.impl;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -16,10 +18,12 @@ import java.util.Random;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
+import javax.servlet.ServletContext;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ResourceUtils;
 import org.springframework.util.StringUtils;
 
 import sun.misc.BASE64Encoder;
@@ -83,6 +87,9 @@ public class ParkServiceImpl implements ParkService {
   	
     @Resource(name = "propertiesUtil")
     private PropertiesUtil propertiesUtil;
+    
+    @Resource
+    private ServletContext servletContext;
     
     
     @Override
@@ -211,32 +218,33 @@ public class ParkServiceImpl implements ParkService {
         return jsonStr;
     }
     
-    public static String getImageStr() {
-        //待处理的本地图片
+    
+    public String getImageStr() {
+        // 待处理的本地图片
         try {
-      String imgFile = "E:\\home\\weblogic\\logo.png";
-      InputStream in = null;
-      byte[] data = null;
-      //读取图片字节数组
-      try {
-          in = new FileInputStream(imgFile);
-          data = new byte[in.available()];
-          in.read(data);
-          in.close();
-      } catch (IOException e) {
-          e.printStackTrace();
-      }
-      //对字节数组Base64编码
-      BASE64Encoder encoder = new BASE64Encoder();
-      //返回Base64编码过的字节数组字符串
-      return "data:image/png;base64,"+encoder.encode(data);
-    } catch (Exception e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    }
+            String path = servletContext.getRealPath("/") + File.separator + "images" + File.separator + "logo.png";
+            File file = new File(path);
+            InputStream in = null;
+            byte[] data = null;
+            // 读取图片字节数组
+            try {
+                in = new FileInputStream(file);
+                data = new byte[in.available()];
+                in.read(data);
+                in.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            // 对字节数组Base64编码
+            BASE64Encoder encoder = new BASE64Encoder();
+            // 返回Base64编码过的字节数组字符串
+            return "data:image/png;base64," + encoder.encode(data);
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
         return "";
     }
-
 
     @Override
     public String parkingCreate(String outParkingId) {

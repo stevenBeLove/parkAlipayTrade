@@ -202,7 +202,7 @@ public class ParkServiceImpl implements ParkService {
      */
     private String getBizContent(ParkBean park) throws IOException{
         JSONObject data = new JSONObject();
-        data.put(RSConsts.MERCHANT_NAME, park.getMerchantName());
+        data.put(RSConsts.MERCHANT_NAME, propertiesUtil.readValue("alipay.isvName"));
         data.put(RSConsts.MERCHANT_SERVICE_PHONE, park.getMerchantServicePhone());
         data.put(RSConsts.ACCOUNT_NO, propertiesUtil.readValue("alipay.isvAccount"));
         data.put(RSConsts.MERCHANT_LOGO, getImageStr());
@@ -362,7 +362,7 @@ public class ParkServiceImpl implements ParkService {
 	public String enterinfoSyncEnter(ParkBean park,String orderTrade, String carNumber, String in_time,
 			String carType,String carColor,String agreementStatus,String billingType,String carNumberColor,String lane) {
 		OrderBean bean = new OrderBean();//创建订单
-		bean.setParkingName(park.getMerchantName());
+		bean.setParkingName(park.getParkingName());
 		bean.setSellerId(park.getAlipayUserId());
 		bean.setParkingId(park.getParkingId());
 		bean.setCarNumber(carNumber);

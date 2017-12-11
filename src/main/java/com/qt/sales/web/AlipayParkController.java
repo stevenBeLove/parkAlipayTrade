@@ -241,6 +241,7 @@ public class AlipayParkController {
 					}
 					//显示订单信息
 					BigDecimal money =getPayMoney(car_number,parking_id);//调用接口查询费用
+					model.addAttribute(RSConsts.orderMoney, money.setScale(2, BigDecimal.ROUND_HALF_DOWN));
 					//没有找到未付款的订单，找下已经付款的订单
 					if(StringUtils.isEmpty(order)){
 						boolean haveOrder = false;
@@ -874,7 +875,7 @@ public class AlipayParkController {
         JSONObject data = new JSONObject();
         data.put(RSConsts.car_number, order.getCarNumber());
         data.put(RSConsts.out_trade_no, order.getOutOrderNo());
-        data.put(RSConsts.subject, order.getParkingName()+ "代扣缴费");
+        data.put(RSConsts.subject,propertiesUtil.readValue("alipay.isvName")+ "代扣缴费");
         data.put(RSConsts.total_fee, order.getPayMoney().setScale(2, BigDecimal.ROUND_HALF_DOWN));// 交易金额保留小数点后两位
         // data.put(RSConsts.seller_logon_id,);
         data.put(RSConsts.seller_id, order.getSellerId());
@@ -908,7 +909,11 @@ public class AlipayParkController {
       JSONObject data = new JSONObject();
       data.put(RSConsts.user_id,order.getUserId());
       data.put(RSConsts.out_parking_id,order.getOutParkingId());
-      data.put(RSConsts.parking_name,order.getParkingName());
+      try {
+		data.put(RSConsts.parking_name,propertiesUtil.readValue("alipay.isvName"));
+	  } catch (IOException e) {
+			e.printStackTrace();
+	  }
       data.put(RSConsts.car_number,order.getCarNumber());
       data.put(RSConsts.out_order_no,order.getOutOrderNo());
       data.put(RSConsts.order_status,order.getOrderStatus());
@@ -1039,7 +1044,8 @@ public class AlipayParkController {
      data.put(RSConsts.seller_id, order.getSellerId());//卖家支付宝用户ID
      data.put(RSConsts.total_amount, payMoney);
 //     data.put("discountable_amount", "");// 可打折金额.!
-     data.put(RSConsts.subject, order.getParkingName()+"停车费");
+//     data.put(RSConsts.subject, order.getParkingName()+"停车费");
+     data.put(RSConsts.subject, propertiesUtil.readValue("alipay.isvName")+"停车费");
      data.put(RSConsts.body, "车牌号码："+order.getCarNumber());
      data.put(RSConsts.buyer_id, order.getUserId());
 //     data.put("operator_id", "0001");//商户操作员编号 !

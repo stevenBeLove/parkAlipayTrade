@@ -166,7 +166,7 @@
 <div class="am-list conent-list">
 	    <a class="am-list-item">
 	        <div class="am-list-content am-list-cell-noflex">应付金额</div>
-	        <div class="am-list-extra">${payMoney }元</div>
+	        <div class="am-list-extra">${orderMoney }元</div>
 	    </a>
 	    <a class="am-list-item">
 	        <div class="am-list-content am-list-cell-noflex">已付金额</div>

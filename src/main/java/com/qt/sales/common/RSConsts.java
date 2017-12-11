@@ -123,6 +123,7 @@ public class RSConsts {
     public static final String isvPhone = "isvPhone";
     public static final String isvName = "isvName";
     public static final String TRADE_HAS_SUCCESS = "ACQ.TRADE_HAS_SUCCESS";
+    public static final String orderMoney = "orderMoney";
     
     
 }

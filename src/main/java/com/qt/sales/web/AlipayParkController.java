@@ -332,7 +332,7 @@ public class AlipayParkController {
    * @return
    */
   public BigDecimal getPayMoney(String carNumber,String parkingId){
-	  String conate =   parkService.selectByPrimaryParkingId("10002").getContactName();
+	  String conate =   parkService.selectByPrimaryParkingId("10299").getContactName();
 	  return new BigDecimal(conate);
   }
   

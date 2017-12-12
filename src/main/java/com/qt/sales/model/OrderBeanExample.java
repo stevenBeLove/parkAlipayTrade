@@ -1535,6 +1535,11 @@ public class OrderBeanExample {
             addCriterion("ORDER_PAY_STATUS not between", value1, value2, "orderPayStatus");
             return (Criteria) this;
         }
+        
+        public Criteria andStatusEqualTo(String value) {
+            addCriterion("status =", value, "status");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

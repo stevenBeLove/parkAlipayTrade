@@ -95,4 +95,13 @@ public interface OrderBeanMapper {
      * @return
      */
     int updateAgreementStatus(OrderBean record);
+    /**
+     * 更新数据状态
+     * @param record
+     * @return
+     */
+    int updateOrderStauts(OrderBean record);
+    
+    
+    
 }

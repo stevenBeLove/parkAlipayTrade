@@ -223,6 +223,7 @@ public class AlipayParkController {
 					OrderBeanExample.Criteria cr = example.createCriteria();
 					cr.andCarNumberEqualTo(car_number);
 					cr.andParkingIdEqualTo(parking_id);
+					cr.andStatusEqualTo("0");
 					//cr.andOrderSynStatusEqualTo(OrderSynStatus.create.getVal());
 					List<OrderBean> orderList = orderBeanService.selectByExample(example);
 					if(orderList==null || orderList.size()==0){
@@ -543,18 +544,19 @@ public class AlipayParkController {
             return ajaxinfo;
         }
         
-         OrderBeanExample example = new OrderBeanExample();
-         OrderBeanExample.Criteria cr = example.createCriteria();
-         cr.andCarNumberEqualTo(carNumber);
-         cr.andOutParkingIdEqualTo(outParkingId);
-         cr.andOrderSynStatusEqualTo(OrderSynStatus.create.getVal());
-         int count = orderBeanService.countByExample(example);
-         if (count > 0) {
-           ajaxinfo.setCarNumber(carNumber);
-           ajaxinfo.setSuccess(AjaxReturnInfo.FALSE_RESULT);
-           ajaxinfo.setMessage("已有该车辆入场记录，不允许重复入场！");
-           return ajaxinfo;
-         }
+//         OrderBeanExample example = new OrderBeanExample();
+//         OrderBeanExample.Criteria cr = example.createCriteria();
+//         cr.andCarNumberEqualTo(carNumber);
+//         cr.andOutParkingIdEqualTo(outParkingId);
+//         cr.andOrderSynStatusEqualTo(OrderSynStatus.create.getVal());
+//         cr.andStatusEqualTo("0");
+//         int count = orderBeanService.countByExample(example);
+//         if (count > 0) {
+//           ajaxinfo.setCarNumber(carNumber);
+//           ajaxinfo.setSuccess(AjaxReturnInfo.FALSE_RESULT);
+//           ajaxinfo.setMessage("已有该车辆入场记录，不允许重复入场！");
+//           return ajaxinfo;
+//         }
 
         AlipayEcoMycarParkingEnterinfoSyncRequest request = new AlipayEcoMycarParkingEnterinfoSyncRequest();
         request.setBizContent(enterinfoSyncGetBizContent(bean.getParkingId(), carNumber, in_time));// 业务数据
@@ -614,6 +616,7 @@ public class AlipayParkController {
         OrderBeanExample.Criteria cr = example.createCriteria();
         cr.andCarNumberEqualTo(carNumber);
         cr.andOutParkingIdEqualTo(outParkingId);
+        cr.andStatusEqualTo("0");
         List<OrderBean> orderList = orderBeanService.selectByExample(example);
         if (orderList == null || orderList.size() == 0) {
             ajaxinfo.setSuccess(AjaxReturnInfo.FALSE_RESULT);
@@ -709,6 +712,7 @@ public class AlipayParkController {
         OrderBeanExample.Criteria cr = example.createCriteria();
         cr.andCarNumberEqualTo(carNumber);
         cr.andOutParkingIdEqualTo(outParkingId);
+        cr.andStatusEqualTo("0");
         List<OrderBean> orderList = orderBeanService.selectByExample(example);
         // 驶出时间
         String out_time = DateUtil.getCurrDate(DateUtil.STANDDATEFORMAT);

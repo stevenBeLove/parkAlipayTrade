@@ -148,7 +148,7 @@
       PARKING_ID, IN_DURATION, CARD_NUMBER, 
       DISCOUNT_MONEY, PAID_MONEY, SELLER_ID, 
       OUT_TIME, ORDER_SYN_STATUS, car_type, car_color,order_trade,order_pay_status,agreement_status,
-      update_time,billing_typer,car_number_color,lane
+      update_time,billing_typer,car_number_color,lane,status
       )
     values (#{orderNo,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, #{outParkingId,jdbcType=VARCHAR}, 
       #{parkingName,jdbcType=VARCHAR}, #{carNumber,jdbcType=VARCHAR}, #{outOrderNo,jdbcType=VARCHAR}, 
@@ -159,7 +159,8 @@
       #{outTime,jdbcType=VARCHAR}, #{orderSynStatus,jdbcType=VARCHAR}, 
       #{carType,jdbcType=VARCHAR},#{carColor,jdbcType=VARCHAR},#{orderTrade,jdbcType=VARCHAR},
       #{orderPayStatus,jdbcType=VARCHAR},#{agreementStatus,jdbcType=VARCHAR},#{updateTime,jdbcType=VARCHAR},
-      #{billingTyper,jdbcType=VARCHAR},#{carNumberColor,jdbcType=VARCHAR},#{lane,jdbcType=VARCHAR}
+      #{billingTyper,jdbcType=VARCHAR},#{carNumberColor,jdbcType=VARCHAR},#{lane,jdbcType=VARCHAR},
+      #{status,jdbcType=VARCHAR}
       )
   </insert>
   
@@ -271,6 +272,9 @@
       <if test="lane != null" >
         lane = #{lane,jdbcType=VARCHAR},
       </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=VARCHAR},
+      </if>
     </set>
     where out_order_no = #{outOrderNo,jdbcType=VARCHAR}
   </update>
@@ -379,7 +383,8 @@
       order_pay_status = #{orderPayStatus,jdbcType=VARCHAR},
       refund_money = #{refundMoney,jdbcType=VARCHAR},
       agreement_status = #{agreementStatus,jdbcType=VARCHAR},
-      billing_typer = #{billingTyper,jdbcType=VARCHAR}
+      billing_typer = #{billingTyper,jdbcType=VARCHAR},
+      status = #{status,jdbcType=VARCHAR}
     where out_order_no = #{outOrderNo,jdbcType=VARCHAR}
   </update>
   
@@ -388,7 +393,7 @@
   </select>
   
   <select id="queryTempPaidWithOrderTrade" parameterType="string" resultType="string">
-  	select nvl(sum(p.paid_money),0) from park.TB_ORDER p where  p.order_trade = #{orderTrade,jdbcType=VARCHAR}
+  	select nvl(sum(p.paid_money),0) from park.TB_ORDER p where p.status ='0'  p.order_trade = #{orderTrade,jdbcType=VARCHAR}
   </select>
   
    <select id="selectPayOrderByOrderNo" resultMap="BaseResultMap" parameterType="java.lang.String" >
@@ -403,5 +408,10 @@
   update park.tb_order o set o.agreement_status =  #{agreementStatus,jdbcType=VARCHAR} ,o.update_time = #{updateTime,jdbcType=VARCHAR}  where o.car_number = #{carNumber,jdbcType=VARCHAR} and 
   to_date(o.update_time,'yyyy-mm-dd hh24:mi:ss') &lt; to_date(#{updateTime,jdbcType=VARCHAR},'yyyy-mm-dd hh24:mi:ss')
   </update>
+  
+  <update id="updateOrderStauts" parameterType="com.qt.sales.model.OrderBean">
+  	 update park.tb_order o set o.status='1' where o.status = '0' and o.out_parking_id =#{outParkingId,jdbcType=VARCHAR} and o.car_number = #{carNumber,jdbcType=VARCHAR}
+  </update>
+  
   
 </mapper>

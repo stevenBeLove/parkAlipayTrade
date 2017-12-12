@@ -50,11 +50,13 @@ import com.qt.sales.dao.ParkBeanMapper;
 import com.qt.sales.dao.VehicleBeanMapper;
 import com.qt.sales.exception.QTException;
 import com.qt.sales.model.OrderBean;
+import com.qt.sales.model.OrderBeanExample;
 import com.qt.sales.model.OrderBean.OrderStatus;
 import com.qt.sales.model.OrderBean.OrderSynStatus;
 import com.qt.sales.model.ParkBean;
 import com.qt.sales.model.ParkBeanExample;
 import com.qt.sales.model.VehicleBean;
+import com.qt.sales.service.OrderBeanService;
 import com.qt.sales.service.ParkService;
 import com.qt.sales.utils.DateUtil;
 import com.qt.sales.web.AlipayParkController;
@@ -393,15 +395,33 @@ public class ParkServiceImpl implements ParkService {
 		bean.setPaidMoney(new BigDecimal("0.00"));
 		bean.setOrderSynStatus(OrderSynStatus.create.getVal());
 		if(StringUtils.isEmpty(orderTrade)){
+			//新入场
 			bean.setOrderTrade(outOrderNo);
+			//问题数据
+			updateOrderBeanStatus(carNumber, park.getOutParkingId());
 		}else{
 			bean.setOrderTrade(orderTrade);
 		}
 		bean.setBillingTyper(billingType);
 		bean.setCarNumberColor(carNumberColor);
 		bean.setLane(lane);
+		bean.setStatus("0");
 	    orderBeanMapper.insert(bean);
 	    return outOrderNo;
+	}
+	
+	private void updateOrderBeanStatus(String carNumber,String outParkingId){
+		OrderBeanExample example = new OrderBeanExample();
+        OrderBeanExample.Criteria cr = example.createCriteria();
+        cr.andCarNumberEqualTo(carNumber);
+        cr.andOutParkingIdEqualTo(outParkingId);
+        cr.andStatusEqualTo("0");
+        List<OrderBean> orderList = orderBeanMapper.selectByExample(example);
+		if(orderList!=null && orderList.size()>0){
+			for (OrderBean orderBean : orderList) {
+				orderBeanMapper.updateOrderStauts(orderBean);
+			}
+		}
 	}
 	
     /**

@@ -113,6 +113,11 @@ public class OrderBean {
      */
     private String lane;
     
+    /**
+     *数据状态： 0：正常 1：异常
+     */
+    private String status;
+    
     
 
 
@@ -147,10 +152,6 @@ public class OrderBean {
          * 创建
          */
         create("0"),
-//        /**
-//         * 同步创建
-//         */
-//        sync("0"),
         /**
          * 支付成功
          */
@@ -586,7 +587,13 @@ public class OrderBean {
 	public void setLane(String lane) {
 		this.lane = lane;
 	}
-    
-    
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
 
 }

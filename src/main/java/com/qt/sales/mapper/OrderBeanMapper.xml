@@ -33,6 +33,7 @@
     <result column="billing_typer" property="billingTyper" jdbcType="VARCHAR" />
     <result column="car_number_color" property="carNumberColor" jdbcType="VARCHAR" />
     <result column="lane" property="lane" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
     
     
   </resultMap>
@@ -98,7 +99,7 @@
     ORDER_NO, USER_ID, OUT_PARKING_ID, PARKING_NAME, CAR_NUMBER, OUT_ORDER_NO, ORDER_STATUS, 
     ORDER_TIME, PAY_TIME, PAY_TYPE, PAY_MONEY, IN_TIME, PARKING_ID, IN_DURATION, CARD_NUMBER, 
     DISCOUNT_MONEY, PAID_MONEY, SELLER_ID, OUT_TIME, ORDER_SYN_STATUS, car_id,car_type,car_color,order_trade,
-    REFUND_MONEY,agreement_status,update_time,billing_typer,car_number_color,lane
+    REFUND_MONEY,agreement_status,update_time,billing_typer,car_number_color,lane,status
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.qt.sales.model.OrderBeanExample" >
     select
@@ -393,7 +394,7 @@
   </select>
   
   <select id="queryTempPaidWithOrderTrade" parameterType="string" resultType="string">
-  	select nvl(sum(p.paid_money),0) from park.TB_ORDER p where p.status ='0'  p.order_trade = #{orderTrade,jdbcType=VARCHAR}
+  	select nvl(sum(p.paid_money),0) from park.TB_ORDER p where p.status ='0' and p.order_trade = #{orderTrade,jdbcType=VARCHAR}
   </select>
   
    <select id="selectPayOrderByOrderNo" resultMap="BaseResultMap" parameterType="java.lang.String" >

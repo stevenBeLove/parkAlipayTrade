@@ -173,7 +173,7 @@
       PARKING_ID, IN_DURATION, CARD_NUMBER, 
       DISCOUNT_MONEY, PAID_MONEY, SELLER_ID, 
       OUT_TIME, ORDER_SYN_STATUS, car_type, car_color,order_trade,OUT_REFUND_NO,order_pay_status,
-      agreement_status,update_time,billing_typer,car_number_color,lane
+      agreement_status,update_time,billing_typer,car_number_color,lane,status
       )
     values (park.seq_parkid.nextval,#{orderNo,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, #{outParkingId,jdbcType=VARCHAR}, 
       #{parkingName,jdbcType=VARCHAR}, #{carNumber,jdbcType=VARCHAR}, #{outOrderNo,jdbcType=VARCHAR}, 
@@ -184,7 +184,7 @@
       #{outTime,jdbcType=VARCHAR}, #{orderSynStatus,jdbcType=VARCHAR},
       #{carType,jdbcType=VARCHAR},#{carColor,jdbcType=VARCHAR},#{orderTrade,jdbcType=VARCHAR},#{outRefundNo,jdbcType=VARCHAR},
       #{orderPayStatus,jdbcType=VARCHAR},#{agreementStatus,jdbcType=VARCHAR},#{updateTime,jdbcType=VARCHAR},
-      #{billingTyper,jdbcType=VARCHAR},#{carNumberColor,jdbcType=VARCHAR},#{lane,jdbcType=VARCHAR}
+      #{billingTyper,jdbcType=VARCHAR},#{carNumberColor,jdbcType=VARCHAR},#{lane,jdbcType=VARCHAR},#{status,jdbcType=VARCHAR}
       )
   </insert>
   
@@ -355,6 +355,9 @@
       <if test="lane != null" >
         lane = #{lane,jdbcType=VARCHAR},
       </if>
+       <if test="status != null" >
+        status = #{status,jdbcType=VARCHAR},
+       </if>
     </set>
     where out_order_no = #{outOrderNo,jdbcType=DECIMAL}
   </update>

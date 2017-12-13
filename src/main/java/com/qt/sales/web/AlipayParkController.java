@@ -1068,9 +1068,10 @@ public class AlipayParkController {
      
      JSONObject extend_params = new JSONObject();
      extend_params.put(RSConsts.sys_service_provider_id, propertiesUtil.readValue("alipay.isvPid"));//系统商编号 
-//     extend_params.put("timeout_express", "");!
-//     extend_params.put("business_params", "");!
-//     data.put(RSConsts.extend_params, extend_params.toJSONString());
+     data.put(RSConsts.extend_params, JSONObject.toJSON(extend_params));
+     data.put(RSConsts.timeout_express, "90m");
+//     data.put(RSConsts.business_params, "");
+     logger.debug("创建订单数据："+data.toJSONString());
      return data.toJSONString();
  }
 

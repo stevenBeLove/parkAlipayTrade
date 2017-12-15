@@ -112,9 +112,8 @@
 	                  tradeNO: tradeNO
 	             }, function (data) {
 	                 if ("9000" == data.resultCode) {
-	                	 orderSync(tradeNO);
-	                	 //AlipayJSBridge.call('closeWebview');
-	                	 //location.href = "${ctx}/alipayPark/OrderSync/"+tradeNO;
+	                	 AlipayJSBridge.call('closeWebview');
+	                	 //orderSync(tradeNO);
 	                 }
 	                 if ("4000" == data.resultCode) {
 	               	  Ali.alert({

@@ -88,7 +88,7 @@ public class AlipayParkController {
 //	private static final String gatewayUrl = "https://openapi.alipaydev.com/gateway.do";
 	static String VEHICLE_URL = "https%3a%2f%2fwww.kangguole.com.cn%2fparkAlipayTrade%2falipayPark%2fgetVehicleToken";
 	public static String INTERFACE_URL = "https%3a%2f%2fwww.kangguole.com.cn%2fparkAlipayTrade%2falipayPark%2fnotify";
-	public static String NOTIFY_URL = "https%3a%2f%2fwww.kangguole.com.cn%2fparkAlipayTrade%2falipayPark%2fnotifyUrl";	
+	public static String NOTIFY_URL = "https://www.kangguole.com.cn/parkAlipayTrade/parkAlipayTrade/notifyUrl";	
 	
 	@Resource
 	private ParkService parkService;
@@ -982,6 +982,7 @@ public class AlipayParkController {
           request.setBizContent(getTradeCreateBizContent(orderBean, payMoney));
           ParkBean parkBean = parkService.selectByPrimaryParkingId(orderBean.getParkingId());
           request.putOtherTextParam(RSConsts.app_auth_token, parkBean.getAppAuthToken());
+          request.putOtherTextParam(RSConsts.notify_url, NOTIFY_URL);
           request.setNotifyUrl(NOTIFY_URL);
           AlipayClient alipayClient = aliPayUtil.getInstance();
           AlipayTradeCreateResponse response = alipayClient.execute(request);

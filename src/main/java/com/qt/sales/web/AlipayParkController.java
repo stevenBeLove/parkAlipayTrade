@@ -894,8 +894,11 @@ public class AlipayParkController {
   private void oderSyncSuccess(OrderBean orderBean) throws  QTException, AlipayApiException {
 		AlipayEcoMycarParkingOrderSyncRequest request = new AlipayEcoMycarParkingOrderSyncRequest();
 		  request.setBizContent(getEcoMycarParkingOrderBizContent(orderBean));
-		  String app_auth_token = (String) ParkServiceImpl.parkingStore.get(orderBean.getParkingId());
-		  request.putOtherTextParam(RSConsts.app_auth_token, app_auth_token);
+//		  String app_auth_token = (String) ParkServiceImpl.parkingStore.get(orderBean.getParkingId());
+//		  request.putOtherTextParam(RSConsts.app_auth_token, app_auth_token);
+		  ParkBean parkBean = parkService.selectByPrimaryParkingId(orderBean.getParkingId());
+      request.putOtherTextParam(RSConsts.app_auth_token, parkBean.getAppAuthToken());
+		  
 		  AlipayClient alipayClient = aliPayUtil.getInstance();
 		  AlipayEcoMycarParkingOrderSyncResponse response = alipayClient.execute(request);
 		  if (response.isSuccess()) {
@@ -996,8 +999,8 @@ public class AlipayParkController {
           orderBean.setOrderTime(orderTime);
           orderBean.setPayType(PayTypeStatus.onlinePay.getVal());//支付类型
           request.setBizContent(getTradeCreateBizContent(orderBean, payMoney));
-          String app_auth_token = (String) ParkServiceImpl.parkingStore.get(orderBean.getParkingId());
-          request.putOtherTextParam(RSConsts.app_auth_token, app_auth_token);
+          ParkBean parkBean = parkService.selectByPrimaryParkingId(orderBean.getParkingId());
+          request.putOtherTextParam(RSConsts.app_auth_token, parkBean.getAppAuthToken());
           AlipayClient alipayClient = aliPayUtil.getInstance();
           AlipayTradeCreateResponse response = alipayClient.execute(request);
           if (response.isSuccess()) {
@@ -1124,8 +1127,8 @@ public class AlipayParkController {
     	AjaxReturnInfo ajaxinfo = new AjaxReturnInfo();
     	AlipayTradeRefundRequest request = new AlipayTradeRefundRequest();
         request.setBizContent(getTradeRefundBizContent(orderBean));
-        String app_auth_token = (String) ParkServiceImpl.parkingStore.get(orderBean.getParkingId());
-        request.putOtherTextParam(RSConsts.app_auth_token, app_auth_token);
+        ParkBean parkBean = parkService.selectByPrimaryParkingId(orderBean.getParkingId());
+        request.putOtherTextParam(RSConsts.app_auth_token, parkBean.getAppAuthToken());
         AlipayClient alipayClient = aliPayUtil.getInstance();
         AlipayTradeRefundResponse response = alipayClient.execute(request);
         if (response.isSuccess()) {
@@ -1153,8 +1156,8 @@ public class AlipayParkController {
      */
     public void orderUpdate(OrderBean order) throws AlipayApiException, QTException {
         AlipayEcoMycarParkingOrderUpdateRequest request = new AlipayEcoMycarParkingOrderUpdateRequest();
-        String app_auth_token = (String) ParkServiceImpl.parkingStore.get(order.getParkingId());
-        request.putOtherTextParam(RSConsts.app_auth_token, app_auth_token);
+        ParkBean parkBean = parkService.selectByPrimaryParkingId(order.getParkingId());
+        request.putOtherTextParam(RSConsts.app_auth_token, parkBean.getAppAuthToken());
         request.setBizContent(getOrderUpdateBiz(order));
         AlipayClient alipayClient = aliPayUtil.getInstance();
         AlipayEcoMycarParkingOrderUpdateResponse response = alipayClient.execute(request);
@@ -1194,8 +1197,8 @@ public class AlipayParkController {
             String out_refund_no = "T"+DateUtil.getCurrDateAndTime()+new Random().nextInt(100);
             order.setOutRefundNo(out_refund_no);
             request.setBizContent(getTradeOrderRefundBiz(order));
-            String app_auth_token = (String) ParkServiceImpl.parkingStore.get(order.getParkingId());
-            request.putOtherTextParam(RSConsts.app_auth_token, app_auth_token);
+            ParkBean parkBean = parkService.selectByPrimaryParkingId(order.getParkingId());
+            request.putOtherTextParam(RSConsts.app_auth_token, parkBean.getAppAuthToken());
             AlipayClient alipayClient = aliPayUtil.getInstance();
             AlipayEcoMycarParkingOrderRefundResponse response = alipayClient.execute(request);
             if (response.isSuccess()) {

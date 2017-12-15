@@ -40,6 +40,7 @@ import com.qt.sales.utils.RequestUtil;
 @Controller
 @RequestMapping("/parkAlipayTrade")
 public class AlipayNotifyController {
+    
 
 	@Resource
 	private OrderBeanService orderBeanService;
@@ -87,13 +88,6 @@ public class AlipayNotifyController {
         } finally {
             // 5. 响应结果加签及返回
             try {
-                // 对响应内容加签
-                // responseMsg = encryptAndSign(responseMsg,
-                // propertiesUtil.readValue("alipay.public.key.RSA1"),
-                // propertiesUtil.readValue("alipay.app.private.key.RSA1"),
-                // propertiesUtil.readValue("alipay.charset"),
-                // false, true,
-                // propertiesUtil.readValue("alipay.public.signType.RSA1"));
                 // http 内容应答
                 response.reset();
                 response.setContentType("text/xml;charset=GBK");
@@ -107,6 +101,55 @@ public class AlipayNotifyController {
             }
         }
     }
+    
+    
+    /**
+     * 支付成功回调地址
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/notifyUrl", method = {RequestMethod.POST, RequestMethod.GET})
+    public void notifyUrl(HttpServletRequest request, HttpServletResponse response) {
+        // 支付宝响应消息
+        String responseMsg = "";
+        // 1. 解析请求参数
+        Map<String, String> params = RequestUtil.getRequestParams(request);
+        // 打印本次请求日志，开发者自行决定是否需要
+        LogUtil.log("支付宝请求串", params.toString());
+        try {
+            // 2. 验证签名
+            this.verifySign(params);
+            orderBeanService.updateAgreementNotify(params);
+            String code = "10000";
+            String msg = "success";
+            String econotify = "success";
+            responseMsg = buildBaseAckMsg(code, msg, econotify);
+        } catch (AlipayApiException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (QTException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } finally {
+            // 5. 响应结果加签及返回
+            try {
+                // http 内容应答
+                response.reset();
+                response.setContentType("text/xml;charset=GBK");
+                PrintWriter printWriter = response.getWriter();
+                printWriter.print(responseMsg);
+                LogUtil.log("返回值", params.toString());
+                response.flushBuffer();
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+    }
+    
     
     /**
      * 验签

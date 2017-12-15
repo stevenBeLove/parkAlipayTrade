@@ -68,7 +68,6 @@ import com.qt.sales.model.OrderBeanExample;
 import com.qt.sales.model.ParkBean;
 import com.qt.sales.service.OrderBeanService;
 import com.qt.sales.service.ParkService;
-import com.qt.sales.service.impl.ParkServiceImpl;
 import com.qt.sales.utils.DateUtil;
 import com.qt.sales.utils.LogPay;
 
@@ -85,12 +84,11 @@ public class AlipayParkController {
 
 	protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-	private static final String SYS_SERVICE_PROVIDER_ID = "2088102170404632";
 	// 支付宝沙箱网关
 //	private static final String gatewayUrl = "https://openapi.alipaydev.com/gateway.do";
 	static String VEHICLE_URL = "https%3a%2f%2fwww.kangguole.com.cn%2fparkAlipayTrade%2falipayPark%2fgetVehicleToken";
 	public static String INTERFACE_URL = "https%3a%2f%2fwww.kangguole.com.cn%2fparkAlipayTrade%2falipayPark%2fnotify";
-	
+	public static String NOTIFY_URL = "https%3a%2f%2fwww.kangguole.com.cn%2fparkAlipayTrade%2falipayPark%2fnotifyUrl";	
 	
 	@Resource
 	private ParkService parkService;
@@ -127,7 +125,6 @@ public class AlipayParkController {
 		    ecoMycarParkingVehicleQueryRequest(auth_code, car_id, parking_id, model);
 		}
 		return "alipayPark/orderView";
-		
 	}
 	
 	 public void getAPPToken(HttpServletRequest request, Model model) {
@@ -543,20 +540,6 @@ public class AlipayParkController {
             ajaxinfo.setMessage("未授权！");
             return ajaxinfo;
         }
-        
-//         OrderBeanExample example = new OrderBeanExample();
-//         OrderBeanExample.Criteria cr = example.createCriteria();
-//         cr.andCarNumberEqualTo(carNumber);
-//         cr.andOutParkingIdEqualTo(outParkingId);
-//         cr.andOrderSynStatusEqualTo(OrderSynStatus.create.getVal());
-//         cr.andStatusEqualTo("0");
-//         int count = orderBeanService.countByExample(example);
-//         if (count > 0) {
-//           ajaxinfo.setCarNumber(carNumber);
-//           ajaxinfo.setSuccess(AjaxReturnInfo.FALSE_RESULT);
-//           ajaxinfo.setMessage("已有该车辆入场记录，不允许重复入场！");
-//           return ajaxinfo;
-//         }
 
         AlipayEcoMycarParkingEnterinfoSyncRequest request = new AlipayEcoMycarParkingEnterinfoSyncRequest();
         request.setBizContent(enterinfoSyncGetBizContent(bean.getParkingId(), carNumber, in_time));// 业务数据
@@ -894,8 +877,6 @@ public class AlipayParkController {
   private void oderSyncSuccess(OrderBean orderBean) throws  QTException, AlipayApiException {
 		AlipayEcoMycarParkingOrderSyncRequest request = new AlipayEcoMycarParkingOrderSyncRequest();
 		  request.setBizContent(getEcoMycarParkingOrderBizContent(orderBean));
-//		  String app_auth_token = (String) ParkServiceImpl.parkingStore.get(orderBean.getParkingId());
-//		  request.putOtherTextParam(RSConsts.app_auth_token, app_auth_token);
 		  ParkBean parkBean = parkService.selectByPrimaryParkingId(orderBean.getParkingId());
       request.putOtherTextParam(RSConsts.app_auth_token, parkBean.getAppAuthToken());
 		  
@@ -1001,6 +982,7 @@ public class AlipayParkController {
           request.setBizContent(getTradeCreateBizContent(orderBean, payMoney));
           ParkBean parkBean = parkService.selectByPrimaryParkingId(orderBean.getParkingId());
           request.putOtherTextParam(RSConsts.app_auth_token, parkBean.getAppAuthToken());
+          request.setNotifyUrl(NOTIFY_URL);
           AlipayClient alipayClient = aliPayUtil.getInstance();
           AlipayTradeCreateResponse response = alipayClient.execute(request);
           if (response.isSuccess()) {
@@ -1375,7 +1357,7 @@ public class AlipayParkController {
     }
     
     /*
-     * 驶出阿里停车场
+     * 驶出阿里停车场 出场
      */
     public void exitAliPark(ParkBean parkBean,  String  odlCarNumber){
         AlipayEcoMycarParkingExitinfoSyncRequest request = new AlipayEcoMycarParkingExitinfoSyncRequest();

@@ -38,6 +38,11 @@ public class AjaxReturnInfo {
     private String 					carNumber;
     
     /**
+     * 付款金额
+     */
+    private String payMoney;
+    
+    /**
      * date
      */
     private Map<String, Object>        datas = new HashMap<String, Object>();
@@ -110,7 +115,23 @@ public class AjaxReturnInfo {
 	}
 	public void setCarNumber(String carNumber) {
 		this.carNumber = carNumber;
-	} 
+	}
+    /**
+     * 描述：获取属性值.<br/>
+     * 创建人：yinghui zhang <br/>
+     * 返回类型：@return payMoney .<br/>
+     */
+    public String getPayMoney() {
+        return payMoney;
+    }
+    /**
+     * 创建人：yinghui zhang <br/>
+     * 创建时间：2017年12月16日 下午10:26:31 <br/>
+     * 参数: @param  payMoney 设置值.  <br/>
+     */
+    public void setPayMoney(String payMoney) {
+        this.payMoney = payMoney;
+    } 
 
   
 

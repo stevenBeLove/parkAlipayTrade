@@ -113,7 +113,6 @@
 	             }, function (data) {
 	                 if ("9000" == data.resultCode) {
 	                	 AlipayJSBridge.call('closeWebview');
-	                	 //orderSync(tradeNO);
 	                 }
 	                 if ("4000" == data.resultCode) {
 	               	  Ali.alert({
@@ -133,22 +132,6 @@
 	        });
 	    }
 	    
-	    function orderSync(tradeNO){
-	    	$.ajax({
-				type : "POST",
-				url :  "${ctx}/alipayPark/OrderSync/",
-				data : {
-					'tradeNO':tradeNO
-				},
-				success : function(obj) {
-					if (obj.success == 'true') {
-						 AlipayJSBridge.call('closeWebview');
-					} else {
-						alert(obj.message);
-					}
-				}
-			});
-	    }
 	</script>
 </head>
 <body ontouchstart="">

@@ -46,6 +46,19 @@ public interface OrderBeanService {
 	    String queryTempPaidWithOrderTrade(String orderTrade);
 	    
 	    /**
+	     * 【方法名】    : (查询已交费用). <br/> 
+	     * 【作者】: yinghui zhang .<br/>
+	     * 【时间】： 2017年12月16日 下午8:45:21 .<br/>
+	     * 【参数】： .<br/>
+	     * @return .<br/>
+	     * <p>
+	     * 修改记录.<br/>
+	     * 修改人:  yinghui zhang 修改描述： .<br/>
+	     * <p/>
+	     */
+	    String queryPaidWithCarNumber(String carNumber);
+	    
+	    /**
 	     * 根据订单ID获取订单
 	     * 【方法名】    : (这里用一句话描述这个方法的作用). <br/> 
 	     * 【注意】: (这里描述这个方法的注意事项 – 可选).<br/> 

@@ -519,20 +519,23 @@ public class ParkServiceImpl implements ParkService {
 	
     
     public void updateRefreshAppToken(String outParkingId){
-        ParkBean parkBean = selectByPrimaryKey(outParkingId);
+        ParkBean park = selectByPrimaryKey(outParkingId);
         AlipayClient alipayClient = aliPayUtil.getInstance();
         AlipayOpenAuthTokenAppRequest request = new AlipayOpenAuthTokenAppRequest();
-        request.setBizContent(openAuthTokenBiz(parkBean));
-        request.putOtherTextParam("app_auth_token", parkBean.getAppAuthToken());
+        request.setBizContent(openAuthTokenBiz(park));
         try {
             AlipayOpenAuthTokenAppResponse response = alipayClient.execute(request);
             if(response.isSuccess()){
-                System.out.println(response.getAppAuthToken());
-                System.out.println(response.getAppRefreshToken());
-                System.out.println(response.getExpiresIn());
-                System.out.println(response.getReExpiresIn());
-                System.out.println(response.getUserId());
+                park.setAppAuthToken(response.getAppAuthToken());
+                String expiredate = DateUtil.currentDateAddSeconds(Integer.parseInt(response.getExpiresIn()));
+                park.setExpiresIn(expiredate);
+                String reExpiresIn = DateUtil.currentDateAddSeconds(Integer.parseInt(response.getReExpiresIn()));
+                park.setReExpiresIn(reExpiresIn);
+                park.setRefreshToken(response.getAppRefreshToken());
+                park.setAlipayUserId(response.getUserId());
+                this.updateByPrimaryKeySelective(park);
             }else{
+                logger.error(response.getBody());
                 System.out.println(response.getSubMsg());
             }
         } catch (AlipayApiException e) {
@@ -543,7 +546,7 @@ public class ParkServiceImpl implements ParkService {
 
     private String openAuthTokenBiz(ParkBean parkBean){
         JSONObject data = new JSONObject();
-        data.put(RSConsts.grant_type, "authorization_code");
+        data.put(RSConsts.grant_type, "refresh_token");
         data.put(RSConsts.refresh_token, parkBean.getRefreshToken());
         String jsonStr = JSON.toJSONString(data);
         return jsonStr; 

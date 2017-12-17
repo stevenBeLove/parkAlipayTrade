@@ -118,6 +118,7 @@
     </if>
   </select>
   
+  
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.qt.sales.model.ParkBeanExample" >
     select * from ( select tmp_page.*, rownum row_id from (
     select

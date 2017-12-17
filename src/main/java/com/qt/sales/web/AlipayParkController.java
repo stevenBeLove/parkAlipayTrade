@@ -84,9 +84,6 @@ public class AlipayParkController {
 
     protected final Logger   logger        = LoggerFactory.getLogger(this.getClass());
 
-    // 支付宝沙箱网关
-    // private static final String gatewayUrl =
-    // "https://openapi.alipaydev.com/gateway.do";
     static String            VEHICLE_URL   = "https%3a%2f%2fwww.kangguole.com.cn%2fparkAlipayTrade%2falipayPark%2fgetVehicleToken";
     public static String     INTERFACE_URL = "https%3a%2f%2fwww.kangguole.com.cn%2fparkAlipayTrade%2falipayPark%2fnotify";
     public static String     NOTIFY_URL    = "https://www.kangguole.com.cn/parkAlipayTrade/parkAlipayTrade/notifyUrl";
@@ -118,6 +115,7 @@ public class AlipayParkController {
         String source = request.getParameter("source");
         if (!StringUtils.isEmpty(source)) {
             getAPPToken(request, model);
+            return "redirect:/park/parkList";
         } else {
             logger.debug("parking_id=" + parking_id);
             String rand = request.getParameter("rand");
@@ -155,6 +153,7 @@ public class AlipayParkController {
                     park.setAlipayUserId(response.getUserId());
                     parkService.updateByPrimaryKeySelective(park);
                     model.addAttribute("msg", "授权成功!");
+                    System.out.println("授权成功!");
                 }
             } else {
                 // 换取令牌失败逻辑处理
@@ -379,9 +378,11 @@ public class AlipayParkController {
                 ParkBean park = parkService.selectByPrimaryKey(outParkingId);
                 if (!StringUtils.isEmpty(park)) {
                     park.setAppAuthToken(response.getAppAuthToken());
-                    park.setExpiresIn(response.getExpiresIn());
-                    park.setReExpiresIn(response.getReExpiresIn());
-                    park.setRefreshToken(response.getReExpiresIn());
+                    String expiredate = DateUtil.currentDateAddSeconds(Integer.parseInt(response.getExpiresIn()));
+                    park.setExpiresIn(expiredate);
+                    String reExpiresIn = DateUtil.currentDateAddSeconds(Integer.parseInt(response.getReExpiresIn()));
+                    park.setReExpiresIn(reExpiresIn);
+                    park.setRefreshToken(response.getAppRefreshToken());
                     park.setAlipayUserId(response.getUserId());
                     parkService.updateByPrimaryKeySelective(park);
                     model.addAttribute("msg", "授权成功!");

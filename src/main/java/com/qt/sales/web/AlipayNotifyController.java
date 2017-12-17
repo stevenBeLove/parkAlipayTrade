@@ -6,7 +6,6 @@ package com.qt.sales.web;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.math.BigDecimal;
 import java.text.ParseException;
 import java.util.Map;
 
@@ -34,6 +33,7 @@ import com.qt.sales.model.OrderBean;
 import com.qt.sales.model.OrderBean.OrderStatus;
 import com.qt.sales.model.OrderBean.OrderSynStatus;
 import com.qt.sales.service.OrderBeanService;
+import com.qt.sales.service.ParkService;
 import com.qt.sales.utils.DateUtil;
 import com.qt.sales.utils.LogUtil;
 import com.qt.sales.utils.RequestUtil;
@@ -57,6 +57,10 @@ public class AlipayNotifyController {
 
     @Resource(name = "propertiesUtil")
     private PropertiesUtil   propertiesUtil;
+    
+    @Resource
+    private ParkService      parkService;
+    
     
     protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -137,6 +141,23 @@ public class AlipayNotifyController {
             logger.error(e.getMessage(),e);
         } 
     }
+    
+    
+    /**
+     * 支付成功回调地址
+     * 
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/updateRefreshAppToken", method = { RequestMethod.POST, RequestMethod.GET })
+    public void updateRefreshAppToken(String outParkingId,HttpServletRequest request) {
+        // 1. 解析请求参数
+        Map<String, String> params = RequestUtil.getRequestParams(request);
+        logger.debug("支付宝请求串:"+params.toString());
+        parkService.updateRefreshAppToken(outParkingId);
+    }
+    
+    
     
     
     public void OrderSync(String tradeNO) {

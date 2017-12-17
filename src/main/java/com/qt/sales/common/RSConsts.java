@@ -126,6 +126,8 @@ public class RSConsts {
     public static final String orderMoney = "orderMoney";
     public static final String notify_url = "notify_url";
     public static final String TRADE_SUCCESS = "TRADE_SUCCESS";
+    public static final String grant_type = "grant_type";
+    public static final String refresh_token = "refresh_tokenq";
     
     
 }

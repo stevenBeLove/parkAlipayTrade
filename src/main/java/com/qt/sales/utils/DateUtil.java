@@ -351,5 +351,24 @@ public final class DateUtil {
     long min = ((l / (60 * 1000)));
     return  min+"";
   }
+  /**
+   * 【方法名】    : (添加秒数后的时间). <br/> 
+   * 【作者】: yinghui zhang .<br/>
+   * 【时间】： 2017年12月17日 下午8:58:01 .<br/>
+   * 【参数】： .<br/>
+   * @param seconds
+   * @return .<br/>
+   * <p>
+   * 修改记录.<br/>
+   * 修改人:  yinghui zhang 修改描述： .<br/>
+   * <p/>
+   */
+  public static String currentDateAddSeconds(int seconds) {    
+      Calendar calendar = Calendar.getInstance();    
+      calendar.setTime(new Date());    
+      calendar.add(Calendar.SECOND, seconds);    
+      String mm = format(calendar.getTime(),STANDDATEFORMAT);  
+      return mm;
+  } 
 
 }

@@ -147,9 +147,11 @@ public class AlipayParkController {
                 ParkBean park = parkService.selectByPrimaryKey(outParkingId);
                 if (!StringUtils.isEmpty(park)) {
                     park.setAppAuthToken(response.getAppAuthToken());
-                    park.setExpiresIn(response.getExpiresIn());
-                    park.setReExpiresIn(response.getReExpiresIn());
-                    park.setRefreshToken(response.getReExpiresIn());
+                    String expiredate = DateUtil.currentDateAddSeconds(Integer.parseInt(response.getExpiresIn()));
+                    park.setExpiresIn(expiredate);
+                    String reExpiresIn = DateUtil.currentDateAddSeconds(Integer.parseInt(response.getReExpiresIn()));
+                    park.setReExpiresIn(reExpiresIn);
+                    park.setRefreshToken(response.getAppRefreshToken());
                     park.setAlipayUserId(response.getUserId());
                     parkService.updateByPrimaryKeySelective(park);
                     model.addAttribute("msg", "授权成功!");

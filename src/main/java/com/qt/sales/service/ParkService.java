@@ -147,5 +147,19 @@ public interface ParkService {
      * @throws QTException
      */
     public String agreementQueryRequest(String carNumber, String appToken) throws AlipayApiException, QTException;
+
+    /**
+     * 
+     * 【方法名】    : (更新token). <br/> 
+     * 【作者】: yinghui zhang .<br/>
+     * 【时间】： 2017年12月17日 下午8:36:16 .<br/>
+     * 【参数】： .<br/>
+     * @param outParkingId .<br/>
+     * <p>
+     * 修改记录.<br/>
+     * 修改人:  yinghui zhang 修改描述： .<br/>
+     * <p/>
+     */
+    public void updateRefreshAppToken(String outParkingId);
 }
 

@@ -518,17 +518,37 @@ public class ParkServiceImpl implements ParkService {
     }
 	
     
-//    public void　updateAppToken(String outParkingId){
-//        ParkBean parkBean = this.selectByPrimaryKey(outParkingId);
-//        AlipayClient alipayClient = aliPayUtil.getInstance();
-//        AlipayOpenAuthTokenAppRequest request = new AlipayOpenAuthTokenAppRequest();
-//        request.setBizContent("{" +
-//        "    \"grant_type\":\"authorization_code\"," +
-//        "    \"refresh_token\":\"1cc19911172e4f8aaa509c8fb5d12F56\"" +
-//        "  }");
-//        request.putOtherTextParam("app_auth_token", parkBean.getAppAuthToken());
-//        AlipayOpenAuthTokenAppResponse response = alipayClient.execute(request);
-//    }
+    public void updateRefreshAppToken(String outParkingId){
+        ParkBean parkBean = selectByPrimaryKey(outParkingId);
+        AlipayClient alipayClient = aliPayUtil.getInstance();
+        AlipayOpenAuthTokenAppRequest request = new AlipayOpenAuthTokenAppRequest();
+        request.setBizContent(openAuthTokenBiz(parkBean));
+        request.putOtherTextParam("app_auth_token", parkBean.getAppAuthToken());
+        try {
+            AlipayOpenAuthTokenAppResponse response = alipayClient.execute(request);
+            if(response.isSuccess()){
+                System.out.println(response.getAppAuthToken());
+                System.out.println(response.getAppRefreshToken());
+                System.out.println(response.getExpiresIn());
+                System.out.println(response.getReExpiresIn());
+                System.out.println(response.getUserId());
+            }else{
+                System.out.println(response.getSubMsg());
+            }
+        } catch (AlipayApiException e) {
+            e.printStackTrace();
+        }
+    }
+    
+
+    private String openAuthTokenBiz(ParkBean parkBean){
+        JSONObject data = new JSONObject();
+        data.put(RSConsts.grant_type, "authorization_code");
+        data.put(RSConsts.refresh_token, parkBean.getRefreshToken());
+        String jsonStr = JSON.toJSONString(data);
+        return jsonStr; 
+    }
+
     
 }
 

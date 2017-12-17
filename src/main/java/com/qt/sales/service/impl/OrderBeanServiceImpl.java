@@ -140,6 +140,11 @@ public class OrderBeanServiceImpl implements OrderBeanService {
         bean.setUpdateTime(updateTime);
         orderBeanMapper.updateAgreementStatus(bean);
 	}
+
+    @Override
+    public String queryPaidWithCarNumber(String carNumber) {
+        return orderBeanMapper.queryPaidWithCarNumber(carNumber);
+    }
 	
 
 }

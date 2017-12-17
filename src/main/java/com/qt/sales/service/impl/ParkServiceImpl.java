@@ -37,11 +37,13 @@ import com.alipay.api.request.AlipayEcoMycarParkingConfigSetRequest;
 import com.alipay.api.request.AlipayEcoMycarParkingOrderSyncRequest;
 import com.alipay.api.request.AlipayEcoMycarParkingParkinglotinfoCreateRequest;
 import com.alipay.api.request.AlipayEcoMycarParkingParkinglotinfoUpdateRequest;
+import com.alipay.api.request.AlipayOpenAuthTokenAppRequest;
 import com.alipay.api.response.AlipayEcoMycarParkingAgreementQueryResponse;
 import com.alipay.api.response.AlipayEcoMycarParkingConfigSetResponse;
 import com.alipay.api.response.AlipayEcoMycarParkingOrderSyncResponse;
 import com.alipay.api.response.AlipayEcoMycarParkingParkinglotinfoCreateResponse;
 import com.alipay.api.response.AlipayEcoMycarParkingParkinglotinfoUpdateResponse;
+import com.alipay.api.response.AlipayOpenAuthTokenAppResponse;
 import com.qt.sales.common.AliPayUtil;
 import com.qt.sales.common.PropertiesUtil;
 import com.qt.sales.common.RSConsts;
@@ -515,6 +517,18 @@ public class ParkServiceImpl implements ParkService {
         return parkBeanMapper.selectAllParkBean(example);
     }
 	
+    
+//    public void　updateAppToken(String outParkingId){
+//        ParkBean parkBean = this.selectByPrimaryKey(outParkingId);
+//        AlipayClient alipayClient = aliPayUtil.getInstance();
+//        AlipayOpenAuthTokenAppRequest request = new AlipayOpenAuthTokenAppRequest();
+//        request.setBizContent("{" +
+//        "    \"grant_type\":\"authorization_code\"," +
+//        "    \"refresh_token\":\"1cc19911172e4f8aaa509c8fb5d12F56\"" +
+//        "  }");
+//        request.putOtherTextParam("app_auth_token", parkBean.getAppAuthToken());
+//        AlipayOpenAuthTokenAppResponse response = alipayClient.execute(request);
+//    }
     
 }
 

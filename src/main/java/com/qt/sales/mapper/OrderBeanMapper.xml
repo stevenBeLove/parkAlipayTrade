@@ -401,7 +401,7 @@
   </select>
   
    <select id="queryPaidWithCarNumber" parameterType="string" resultType="string">
-  	select nvl(sum(p.paid_money),0) from park.TB_ORDER p where p.status ='0' and p.#{carNumber,jdbcType=VARCHAR}
+  	select nvl(sum(p.paid_money),0) from park.TB_ORDER p where p.status ='0' and p.CAR_NUMBER = #{carNumber,jdbcType=VARCHAR}
   </select>
   
    <select id="selectPayOrderByOrderNo" resultMap="BaseResultMap" parameterType="java.lang.String" >

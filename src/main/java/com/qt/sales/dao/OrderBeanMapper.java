@@ -102,6 +102,19 @@ public interface OrderBeanMapper {
      */
     int updateOrderStauts(OrderBean record);
     
+    /**
+     * 【方法名】    : (通过车牌查训费用). <br/> 
+     * 【作者】: yinghui zhang .<br/>
+     * 【时间】： 2017年12月16日 下午10:33:21 .<br/>
+     * 【参数】： .<br/>
+     * @param carNumber
+     * @return .<br/>
+     * <p>
+     * 修改记录.<br/>
+     * 修改人:  yinghui zhang 修改描述： .<br/>
+     * <p/>
+     */
+    public String queryPaidWithCarNumber(String carNumber);
     
     
 }

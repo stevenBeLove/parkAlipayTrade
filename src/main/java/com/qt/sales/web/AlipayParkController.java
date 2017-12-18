@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -69,6 +70,7 @@ import com.qt.sales.model.ParkBean;
 import com.qt.sales.service.OrderBeanService;
 import com.qt.sales.service.ParkService;
 import com.qt.sales.utils.DateUtil;
+import com.qt.sales.utils.HttpRequestUtil;
 import com.qt.sales.utils.LogPay;
 
 /**
@@ -87,7 +89,9 @@ public class AlipayParkController {
     static String            VEHICLE_URL   = "https%3a%2f%2fwww.kangguole.com.cn%2fparkAlipayTrade%2falipayPark%2fgetVehicleToken";
     public static String     INTERFACE_URL = "https%3a%2f%2fwww.kangguole.com.cn%2fparkAlipayTrade%2falipayPark%2fnotify";
     public static String     NOTIFY_URL    = "https://www.kangguole.com.cn/parkAlipayTrade/parkAlipayTrade/notifyUrl";
-
+    public static String     PARKPRICE_URL    = "https://www.kangguole.com.cn/sharpPark/qeryParkPrice.do";
+    
+    
     @Resource
     private ParkService      parkService;
 
@@ -236,7 +240,7 @@ public class AlipayParkController {
                         }
                     }
                     // 显示订单信息
-                    BigDecimal money = getPayMoney(car_number, parking_id);// 调用接口查询费用
+                    BigDecimal money = getPayMoney(car_number, parkBean.getOutParkingId(), order.getInTime(), DateUtil.getCurrDate(new Date(), DateUtil.STANDDATEFORMAT),order.getCarType());// 调用接口查询费用
                     model.addAttribute(RSConsts.orderMoney, money.setScale(2, BigDecimal.ROUND_HALF_DOWN));
                     // 没有找到未付款的订单，找下已经付款的订单
                     if (StringUtils.isEmpty(order)) {
@@ -326,9 +330,17 @@ public class AlipayParkController {
      * @param parkingId
      * @return
      */
-    public BigDecimal getPayMoney(String carNumber, String parkingId) {
-        String conate = parkService.selectByPrimaryParkingId("10299").getContactName();
-        return new BigDecimal(conate);
+    public BigDecimal getPayMoney(String carNumber, String parkingId,String inTime, String outTime, String vehicleType) {
+    	Map<String, Object> paramMap = new HashMap<String, Object>();
+        paramMap.put("outParkingId", parkingId);//停车场Id
+		paramMap.put("inTime", "2017-11-11 21:00:00");//进场时间
+		paramMap.put("outTime", "2017-11-18 21:30:00");//出场时间
+		paramMap.put("carNumber", carNumber);//车牌
+		paramMap.put("vehicleType", "1");//车类型 车辆类型0.全部 1.小型车2.
+		//{"retCode":"00","payType":"L","retMessage":"success","totalPrice":"149.00"}
+         String data = HttpRequestUtil.urlPost(PARKPRICE_URL, paramMap,"utf-8");
+         JSONObject json = JSONObject.parseObject(data);
+        return new BigDecimal(json.getString("totalPrice"));
     }
 
     public String getDiscountMoney(String carNumber, String outParkingId) {
@@ -623,7 +635,8 @@ public class AlipayParkController {
             // 是否开启免密支付功能
             if (AgreementStatus.agree.getVal().equals(tempOrder.getAgreementStatus())) {
                 // 如果查询的订单为空，计算已付费用是否超出已缴纳费用
-                BigDecimal money = getPayMoney(carNumber, parkBean.getParkingId());// 调用接口查询费用
+//                BigDecimal money = getPayMoney(carNumber, parkBean.getParkingId());// 调用接口查询费用
+                BigDecimal money = getPayMoney(carNumber, tempOrder.getOutParkingId(), tempOrder.getInTime(), DateUtil.getCurrDate(new Date(), DateUtil.STANDDATEFORMAT),tempOrder.getCarType());// 调用接口查询费用;// 调用接口查询费用
                 // 查询已经付款的车费
                 String paidMoney = orderBeanService.queryPaidWithCarNumber(tempOrder.getCarNumber());
                 BigDecimal paid = new BigDecimal(paidMoney);
@@ -692,7 +705,7 @@ public class AlipayParkController {
             return ajaxinfo;
         } else {
             // 显示订单信息
-            BigDecimal money = getPayMoney(carNumber, order.getOutParkingId());
+            BigDecimal money = getPayMoney(carNumber, order.getOutParkingId(), order.getInTime(), DateUtil.getCurrDate(new Date(), DateUtil.STANDDATEFORMAT),order.getCarType());// 调用接口查询费用;// 调用接口查询费用
             // 判断订单的金额是否已经超时产生费用
             String paidMoney = orderBeanService.queryPaidWithCarNumber(order.getCarNumber());
             BigDecimal tradePaidMoney = new BigDecimal(paidMoney);
@@ -856,7 +869,7 @@ public class AlipayParkController {
     public String autoOrderPay(OrderBean order, ParkBean parkBean, String carNumber) {
         String result = "1";
         // 计算停车费用
-        BigDecimal money = getPayMoney(carNumber, parkBean.getParkingId());// 调用接口查询费用
+        BigDecimal money = getPayMoney(carNumber, order.getOutParkingId(), order.getInTime(), DateUtil.getCurrDate(new Date(), DateUtil.STANDDATEFORMAT),order.getCarType());// 调用接口查询费用;// 调用接口查询费用
         // 查询已经付款的车费
         String paidMoney = orderBeanService.queryPaidWithCarNumber(order.getCarNumber());
         BigDecimal paid = new BigDecimal(paidMoney);

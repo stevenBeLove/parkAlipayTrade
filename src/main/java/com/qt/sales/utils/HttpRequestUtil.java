@@ -17,6 +17,8 @@ import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.params.HttpMethodParams;
 import org.springframework.util.StringUtils;
 
+import com.alibaba.fastjson.JSONObject;
+
 
 /**
  * 
@@ -236,6 +238,7 @@ public class HttpRequestUtil {
 		paramMap.put("vehicleType", "1");//车类型 车辆类型0.全部 1.小型车2.
 		//{"retCode":"00","payType":"L","retMessage":"success","totalPrice":"149.00"}
          String data = HttpRequestUtil.urlPost("https://www.kangguole.com.cn/sharpPark/qeryParkPrice.do", paramMap,"utf-8");
-         System.out.println(data);
+         JSONObject json = JSONObject.parseObject(data);
+         System.out.println(json.get("totalPrice"));
      }
 }

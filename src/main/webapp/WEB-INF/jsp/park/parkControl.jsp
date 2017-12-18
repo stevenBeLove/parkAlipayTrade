@@ -23,7 +23,7 @@ function carIn(){
 			'carNumber':$("#carNumber").val(),
 			'outParkingId':$("#outParkingId").val(),
 			'carType':'1',
-			'carColor':'白色',
+			'carColor':'',
 			'billingType':$("#billingType").val()
 		},
 		success : function(obj) {

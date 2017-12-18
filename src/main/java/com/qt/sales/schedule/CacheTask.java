@@ -1,12 +1,6 @@
 package com.qt.sales.schedule;
 
-import java.io.BufferedReader;
-import java.io.PrintWriter;
-import java.io.StringReader;
-import java.io.StringWriter;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
+import java.text.ParseException;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -18,6 +12,7 @@ import org.springframework.stereotype.Component;
 import com.qt.sales.model.ParkBean;
 import com.qt.sales.model.ParkBeanExample;
 import com.qt.sales.service.ParkService;
+import com.qt.sales.utils.DateUtil;
 
 
 /**
@@ -39,21 +34,26 @@ public class CacheTask {
 	public ParkService parkService;
 
 	//每天上午04:10触发
-	@Scheduled(cron = "0 10 04 * * ?")
+	@Scheduled(cron = "0 54 22 * * ?")
 	public void generateCacheDate() {
 	    ParkBeanExample example = new ParkBeanExample();
-      ParkBeanExample.Criteria cr = example.createCriteria();
 	    List<ParkBean> parks =  parkService.selectAllParkBean(example);
 	    if(parks!=null && parks.size()>0){
 	        for (ParkBean parkBean : parks) {
 	            if("1".equals(parkBean.getStatus())){
 	                String expireId = parkBean.getExpiresIn();//过期时间
-	                
+	                try {
+	                	//提前两天更新
+						if(DateUtil.getTimeDifferDay(expireId) == 1){
+							 parkService.updateRefreshAppToken(parkBean.getOutParkingId());
+						}
+					} catch (ParseException e) {
+						e.printStackTrace();
+					}
 	            }
 	        }
 	    }
 	  
-//	    parkService.updateRefreshAppToken(outParkingId);
 	}
 
 

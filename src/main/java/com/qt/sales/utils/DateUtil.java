@@ -351,6 +351,22 @@ public final class DateUtil {
     long min = ((l / (60 * 1000)));
     return  min+"";
   }
+  
+  /**
+   * 算取日期差
+   * @param startTime
+   * @param nowTime
+   * @return
+   * @throws ParseException
+   */
+	public static long getTimeDifferDay(String startTime) throws ParseException {
+		SimpleDateFormat df = new SimpleDateFormat(STANDDATEFORMAT);
+		Date now = new Date();
+		Date date = df.parse(startTime);
+		long l = date.getTime() - now.getTime();
+		long day = l / (24 * 60 * 60 * 1000);
+		return day;
+	}
   /**
    * 【方法名】    : (添加秒数后的时间). <br/> 
    * 【作者】: yinghui zhang .<br/>
@@ -370,5 +386,14 @@ public final class DateUtil {
       String mm = format(calendar.getTime(),STANDDATEFORMAT);  
       return mm;
   } 
+  
+  public static void main(String[] args) {
+	  try {
+		long day = getTimeDifferDay("2018-12-18 22:41:07");
+		System.out.println(day);
+	} catch (ParseException e) {
+		e.printStackTrace();
+	}
+  }
 
 }

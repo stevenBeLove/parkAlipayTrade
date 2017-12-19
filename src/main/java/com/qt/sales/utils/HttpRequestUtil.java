@@ -232,8 +232,8 @@ public class HttpRequestUtil {
      public static void main(String[] args) {
         Map<String, Object> paramMap = new HashMap<String, Object>();
         paramMap.put("outParkingId", "10180");//停车场Id
-		paramMap.put("inTime", "2017-11-11 21:00:00");//进场时间
-		paramMap.put("outTime", "2017-11-18 21:30:00");//出场时间
+		paramMap.put("inTime", "2017-11-18 21:00:00");//进场时间
+		paramMap.put("outTime", "2017-11-19 21:30:00");//出场时间
 		paramMap.put("carNumber", "沪A6B521");//车牌
 		paramMap.put("vehicleType", "1");//车类型 车辆类型0.全部 1.小型车2.
 		//{"retCode":"00","payType":"L","retMessage":"success","totalPrice":"149.00"}

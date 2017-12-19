@@ -416,7 +416,7 @@ public class ParkServiceImpl implements ParkService {
 		OrderBeanExample example = new OrderBeanExample();
         OrderBeanExample.Criteria cr = example.createCriteria();
         cr.andCarNumberEqualTo(carNumber);
-        cr.andOutParkingIdEqualTo(outParkingId);
+        //cr.andOutParkingIdEqualTo(outParkingId);
         cr.andStatusEqualTo("0");
         List<OrderBean> orderList = orderBeanMapper.selectByExample(example);
 		if(orderList!=null && orderList.size()>0){

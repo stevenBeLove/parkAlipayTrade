@@ -333,13 +333,13 @@ public class AlipayParkController {
     public BigDecimal getPayMoney(String carNumber, String parkingId,String inTime, String outTime, String vehicleType) {
     	Map<String, Object> paramMap = new HashMap<String, Object>();
         paramMap.put("outParkingId", parkingId);//停车场Id
-		paramMap.put("inTime", "2017-11-11 21:00:00");//进场时间
-		paramMap.put("outTime", "2017-11-18 21:30:00");//出场时间
+		paramMap.put("inTime", inTime);//进场时间
+		paramMap.put("outTime", outTime);//出场时间
 		paramMap.put("carNumber", carNumber);//车牌
-		paramMap.put("vehicleType", "1");//车类型 车辆类型0.全部 1.小型车2.
-		//{"retCode":"00","payType":"L","retMessage":"success","totalPrice":"149.00"}
-         String data = HttpRequestUtil.urlPost(PARKPRICE_URL, paramMap,"utf-8");
-         JSONObject json = JSONObject.parseObject(data);
+		paramMap.put("vehicleType", vehicleType);//车类型 车辆类型0.全部 1.小型车2.
+		logger.debug("计算车费参数="+paramMap.toString());
+        String data = HttpRequestUtil.urlPost(PARKPRICE_URL, paramMap,"utf-8");
+        JSONObject json = JSONObject.parseObject(data);
         return new BigDecimal(json.getString("totalPrice"));
     }
 

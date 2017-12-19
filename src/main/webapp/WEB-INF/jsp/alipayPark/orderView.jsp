@@ -177,10 +177,10 @@
 		  <div class="am-message-main">请于付款后15分钟内离场，超时将加收停车费</div>
 		</div>
 		<div class="am-content">
-			<c:if test="${empty payBtn}">
+			<c:if test="${ payMoney != '0.00'}">
 				<button id ="payButton" class="am-button blue">立即支付</button>
 			</c:if>
-			<c:if test="${not empty payBtn}">
+			<c:if test="${payMoney == '0.00'}">
 				<button disabled="disabled" class="am-button disabled" class="am-button blue">立即支付</button>
 			</c:if>
 		</div>

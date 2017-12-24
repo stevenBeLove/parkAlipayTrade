@@ -636,7 +636,7 @@ public class AlipayParkController {
             if (AgreementStatus.agree.getVal().equals(tempOrder.getAgreementStatus())) {
                 // 如果查询的订单为空，计算已付费用是否超出已缴纳费用
 //                BigDecimal money = getPayMoney(carNumber, parkBean.getParkingId());// 调用接口查询费用
-                BigDecimal money = getPayMoney(carNumber, tempOrder.getOutParkingId(), tempOrder.getInTime(), DateUtil.getCurrDate(new Date(), DateUtil.STANDDATEFORMAT),tempOrder.getCarType());// 调用接口查询费用;// 调用接口查询费用
+                BigDecimal money = getPayMoney(carNumber, tempOrder.getOutParkingId(), tempOrder.getInTime(), DateUtil.getCurrDate(new Date(), DateUtil.STANDDATEFORMAT),tempOrder.getCarType());// 调用接口查询费用
                 // 查询已经付款的车费
                 String paidMoney = orderBeanService.queryPaidWithCarNumber(tempOrder.getCarNumber());
                 BigDecimal paid = new BigDecimal(paidMoney);
@@ -682,7 +682,30 @@ public class AlipayParkController {
                 return ajaxinfo;
             }
         }
-
+        //计算费用为0元的情况
+        if (haveNoPaid) {
+        	 BigDecimal money = getPayMoney(carNumber, order.getOutParkingId(), order.getInTime(), DateUtil.getCurrDate(new Date(), DateUtil.STANDDATEFORMAT),order.getCarType());// 调用接口查询费用
+        	 if("0.00".equals(money.toString())|| "0".equals(money.toString()) ){
+        		 order.setPayMoney(money);
+                 order.setPaidMoney(money);
+                 order.setOrderStatus(OrderStatus.sucess.getVal());
+                 order.setCardNumber("*");
+                 String nowTime = DateUtil.getCurrDate(DateUtil.STANDDATEFORMAT);
+                 order.setOrderTime(nowTime);
+                 order.setPayType(PayTypeStatus.insteadAlipay.getVal());
+                 order.setOrderSynStatus(OrderSynStatus.paysucess.getVal());
+                 try {
+                     order.setInDuration(DateUtil.getTimeDifferMin(order.getInTime(), nowTime));
+                 } catch (ParseException e) {
+                     logger.error(e.getMessage(), e);
+                 }
+                 orderBeanService.updateByPrimaryKeySelective(order);
+                 orderBeanService.insertFromOrder(order);
+                 ajaxinfo.setSuccess(AjaxReturnInfo.TURE_RESULT);
+                 ajaxinfo.setMessage("限时免费车辆！");
+                 return ajaxinfo;
+        	 }
+        }
         // 是否开启免密支付功能
         if (AgreementStatus.agree.getVal().equals(order.getAgreementStatus()) && haveNoPaid) {
             // 使用免密支付自动扣款
@@ -754,6 +777,19 @@ public class AlipayParkController {
                 orderBeanService.updateOrderPayByOrderNo(orderBean);
                 // 添加订单
                 orderBean.setBillingTyper(billType);
+                orderBeanService.insertFromOrder(orderBean);
+                // 删除订单
+                orderBeanService.deleteWithOrderTrade(orderBean.getOrderTrade());
+                bill = true;
+            }
+            //限时免费车辆
+            if ("0.00".equals(orderBean.getPaidMoney().toString())||"0".equals(orderBean.getPaidMoney().toString())) {
+                // 更新车辆驶出订单
+                orderBean.setOutTime(out_time);
+                // 更新订单
+                orderBeanService.updateOrderPayByOrderNo(orderBean);
+                // 添加订单
+                orderBean.setBillingTyper(billingTyper.F.toString());
                 orderBeanService.insertFromOrder(orderBean);
                 // 删除订单
                 orderBeanService.deleteWithOrderTrade(orderBean.getOrderTrade());

@@ -4,6 +4,8 @@
  */
 package com.ycft;
 
+import java.math.BigDecimal;
+
 import com.qt.sales.model.OrderBean.billingTyper;
 
 /** 
@@ -16,9 +18,8 @@ import com.qt.sales.model.OrderBean.billingTyper;
 public class OrderTest {
 
     public static void main(String[] args) {
-        String type ="F";
-        boolean re = type.equals(billingTyper.F.toString());
-        System.out.println(billingTyper.F.toString());
+    	BigDecimal money = new BigDecimal("0.00");
+    	System.out.println(money.toString());
     }
 }
 

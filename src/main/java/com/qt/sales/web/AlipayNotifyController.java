@@ -113,7 +113,8 @@ public class AlipayNotifyController {
 
     /**
      * 支付成功回调地址
-     * 
+     * 参考地址：
+     * https://doc.open.alipay.com/docs/doc.htm?&docType=1&articleId=105672
      * @param request
      * @return
      */

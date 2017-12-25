@@ -635,7 +635,6 @@ public class AlipayParkController {
             // 是否开启免密支付功能
             if (AgreementStatus.agree.getVal().equals(tempOrder.getAgreementStatus())) {
                 // 如果查询的订单为空，计算已付费用是否超出已缴纳费用
-//                BigDecimal money = getPayMoney(carNumber, parkBean.getParkingId());// 调用接口查询费用
                 BigDecimal money = getPayMoney(carNumber, tempOrder.getOutParkingId(), tempOrder.getInTime(), DateUtil.getCurrDate(new Date(), DateUtil.STANDDATEFORMAT),tempOrder.getCarType());// 调用接口查询费用
                 // 查询已经付款的车费
                 String paidMoney = orderBeanService.queryPaidWithCarNumber(tempOrder.getCarNumber());
@@ -1120,15 +1119,19 @@ public class AlipayParkController {
                 logger.debug("调用成功");
             } else {
                 if (RSConsts.TRADE_HAS_SUCCESS.equals(response.getSubCode())) {// 订单已经支付
-                    String nowTime = DateUtil.getCurrDate(DateUtil.STANDDATEFORMAT);
+                    logger.debug("--订单已经支付---");
+                	String nowTime = DateUtil.getCurrDate(DateUtil.STANDDATEFORMAT);
                     orderBean.setPayTime(nowTime);
                     orderBean.setOrderStatus(OrderStatus.sucess.getVal());
                     orderBean.setCardNumber("*");
                     orderBean.setOrderSynStatus(OrderSynStatus.paysucess.getVal());
                     orderBean.setInDuration(DateUtil.getTimeDifferMin(orderBean.getInTime(), nowTime));
                     orderBean.setPaidMoney(orderBean.getPayMoney());// 已支付
-                    orderBeanService.updateByPrimaryKeySelective(orderBean);
-                    orderBeanService.insertFromOrder(orderBean);
+                    int payOrderCount = orderBeanService.queryOrderPayCountByOrderNo(outOrderNo).intValue();
+                    if(payOrderCount == 0){
+                    	 orderBeanService.updateByPrimaryKeySelective(orderBean);
+                         orderBeanService.insertFromOrder(orderBean);
+                    }
                 }
                 ajaxinfo.setSuccess(AjaxReturnInfo.FALSE_RESULT);
                 ajaxinfo.setMessage(response.getSubMsg());

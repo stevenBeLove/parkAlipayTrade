@@ -119,13 +119,13 @@
     select 
     <include refid="Base_Column_List" />
     from park.TB_ORDER
-    where out_order_no = #{outOrderNo,jdbcType=VARCHAR}
+    where out_order_no = #{outOrderNo,jdbcType=VARCHAR}  and status = '0'
   </select>
     <select id="selectByOrderNo" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
     <include refid="Base_Column_List" />
     from park.TB_ORDER
-    where ORDER_NO = #{orderNo,jdbcType=VARCHAR}
+    where ORDER_NO = #{orderNo,jdbcType=VARCHAR} and status = '0'
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
     delete from park.TB_ORDER
@@ -194,6 +194,7 @@
       <include refid="Example_Where_Clause" />
     </if>
   </select>
+  
  
   <update id="updateByPrimaryKeySelective" parameterType="com.qt.sales.model.OrderBean" >
     update park.TB_ORDER
@@ -420,6 +421,13 @@
   <update id="updateOrderStauts" parameterType="com.qt.sales.model.OrderBean">
   	 update park.tb_order o set o.status='1' where o.status = '0' and o.out_parking_id =#{outParkingId,jdbcType=VARCHAR} and o.car_number = #{carNumber,jdbcType=VARCHAR}
   </update>
+  
+  <select id="queryOrderPayCountByOrderNo" resultType="java.lang.Integer" parameterType="java.lang.String" >
+  	select 
+    count(*)
+    from park.TB_ORDER_PAY
+    where  OUT_ORDER_NO = #{outOrderNo,jdbcType=VARCHAR}
+  </select>
   
   
 </mapper>

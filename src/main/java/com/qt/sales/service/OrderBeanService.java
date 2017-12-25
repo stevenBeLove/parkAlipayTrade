@@ -112,4 +112,11 @@ public interface OrderBeanService {
 	     * @throws QTException
 	     */
 	    public void updateAgreementNotify(Map<String, String> params) throws QTException;
+	    
+	    /**
+	     * 查询支付订单数量
+	     * @param orderNo
+	     * @return
+	     */
+	    public Integer queryOrderPayCountByOrderNo(String outOrderNo);
 }

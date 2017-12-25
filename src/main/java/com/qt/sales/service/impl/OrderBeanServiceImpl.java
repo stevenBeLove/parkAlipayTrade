@@ -145,6 +145,11 @@ public class OrderBeanServiceImpl implements OrderBeanService {
     public String queryPaidWithCarNumber(String carNumber) {
         return orderBeanMapper.queryPaidWithCarNumber(carNumber);
     }
+
+	@Override
+	public Integer queryOrderPayCountByOrderNo(String outOrderNo) {
+		return orderBeanMapper.queryOrderPayCountByOrderNo(outOrderNo);
+	}
 	
 
 }

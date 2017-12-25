@@ -408,8 +408,8 @@ public class ParkServiceImpl implements ParkService {
 		bean.setCarNumberColor(carNumberColor);
 		bean.setLane(lane);
 		bean.setStatus("0");
-    orderBeanMapper.insert(bean);
-    return outOrderNo;
+	    orderBeanMapper.insert(bean);
+	    return outOrderNo;
 	}
 	
 	private void updateOrderBeanStatus(String carNumber,String outParkingId){

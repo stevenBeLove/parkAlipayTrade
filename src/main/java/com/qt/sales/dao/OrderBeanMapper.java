@@ -116,5 +116,12 @@ public interface OrderBeanMapper {
      */
     public String queryPaidWithCarNumber(String carNumber);
     
+    /**
+     * 查询支付成功订单数量
+     * @param orderNo
+     * @return
+     */
+    public Integer queryOrderPayCountByOrderNo(String orderNo);
+    
     
 }

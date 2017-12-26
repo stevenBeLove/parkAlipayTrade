@@ -43,6 +43,11 @@ public class AjaxReturnInfo {
     private String payMoney;
     
     /**
+     *订单号
+     */
+    private String orderNo;
+    
+    /**
      * date
      */
     private Map<String, Object>        datas = new HashMap<String, Object>();
@@ -131,7 +136,13 @@ public class AjaxReturnInfo {
      */
     public void setPayMoney(String payMoney) {
         this.payMoney = payMoney;
-    } 
+    }
+	public String getOrderNo() {
+		return orderNo;
+	}
+	public void setOrderNo(String orderNo) {
+		this.orderNo = orderNo;
+	} 
 
   
 

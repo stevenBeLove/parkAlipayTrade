@@ -653,7 +653,8 @@ public class AlipayParkController {
                     String result = autoPay(order, parkBean);
                     if ("0".equals(result)) {
                         ajaxinfo.setSuccess(AjaxReturnInfo.TURE_RESULT);
-                        ajaxinfo.setPayMoney(order.getPaidMoney().toString());
+                        ajaxinfo.setPayMoney(money.toString());
+                        //ajaxinfo.setOrderNo(order.getOrderNo());
                         ajaxinfo.setMessage("代扣付款成功！");
                         return ajaxinfo;
                     } else {
@@ -663,6 +664,9 @@ public class AlipayParkController {
                     }
                 }
             }
+            // 查询已经付款的车费
+            String paidMoney = orderBeanService.queryPaidWithCarNumber(carNumber);
+            ajaxinfo.setPayMoney(paidMoney);
             ajaxinfo.setSuccess(AjaxReturnInfo.TURE_RESULT);
             ajaxinfo.setMessage("已支付成功！");
             return ajaxinfo;
@@ -700,6 +704,7 @@ public class AlipayParkController {
                  }
                  orderBeanService.updateByPrimaryKeySelective(order);
                  orderBeanService.insertFromOrder(order);
+                 ajaxinfo.setPayMoney("0.00");
                  ajaxinfo.setSuccess(AjaxReturnInfo.TURE_RESULT);
                  ajaxinfo.setMessage("限时免费车辆！");
                  return ajaxinfo;
@@ -710,8 +715,10 @@ public class AlipayParkController {
             // 使用免密支付自动扣款
             String result = autoOrderPay(order, parkBean, carNumber);
             if ("0".equals(result)) {
+            	// 查询已经付款的车费
+                String paidMoney = orderBeanService.queryPaidWithCarNumber(carNumber);
+                ajaxinfo.setPayMoney(paidMoney);
                 ajaxinfo.setSuccess(AjaxReturnInfo.TURE_RESULT);
-                ajaxinfo.setPayMoney(order.getPaidMoney().toString());
                 ajaxinfo.setMessage("代扣付款成功！");
                 return ajaxinfo;
             } else {
@@ -742,6 +749,9 @@ public class AlipayParkController {
                 return ajaxinfo;
             }
         }
+        // 查询已经付款的车费
+        String paidMoney = orderBeanService.queryPaidWithCarNumber(carNumber);
+        ajaxinfo.setPayMoney(paidMoney);
         ajaxinfo.setSuccess(AjaxReturnInfo.TURE_RESULT);
         ajaxinfo.setMessage("付款成功！");
         return ajaxinfo;

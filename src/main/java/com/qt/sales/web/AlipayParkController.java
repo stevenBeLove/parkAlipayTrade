@@ -187,6 +187,9 @@ public class AlipayParkController {
         AlipaySystemOauthTokenRequest tokenRequest = new AlipaySystemOauthTokenRequest();
         tokenRequest.setGrantType("authorization_code");
         ParkBean parkBean = parkService.selectByPrimaryParkingId(parking_id);
+        if(parkBean == null){
+        	return;
+        }
         String app_auth_token = parkBean.getAppAuthToken();
         logger.debug("store.token = " + app_auth_token);
         // 授权设置

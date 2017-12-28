@@ -72,43 +72,51 @@ public class AlipayNotifyController {
      */
     @RequestMapping(value = "/agreementNotify", method = { RequestMethod.POST, RequestMethod.GET })
     public void agreementNotify(HttpServletRequest request, HttpServletResponse response) {
-        // 支付宝响应消息
-        String responseMsg = "";
-        // 1. 解析请求参数
-        Map<String, String> params = RequestUtil.getRequestParams(request);
-        // 打印本次请求日志，开发者自行决定是否需要
-        logger.debug("支付宝请求串:"+params.toString());
-        try {
-            // 2. 验证签名
-            this.verifySign(params);
-            orderBeanService.updateAgreementNotify(params);
-            String code = "10000";
-            String msg = "success";
-            String econotify = "success";
-            responseMsg = buildBaseAckMsg(code, msg, econotify);
-        } catch (AlipayApiException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (QTException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } finally {
-            // 5. 响应结果加签及返回
-            try {
-                // http 内容应答
-                response.reset();
-                response.setContentType("text/xml;charset=GBK");
-                PrintWriter printWriter = response.getWriter();
-                printWriter.print(responseMsg);
-                logger.debug("响应请求串:"+params.toString());
-                response.flushBuffer();
-            } catch (IOException e) {
-                logger.error(e.getMessage(),e);
-            }
-        }
+		// 支付宝响应消息
+		String responseMsg = "";
+		// 1. 解析请求参数
+		Map<String, String> params = RequestUtil.getRequestParams(request);
+		try {
+			if (params == null || "".equals(params.toString()) || params.isEmpty()) {
+				String code = "10000";
+				String msg = "success";
+				String econotify = "success";
+				responseMsg = buildBaseAckMsg(code, msg, econotify);
+			} else {
+				// 打印本次请求日志，开发者自行决定是否需要
+				logger.debug("支付宝请求串:" + params.toString());
+
+				// 2. 验证签名
+				this.verifySign(params);
+				orderBeanService.updateAgreementNotify(params);
+				String code = "10000";
+				String msg = "success";
+				String econotify = "success";
+				responseMsg = buildBaseAckMsg(code, msg, econotify);
+			}
+		} catch (AlipayApiException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (QTException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			// 5. 响应结果加签及返回
+			try {
+				// http 内容应答
+				response.reset();
+				response.setContentType("text/xml;charset=GBK");
+				PrintWriter printWriter = response.getWriter();
+				printWriter.print(responseMsg);
+				logger.debug("响应请求串:" + responseMsg.toString());
+				response.flushBuffer();
+			} catch (IOException e) {
+				logger.error(e.getMessage(), e);
+			}
+		}
     }
 
     /**
@@ -125,23 +133,21 @@ public class AlipayNotifyController {
         String  responseMsg ="";
         try {
 	        if(params == null || "".equals(params.toString())){
-	        	  String code = "10000";
-	              String msg = "success";
-	              String econotify = "success";
-	        	  responseMsg = buildBaseAckMsg(code, msg, econotify);
+	        	  responseMsg = "success";
+	        }else{
+		        logger.debug("支付成功回调:"+params.toString());
+	            // 2. 验证签名
+	            this.verifySignRSA2(params);
+	            String trade_no = params.get("trade_no");
+	            LogUtil.log("trade_no", trade_no);
+	            String trade_status = params.get("trade_status");
+	            LogUtil.log("trade_status", trade_status);
+	            String out_trade_no = params.get("out_trade_no");
+	            LogUtil.log("out_trade_no", out_trade_no);
+	            if(RSConsts.TRADE_SUCCESS.equals(trade_status)){
+	                OrderSync(trade_no);
+	            }
 	        }
-	        logger.debug("支付成功回调:"+params.toString());
-            // 2. 验证签名
-            this.verifySignRSA2(params);
-            String trade_no = params.get("trade_no");
-            LogUtil.log("trade_no", trade_no);
-            String trade_status = params.get("trade_status");
-            LogUtil.log("trade_status", trade_status);
-            String out_trade_no = params.get("out_trade_no");
-            LogUtil.log("out_trade_no", out_trade_no);
-            if(RSConsts.TRADE_SUCCESS.equals(trade_status)){
-                OrderSync(trade_no);
-            }
             
         } catch (AlipayApiException e) {
             logger.error(e.getMessage(),e);

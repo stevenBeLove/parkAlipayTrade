@@ -130,12 +130,12 @@ public class AlipayNotifyController {
     public void notifyUrl(HttpServletRequest request, HttpServletResponse response) {
         // 1. 解析请求参数
         Map<String, String> params = RequestUtil.getRequestParams(request);
+        logger.debug("支付成功回调:"+params.toString());
         String  responseMsg ="";
         try {
-	        if(params == null || "".equals(params.toString())){
+	        if(params == null || "".equals(params.toString())|| params.isEmpty()){
 	        	  responseMsg = "success";
 	        }else{
-		        logger.debug("支付成功回调:"+params.toString());
 	            // 2. 验证签名
 	            this.verifySignRSA2(params);
 	            String trade_no = params.get("trade_no");

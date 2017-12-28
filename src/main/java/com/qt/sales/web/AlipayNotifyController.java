@@ -122,8 +122,15 @@ public class AlipayNotifyController {
     public void notifyUrl(HttpServletRequest request, HttpServletResponse response) {
         // 1. 解析请求参数
         Map<String, String> params = RequestUtil.getRequestParams(request);
-        logger.debug("支付宝请求串:"+params.toString());
+        String  responseMsg ="";
         try {
+	        if(params == null || "".equals(params.toString())){
+	        	  String code = "10000";
+	              String msg = "success";
+	              String econotify = "success";
+	        	  responseMsg = buildBaseAckMsg(code, msg, econotify);
+	        }
+	        logger.debug("支付成功回调:"+params.toString());
             // 2. 验证签名
             this.verifySignRSA2(params);
             String trade_no = params.get("trade_no");
@@ -140,13 +147,24 @@ public class AlipayNotifyController {
             logger.error(e.getMessage(),e);
         } catch (IOException e) {
             logger.error(e.getMessage(),e);
+        } finally {
+            // 5. 响应结果加签及返回
+            try {
+                // http 内容应答
+                response.reset();
+                response.setContentType("text/xml;charset=GBK");
+                PrintWriter printWriter = response.getWriter();
+                printWriter.print(responseMsg);
+                logger.debug("响应请求串:"+params.toString());
+                response.flushBuffer();
+            } catch (IOException e) {
+                logger.error(e.getMessage(),e);
+            }
         } 
     }
     
     
     /**
-     * 支付成功回调地址
-     * 
      * @param request
      * @return
      */

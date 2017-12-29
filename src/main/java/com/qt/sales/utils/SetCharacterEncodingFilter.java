@@ -53,6 +53,7 @@ import javax.servlet.ServletResponse;
  * user's session.</p>
  *
  * @author Craig McClanahan
+ * 
  * @version $Id: SetCharacterEncodingFilter.java 939521 2010-04-30 00:16:33Z kkolinko $
  */
 

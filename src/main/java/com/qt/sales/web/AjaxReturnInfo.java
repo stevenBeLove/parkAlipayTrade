@@ -38,9 +38,14 @@ public class AjaxReturnInfo {
     private String 					carNumber;
     
     /**
-     * 付款金额
+     * 应付款金额
      */
     private String payMoney;
+    
+    /**
+     * 已付款金额
+     */
+    private String paidMoney;
     
     /**
      *订单号
@@ -142,6 +147,12 @@ public class AjaxReturnInfo {
 	}
 	public void setOrderNo(String orderNo) {
 		this.orderNo = orderNo;
+	}
+	public String getPaidMoney() {
+		return paidMoney;
+	}
+	public void setPaidMoney(String paidMoney) {
+		this.paidMoney = paidMoney;
 	} 
 
   

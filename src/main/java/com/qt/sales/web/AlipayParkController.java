@@ -823,9 +823,9 @@ public class AlipayParkController {
                 orderBeanService.updateOrderPayByOrderNo(orderBean);
                 // 添加订单
                 orderBean.setBillingTyper(billingTyper.F.toString());
-                orderBeanService.insertFromOrder(orderBean);
                 // 删除订单
                 orderBeanService.deleteWithOrderTrade(orderBean.getOrderTrade());
+                freeCarExit(parkBean,carNumber,out_time);
                 bill = true;
             }
             if (bill) {
@@ -875,6 +875,25 @@ public class AlipayParkController {
         return ajaxinfo;
     }
 
+    public void freeCarExit(ParkBean parkBean,String carNumber,String out_time){
+    	AlipayEcoMycarParkingExitinfoSyncRequest request = new AlipayEcoMycarParkingExitinfoSyncRequest();
+        request.putOtherTextParam(RSConsts.app_auth_token, parkBean.getAppAuthToken());
+        request.setBizContent(ecoMycarParkingExitinfoSyncContent(parkBean.getParkingId(), carNumber, out_time));// 业务数据
+        AlipayEcoMycarParkingExitinfoSyncResponse response;
+        try {
+            AlipayClient alipayClient = aliPayUtil.getInstance();
+            response = alipayClient.execute(request);
+            if (response.isSuccess()) {
+                logger.debug("限时免费车辆驶出成功!");
+            } else {
+            	logger.debug("限时免费车辆驶出失败!");
+            }
+        } catch (AlipayApiException e) {
+            logger.error(e.getMessage(), e);
+        } 
+    }
+    
+    
     /**
      * 无感支付
      * 

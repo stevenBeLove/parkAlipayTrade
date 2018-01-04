@@ -236,56 +236,45 @@ public class AlipayParkController {
 
                     // 首先查询是否存在未付款的订单
                     OrderBean order = null;
+                    OrderBean payOrder = null;
                     for (OrderBean orderBean : orderList) {
                         //有未付款的订单
                         if (OrderSynStatus.create.getVal().equals(orderBean.getOrderSynStatus())) {
                         	order = orderBean;
                         }
+                        if (OrderSynStatus.paysucess.getVal().equals(orderBean.getOrderSynStatus())) {
+                        	payOrder = orderBean;
+                        }
                     }
                     BigDecimal money = null;
-                    // 没有找到未付款的订单，找下已经付款的订单
-                    if (StringUtils.isEmpty(order)) {
-                        boolean haveOrder = false;
-                        for (OrderBean orderBean : orderList) {
-                            // 找到已经付款的订单
-                            if (OrderSynStatus.paysucess.getVal().equals(orderBean.getOrderSynStatus())) {
-                                order = orderBean;
-                                haveOrder = true;
-                            }
-                        }
-                        if (haveOrder) {
-                            // 判断订单的金额是否已经超时产生费用
-                            String paidMoney = orderBeanService.queryPaidWithCarNumber(order.getCarNumber());
-                            BigDecimal tradePaidMoney = new BigDecimal(paidMoney);
-                            money = getPayMoney(car_number, parkBean.getOutParkingId(), order.getInTime(), DateUtil.getCurrDate(new Date(), DateUtil.STANDDATEFORMAT),order.getCarType());// 调用接口查询费用
-                            if (money.compareTo(tradePaidMoney) == 1) {
-                                // 创建未支付订单
-                                ParkBean bean = parkService.selectByPrimaryParkingId(parking_id);
-                                String in_time = DateUtil.getCurrDate(DateUtil.STANDDATEFORMAT);
-                                String outOrderNo = parkService.enterinfoSyncEnter(bean, order.getOrderTrade(), car_number, in_time, order.getCarType(), order.getCarColor(),
-                                        order.getAgreementStatus(), order.getBillingTyper(), order.getCarNumberColor(), order.getLane());
-                                OrderBean noPaidOrder = orderBeanService.selectByPrimaryKey(outOrderNo);
-                                order = noPaidOrder;
-                            }
-                        }
-                    }else{
-                        money = getPayMoney(car_number, parkBean.getOutParkingId(), order.getInTime(), DateUtil.getCurrDate(new Date(), DateUtil.STANDDATEFORMAT),order.getCarType());// 调用接口查询费用
+                    if(order != null){//存在未付款的订单
+                    	money = getPayMoney(car_number, parkBean.getOutParkingId(), order.getInTime(), DateUtil.getCurrDate(new Date(), DateUtil.STANDDATEFORMAT),order.getCarType());// 调用接口查询费用
                     }
-                    model.addAttribute(RSConsts.orderMoney, money.setScale(2, BigDecimal.ROUND_HALF_DOWN));
-                    if (StringUtils.isEmpty(order)) {
-                        model.addAttribute("msg", "无订单生成！");
-                        model.addAttribute("status", false);
-                        return;
+                    // 没有找到未付款的订单，找下已经付款的订单
+                    if (payOrder!=null) {
+                        // 判断订单的金额是否已经超时产生费用
+                        String paidMoney = orderBeanService.queryPaidWithCarNumber(payOrder.getCarNumber());
+                        BigDecimal tradePaidMoney = new BigDecimal(paidMoney);
+                        money = getPayMoney(car_number, parkBean.getOutParkingId(), payOrder.getInTime(), DateUtil.getCurrDate(new Date(), DateUtil.STANDDATEFORMAT),payOrder.getCarType());// 调用接口查询费用
+                        if (money.compareTo(tradePaidMoney) == 1) {
+                            // 创建未支付订单
+                            ParkBean bean = parkService.selectByPrimaryParkingId(parking_id);
+                            String in_time = DateUtil.getCurrDate(DateUtil.STANDDATEFORMAT);
+                            String outOrderNo = parkService.enterinfoSyncEnter(bean, payOrder.getOrderTrade(), car_number, in_time, payOrder.getCarType(), payOrder.getCarColor(),
+                            		payOrder.getAgreementStatus(), payOrder.getBillingTyper(), payOrder.getCarNumberColor(), payOrder.getLane());
+                            OrderBean noPaidOrder = orderBeanService.selectByPrimaryKey(outOrderNo);
+                            order = noPaidOrder;
+                        }
                     }
                     // 更新订单信息
                     order.setUserId(uid);
                     order.setCarId(car_id);
+                    model.addAttribute(RSConsts.orderMoney, money.setScale(2, BigDecimal.ROUND_HALF_DOWN));
                     orderBeanService.updateByPrimaryKey(order);
                     model.addAttribute("outOrderNo", order.getOutOrderNo());
                     String paidMoney = orderBeanService.queryPaidWithCarNumber(order.getCarNumber());
                     if (!"0".equals(paidMoney)) {
                         BigDecimal paid = new BigDecimal(paidMoney);
-                        money = getPayMoney(car_number, parkBean.getOutParkingId(), order.getInTime(), DateUtil.getCurrDate(new Date(), DateUtil.STANDDATEFORMAT),order.getCarType());// 调用接口查询费用
                         if (money.compareTo(paid) == 1) {
                             String payResult = money.subtract(paid).floatValue() + "";
                             BigDecimal setScale = new BigDecimal(payResult).setScale(2, BigDecimal.ROUND_HALF_DOWN);

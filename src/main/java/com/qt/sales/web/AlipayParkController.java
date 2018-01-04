@@ -236,12 +236,10 @@ public class AlipayParkController {
 
                     // 首先查询是否存在未付款的订单
                     OrderBean order = null;
-                    boolean haveCreate = false;
                     for (OrderBean orderBean : orderList) {
                         //有未付款的订单
                         if (OrderSynStatus.create.getVal().equals(orderBean.getOrderSynStatus())) {
                         	order = orderBean;
-                            haveCreate = true;
                         }
                     }
                     BigDecimal money = null;
@@ -638,7 +636,7 @@ public class AlipayParkController {
             }
         }
         // 查询的未付款订单为空，已经自助缴费成功的
-        if (order == null) {
+        if (order == null && tempOrder!=null) {
             // 是否开启免密支付功能
             if (AgreementStatus.agree.getVal().equals(tempOrder.getAgreementStatus())) {
                 // 如果查询的订单为空，计算已付费用是否超出已缴纳费用
@@ -662,23 +660,24 @@ public class AlipayParkController {
                         ajaxinfo.setSuccess(AjaxReturnInfo.TURE_RESULT);
                         ajaxinfo.setPayMoney(money.toString());
                         ajaxinfo.setOrderNo(order.getOrderNo());
-                        ajaxinfo.setMessage("代扣付款成功！");
+                        ajaxinfo.setMessage("超时订单代扣成功！");
                         return ajaxinfo;
                     } else {
                         ajaxinfo.setSuccess(AjaxReturnInfo.FALSE_RESULT);
-                        ajaxinfo.setMessage("代扣失败，请扫码到缴费页面支付！");
+                        ajaxinfo.setMessage("超时订单代扣失败，请扫码到缴费页面支付！");
                         return ajaxinfo;
                     }
                 }
+                // 查询已经付款的车费
+                //String paidMoney1 = orderBeanService.queryPaidWithCarNumber(carNumber);
+                ajaxinfo.setOrderNo(tempOrder.getOrderNo());
+                ajaxinfo.setPayMoney(paidMoney);
+                ajaxinfo.setPaidMoney(paidMoney);
+                ajaxinfo.setSuccess(AjaxReturnInfo.TURE_RESULT);
+                ajaxinfo.setMessage("已支付成功！");
+                return ajaxinfo;
             }
-            // 查询已经付款的车费
-            String paidMoney = orderBeanService.queryPaidWithCarNumber(carNumber);
-            ajaxinfo.setOrderNo(tempOrder.getOrderNo());
-            ajaxinfo.setPayMoney(paidMoney);
-            ajaxinfo.setPaidMoney(paidMoney);
-            ajaxinfo.setSuccess(AjaxReturnInfo.TURE_RESULT);
-            ajaxinfo.setMessage("已支付成功！");
-            return ajaxinfo;
+           
         }
 
         // 月卡或免费用户
@@ -710,6 +709,7 @@ public class AlipayParkController {
                  order.setOrderTime(nowTime);
                  order.setPayType(PayTypeStatus.insteadAlipay.getVal());
                  order.setOrderSynStatus(OrderSynStatus.paysucess.getVal());
+                 order.setOrderNo("0");
                  try {
                      order.setInDuration(DateUtil.getTimeDifferMin(order.getInTime(), nowTime));
                  } catch (ParseException e) {

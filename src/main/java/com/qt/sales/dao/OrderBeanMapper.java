@@ -123,5 +123,12 @@ public interface OrderBeanMapper {
      */
     public Integer queryOrderPayCountByOrderNo(String orderNo);
     
+    /**
+     * 查询订单数量
+     * @param orderNo
+     * @return
+     */
+    public Integer  selectCountByOrderNo(String orderNo);
+    
     
 }

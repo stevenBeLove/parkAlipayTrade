@@ -409,7 +409,14 @@
     select 
     <include refid="Base_Column_List" />
     from park.TB_ORDER_PAY
-    where  ORDER_NO = #{orderNo,jdbcType=VARCHAR}
+    where  ORDER_NO = #{orderNo,jdbcType=VARCHAR} 
+  </select>
+  
+   <select id="selectCountByOrderNo" resultType="java.lang.Integer" parameterType="java.lang.String" >
+    select 
+    count(*)
+    from park.TB_ORDER_PAY
+    where  ORDER_NO = #{orderNo,jdbcType=VARCHAR} 
   </select>
   
   

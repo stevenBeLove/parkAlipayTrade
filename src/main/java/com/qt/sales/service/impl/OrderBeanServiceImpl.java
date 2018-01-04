@@ -100,7 +100,15 @@ public class OrderBeanServiceImpl implements OrderBeanService {
     
     @Override
     public int insertFromOrder(OrderBean record){
-    	return orderBeanMapper.insertFromOrder(record);
+    	if("0".equals(record.getOrderNo())){
+    		orderBeanMapper.insertFromOrder(record);
+    	}else{
+    		int count = orderBeanMapper.selectCountByOrderNo(record.getOrderNo());
+    		if(count==0){
+    			orderBeanMapper.insertFromOrder(record);
+    		}
+    	}
+    	return 1;
     }
 
 	@Override

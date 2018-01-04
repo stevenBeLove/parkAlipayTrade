@@ -236,15 +236,15 @@ public class AlipayParkController {
 
                     // 首先查询是否存在未付款的订单
                     OrderBean order = null;
+                    boolean haveCreate = false;
                     for (OrderBean orderBean : orderList) {
-                        // 有未付款的订单
+                        //有未付款的订单
                         if (OrderSynStatus.create.getVal().equals(orderBean.getOrderSynStatus())) {
-                            order = orderBean;
+                        	order = orderBean;
+                            haveCreate = true;
                         }
                     }
-                    // 显示订单信息
-                    BigDecimal money = getPayMoney(car_number, parkBean.getOutParkingId(), order.getInTime(), DateUtil.getCurrDate(new Date(), DateUtil.STANDDATEFORMAT),order.getCarType());// 调用接口查询费用
-                    model.addAttribute(RSConsts.orderMoney, money.setScale(2, BigDecimal.ROUND_HALF_DOWN));
+                    BigDecimal money = null;
                     // 没有找到未付款的订单，找下已经付款的订单
                     if (StringUtils.isEmpty(order)) {
                         boolean haveOrder = false;
@@ -259,6 +259,7 @@ public class AlipayParkController {
                             // 判断订单的金额是否已经超时产生费用
                             String paidMoney = orderBeanService.queryPaidWithCarNumber(order.getCarNumber());
                             BigDecimal tradePaidMoney = new BigDecimal(paidMoney);
+                            money = getPayMoney(car_number, parkBean.getOutParkingId(), order.getInTime(), DateUtil.getCurrDate(new Date(), DateUtil.STANDDATEFORMAT),order.getCarType());// 调用接口查询费用
                             if (money.compareTo(tradePaidMoney) == 1) {
                                 // 创建未支付订单
                                 ParkBean bean = parkService.selectByPrimaryParkingId(parking_id);
@@ -269,8 +270,10 @@ public class AlipayParkController {
                                 order = noPaidOrder;
                             }
                         }
+                    }else{
+                        money = getPayMoney(car_number, parkBean.getOutParkingId(), order.getInTime(), DateUtil.getCurrDate(new Date(), DateUtil.STANDDATEFORMAT),order.getCarType());// 调用接口查询费用
                     }
-
+                    model.addAttribute(RSConsts.orderMoney, money.setScale(2, BigDecimal.ROUND_HALF_DOWN));
                     if (StringUtils.isEmpty(order)) {
                         model.addAttribute("msg", "无订单生成！");
                         model.addAttribute("status", false);
@@ -284,6 +287,7 @@ public class AlipayParkController {
                     String paidMoney = orderBeanService.queryPaidWithCarNumber(order.getCarNumber());
                     if (!"0".equals(paidMoney)) {
                         BigDecimal paid = new BigDecimal(paidMoney);
+                        money = getPayMoney(car_number, parkBean.getOutParkingId(), order.getInTime(), DateUtil.getCurrDate(new Date(), DateUtil.STANDDATEFORMAT),order.getCarType());// 调用接口查询费用
                         if (money.compareTo(paid) == 1) {
                             String payResult = money.subtract(paid).floatValue() + "";
                             BigDecimal setScale = new BigDecimal(payResult).setScale(2, BigDecimal.ROUND_HALF_DOWN);

@@ -259,8 +259,7 @@ public class AlipayParkController {
                         if (money.compareTo(tradePaidMoney) == 1) {
                             // 创建未支付订单
                             ParkBean bean = parkService.selectByPrimaryParkingId(parking_id);
-                            String in_time = DateUtil.getCurrDate(DateUtil.STANDDATEFORMAT);
-                            String outOrderNo = parkService.enterinfoSyncEnter(bean, payOrder.getOrderTrade(), car_number, in_time, payOrder.getCarType(), payOrder.getCarColor(),
+                            String outOrderNo = parkService.enterinfoSyncEnter(bean, payOrder.getOrderTrade(), car_number, payOrder.getInTime(), payOrder.getCarType(), payOrder.getCarColor(),
                             		payOrder.getAgreementStatus(), payOrder.getBillingTyper(), payOrder.getCarNumberColor(), payOrder.getLane());
                             OrderBean noPaidOrder = orderBeanService.selectByPrimaryKey(outOrderNo);
                             order = noPaidOrder;
@@ -637,7 +636,7 @@ public class AlipayParkController {
                 if (money.compareTo(paid) == 1) {
                     // 创建未付款的订单
                     String in_time = DateUtil.getCurrDate(DateUtil.STANDDATEFORMAT);
-                    String outOrderNo = parkService.enterinfoSyncEnter(parkBean, tempOrder.getOrderTrade(), tempOrder.getCarNumber(), in_time, tempOrder.getCarType(), tempOrder.getCarColor(),
+                    String outOrderNo = parkService.enterinfoSyncEnter(parkBean, tempOrder.getOrderTrade(), tempOrder.getCarNumber(), tempOrder.getInTime(), tempOrder.getCarType(), tempOrder.getCarColor(),
                             tempOrder.getAgreementStatus(), tempOrder.getBillingTyper(), tempOrder.getCarNumberColor(), tempOrder.getLane());
                     OrderBean noPaidOrder = orderBeanService.selectByPrimaryKey(outOrderNo);
                     order = noPaidOrder;
@@ -755,8 +754,8 @@ public class AlipayParkController {
             if (money.compareTo(tradePaidMoney) == 1) {
                 // 创建未支付订单
                 ParkBean bean = parkService.selectByPrimaryParkingId(order.getParkingId());
-                String in_time = DateUtil.getCurrDate(DateUtil.STANDDATEFORMAT);
-                parkService.enterinfoSyncEnter(bean, order.getOrderTrade(), order.getCarNumber(), in_time, order.getCarType(), order.getCarColor(), order.getAgreementStatus(),
+//                String in_time = DateUtil.getCurrDate(DateUtil.STANDDATEFORMAT);
+                parkService.enterinfoSyncEnter(bean, order.getOrderTrade(), order.getCarNumber(), order.getInTime(), order.getCarType(), order.getCarColor(), order.getAgreementStatus(),
                         order.getBillingTyper(), order.getCarNumberColor(), order.getLane());
                 ajaxinfo.setPayMoney(money.toString());
                 ajaxinfo.setPaidMoney(paidMoney);

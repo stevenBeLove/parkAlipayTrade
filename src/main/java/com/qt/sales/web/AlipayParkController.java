@@ -830,7 +830,9 @@ public class AlipayParkController {
                 orderBean.setBillingTyper(billingTyper.F.toString());
                 // 删除订单
                 orderBeanService.deleteWithOrderTrade(orderBean.getOrderTrade());
-                freeCarExit(parkBean,carNumber,out_time);
+                if(!billingTyper.N.toString().equals(billType)){
+                	 freeCarExit(parkBean,carNumber,out_time);
+                }
                 bill = true;
             }
             if (bill) {

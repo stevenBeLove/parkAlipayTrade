@@ -247,7 +247,11 @@ public class OrderBean {
     	/**
     	 * 免费
     	 */
-    	F
+    	F,
+    	/**
+    	 *无牌车 
+    	 */
+    	N
     }
    
 

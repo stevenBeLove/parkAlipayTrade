@@ -241,6 +241,7 @@ public class AlipayParkController {
                         //有未付款的订单
                         if (OrderSynStatus.create.getVal().equals(orderBean.getOrderSynStatus())) {
                         	order = orderBean;
+                        	break;
                         }
                         if (OrderSynStatus.paysucess.getVal().equals(orderBean.getOrderSynStatus())) {
                         	payOrder = orderBean;
@@ -260,10 +261,12 @@ public class AlipayParkController {
                             // 创建未支付订单
                             ParkBean bean = parkService.selectByPrimaryParkingId(parking_id);
                             String in_time = DateUtil.getCurrDate(DateUtil.STANDDATEFORMAT);
-                            String outOrderNo = parkService.enterinfoSyncEnter(bean, payOrder.getOrderTrade(), car_number, in_time, payOrder.getCarType(), payOrder.getCarColor(),
+                            String outOrderNo = parkService.enterinfoSyncEnter(bean, payOrder.getOrderTrade(), car_number, payOrder.getInTime(), payOrder.getCarType(), payOrder.getCarColor(),
                             		payOrder.getAgreementStatus(), payOrder.getBillingTyper(), payOrder.getCarNumberColor(), payOrder.getLane());
                             OrderBean noPaidOrder = orderBeanService.selectByPrimaryKey(outOrderNo);
                             order = noPaidOrder;
+                        }else{
+                        	order = payOrder;
                         }
                     }
                     // 更新订单信息
@@ -516,7 +519,7 @@ public class AlipayParkController {
      * @param outParkingId
      * @param carNumber
      * @param billingType
-     *            M：月卡。F:免费。L：临时
+     *            M：月卡。F:免费。L：临时. N:无牌车
      * @param carType
      *            1.小型车2.中型车 3.大型车 4.摩托车 5.其他
      * @param carNumberColor
@@ -534,7 +537,7 @@ public class AlipayParkController {
         String in_time = DateUtil.getCurrDate(DateUtil.STANDDATEFORMAT);
         ParkBean bean = parkService.selectByPrimaryKey(outParkingId);
         if (!StringUtils.isEmpty(billingType)) {
-            if (billingTyper.M.toString().equals(billingType.trim()) || billingTyper.F.toString().equals(billingType.trim())) {
+            if (billingTyper.M.toString().equals(billingType.trim()) || billingTyper.F.toString().equals(billingType.trim())|| billingTyper.N.toString().equals(billingType.trim())) {
                 parkService.enterinfoSyncEnter(bean, "", carNumber, in_time, carType, carColor, "", billingType, carNumberColor, lane);
                 ajaxinfo.setCarNumber(carNumber);
                 ajaxinfo.setSuccess(AjaxReturnInfo.TURE_RESULT);
@@ -620,6 +623,7 @@ public class AlipayParkController {
             if (OrderSynStatus.create.getVal().equals(orderBean.getOrderSynStatus())) {
                 order = orderBean;
                 haveNoPaid = true;
+                break;
             } else {
                 tempOrder = orderBean;
             }
@@ -637,7 +641,7 @@ public class AlipayParkController {
                 if (money.compareTo(paid) == 1) {
                     // 创建未付款的订单
                     String in_time = DateUtil.getCurrDate(DateUtil.STANDDATEFORMAT);
-                    String outOrderNo = parkService.enterinfoSyncEnter(parkBean, tempOrder.getOrderTrade(), tempOrder.getCarNumber(), in_time, tempOrder.getCarType(), tempOrder.getCarColor(),
+                    String outOrderNo = parkService.enterinfoSyncEnter(parkBean, tempOrder.getOrderTrade(), tempOrder.getCarNumber(), tempOrder.getInTime(), tempOrder.getCarType(), tempOrder.getCarColor(),
                             tempOrder.getAgreementStatus(), tempOrder.getBillingTyper(), tempOrder.getCarNumberColor(), tempOrder.getLane());
                     OrderBean noPaidOrder = orderBeanService.selectByPrimaryKey(outOrderNo);
                     order = noPaidOrder;
@@ -647,7 +651,8 @@ public class AlipayParkController {
                     String result = autoPay(order, parkBean);
                     if ("0".equals(result)) {
                         ajaxinfo.setSuccess(AjaxReturnInfo.TURE_RESULT);
-                        ajaxinfo.setPayMoney(money.toString());
+                        ajaxinfo.setPaidMoney(paidMoney);
+                        ajaxinfo.setPayMoney(order.getPayMoney().toString());
                         ajaxinfo.setOrderNo(order.getOrderNo());
                         ajaxinfo.setMessage("超时订单代扣成功！");
                         return ajaxinfo;
@@ -658,7 +663,6 @@ public class AlipayParkController {
                     }
                 }
                 // 查询已经付款的车费
-                //String paidMoney1 = orderBeanService.queryPaidWithCarNumber(carNumber);
                 ajaxinfo.setOrderNo(tempOrder.getOrderNo());
                 ajaxinfo.setPayMoney(paidMoney);
                 ajaxinfo.setPaidMoney(paidMoney);
@@ -683,6 +687,14 @@ public class AlipayParkController {
             	ajaxinfo.setPaidMoney("0.00");
                 ajaxinfo.setSuccess(AjaxReturnInfo.TURE_RESULT);
                 ajaxinfo.setMessage("免费车牌！");
+                return ajaxinfo;
+            }else if(billingTyper.N.toString().equals(billType)) {
+            	 // 如果查询的订单为空，计算已付费用是否超出已缴纳费用
+                BigDecimal money = getPayMoney(carNumber, order.getOutParkingId(), order.getInTime(), DateUtil.getCurrDate(new Date(), DateUtil.STANDDATEFORMAT),order.getCarType());// 调用接口查询费用
+            	ajaxinfo.setPayMoney(money.toString());
+            	ajaxinfo.setPaidMoney("0.00");
+                ajaxinfo.setSuccess(AjaxReturnInfo.TURE_RESULT);
+                ajaxinfo.setMessage("无牌车辆！");
                 return ajaxinfo;
             }
         }
@@ -756,7 +768,7 @@ public class AlipayParkController {
                 // 创建未支付订单
                 ParkBean bean = parkService.selectByPrimaryParkingId(order.getParkingId());
                 String in_time = DateUtil.getCurrDate(DateUtil.STANDDATEFORMAT);
-                parkService.enterinfoSyncEnter(bean, order.getOrderTrade(), order.getCarNumber(), in_time, order.getCarType(), order.getCarColor(), order.getAgreementStatus(),
+                parkService.enterinfoSyncEnter(bean, order.getOrderTrade(), order.getCarNumber(), order.getInTime(), order.getCarType(), order.getCarColor(), order.getAgreementStatus(),
                         order.getBillingTyper(), order.getCarNumberColor(), order.getLane());
                 ajaxinfo.setPayMoney(money.toString());
                 ajaxinfo.setPaidMoney(paidMoney);
@@ -796,7 +808,7 @@ public class AlipayParkController {
             String billType = orderBean.getBillingTyper();
             boolean bill = false;
             // 判断是否为免费车辆
-            if (billingTyper.M.toString().equals(billType) || billingTyper.F.toString().equals(billType)) {
+            if (billingTyper.M.toString().equals(billType) || billingTyper.F.toString().equals(billType)|| billingTyper.N.toString().equals(billType)) {
                 // 更新车辆驶出订单
                 orderBean.setOutTime(out_time);
                 // 更新订单

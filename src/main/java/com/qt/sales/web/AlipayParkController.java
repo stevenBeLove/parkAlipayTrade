@@ -301,7 +301,8 @@ public class AlipayParkController {
                     model.addAttribute(RSConsts.timeDiffer, DateUtil.getTimeDiffer(order.getInTime(), nowTime));
                     model.addAttribute(RSConsts.inDuration, DateUtil.getTimeDifferMin(order.getInTime(), nowTime));
                     model.addAttribute(RSConsts.orderTime, DateUtil.getCurrDate(new Date(), DateUtil.STANDDATEFORMAT));
-                    model.addAttribute(RSConsts.isvPhone, propertiesUtil.readValue("alipay.isvPhone"));
+                    //model.addAttribute(RSConsts.isvPhone, propertiesUtil.readValue("alipay.isvPhone"));
+                    model.addAttribute(RSConsts.isvPhone, parkBean.getContactTel());
                     model.addAttribute(RSConsts.isvName, propertiesUtil.readValue("alipay.isvName"));
 
                 } else {

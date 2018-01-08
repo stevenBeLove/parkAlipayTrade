@@ -129,7 +129,8 @@ public class ParkController {
 			String car_id = "10230";
 			String userid = "2088702384663522";
 			String parking_id = "PI1514099352989440863";
-			String car_number = "冀J2Z8B8";
+//			String car_number = "冀J2Z8B8";
+			String car_number = "沪A6B521";
 			// 调用成功
 			String uid = "2088702384663522";
 			
@@ -147,6 +148,7 @@ public class ParkController {
              if (orderList == null || orderList.size() == 0) {
                  model.addAttribute("msg", "无订单生成！");
                  model.addAttribute("status", false);
+                 return path;
              }
 
              // 首先查询是否存在未付款的订单
@@ -181,14 +183,14 @@ public class ParkController {
                      OrderBean noPaidOrder = orderBeanService.selectByPrimaryKey(outOrderNo);
                      order = noPaidOrder;
                  }else{
-                	 order = payOrder;
+                 	order = payOrder;
                  }
              }
              // 更新订单信息
-        	 order.setUserId(uid);
+             order.setUserId(uid);
              order.setCarId(car_id);
-             orderBeanService.updateByPrimaryKey(order);
              model.addAttribute(RSConsts.orderMoney, money.setScale(2, BigDecimal.ROUND_HALF_DOWN));
+             orderBeanService.updateByPrimaryKey(order);
              model.addAttribute("outOrderNo", order.getOutOrderNo());
              String paidMoney = orderBeanService.queryPaidWithCarNumber(order.getCarNumber());
              if (!"0".equals(paidMoney)) {

@@ -537,6 +537,12 @@ public class AlipayParkController {
         AjaxReturnInfo ajaxinfo = new AjaxReturnInfo();
         String in_time = DateUtil.getCurrDate(DateUtil.STANDDATEFORMAT);
         ParkBean bean = parkService.selectByPrimaryKey(outParkingId);
+        if (StringUtils.isEmpty(bean) || StringUtils.isEmpty(bean.getAppAuthToken())) {
+            ajaxinfo.setCarNumber(carNumber);
+            ajaxinfo.setSuccess(AjaxReturnInfo.FALSE_RESULT);
+            ajaxinfo.setMessage("停车场未授权！");
+            return ajaxinfo;
+        }
         if (!StringUtils.isEmpty(billingType)) {
             if (billingTyper.M.toString().equals(billingType.trim()) || billingTyper.F.toString().equals(billingType.trim())|| billingTyper.N.toString().equals(billingType.trim())) {
                 parkService.enterinfoSyncEnter(bean, "", carNumber, in_time, carType, carColor, "", billingType, carNumberColor, lane);
@@ -546,13 +552,6 @@ public class AlipayParkController {
                 return ajaxinfo;
             }
         }
-        if (StringUtils.isEmpty(bean.getAppAuthToken())) {
-            ajaxinfo.setCarNumber(carNumber);
-            ajaxinfo.setSuccess(AjaxReturnInfo.FALSE_RESULT);
-            ajaxinfo.setMessage("未授权！");
-            return ajaxinfo;
-        }
-
         AlipayEcoMycarParkingEnterinfoSyncRequest request = new AlipayEcoMycarParkingEnterinfoSyncRequest();
         request.setBizContent(enterinfoSyncGetBizContent(bean.getParkingId(), carNumber, in_time));// 业务数据
         request.putOtherTextParam(RSConsts.app_auth_token, bean.getAppAuthToken());

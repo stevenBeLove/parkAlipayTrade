@@ -929,6 +929,7 @@ public class AlipayParkController {
                 order.setCardNumber("*");
                 order.setOrderTime(gmt_payment);
                 order.setPayType(PayTypeStatus.insteadAlipay.getVal());
+                order.setOrderPayStatus(OrderPayStatus.success.getVal());
                 order.setOrderSynStatus(OrderSynStatus.paysucess.getVal());
                 try {
                     order.setInDuration(DateUtil.getTimeDifferMin(order.getInTime(), gmt_payment));
@@ -998,6 +999,7 @@ public class AlipayParkController {
                 order.setCardNumber("*");
                 order.setOrderTime(gmt_payment);
                 order.setPayType(PayTypeStatus.insteadAlipay.getVal());
+                order.setOrderPayStatus(OrderPayStatus.success.getVal());
                 order.setOrderSynStatus(OrderSynStatus.paysucess.getVal());
                 try {
                     order.setInDuration(DateUtil.getTimeDifferMin(order.getInTime(), gmt_payment));

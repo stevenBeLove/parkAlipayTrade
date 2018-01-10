@@ -631,13 +631,13 @@ public class AlipayParkController {
         }
         // 查询的未付款订单为空，已经自助缴费成功的
         if (order == null && tempOrder!=null) {
+        	 // 如果查询的订单为空，计算已付费用是否超出已缴纳费用
+            BigDecimal money = getPayMoney(carNumber, tempOrder.getOutParkingId(), tempOrder.getInTime(), DateUtil.getCurrDate(new Date(), DateUtil.STANDDATEFORMAT),tempOrder.getCarType());// 调用接口查询费用
+            // 查询已经付款的车费
+            String paidMoney = orderBeanService.queryPaidWithCarNumber(tempOrder.getCarNumber());
+            BigDecimal paid = new BigDecimal(paidMoney);
             // 是否开启免密支付功能
             if (AgreementStatus.agree.getVal().equals(tempOrder.getAgreementStatus())) {
-                // 如果查询的订单为空，计算已付费用是否超出已缴纳费用
-                BigDecimal money = getPayMoney(carNumber, tempOrder.getOutParkingId(), tempOrder.getInTime(), DateUtil.getCurrDate(new Date(), DateUtil.STANDDATEFORMAT),tempOrder.getCarType());// 调用接口查询费用
-                // 查询已经付款的车费
-                String paidMoney = orderBeanService.queryPaidWithCarNumber(tempOrder.getCarNumber());
-                BigDecimal paid = new BigDecimal(paidMoney);
                 // 超时订单
                 if (money.compareTo(paid) == 1) {
                     // 创建未付款的订单
@@ -663,15 +663,28 @@ public class AlipayParkController {
                         return ajaxinfo;
                     }
                 }
-                // 查询已经付款的车费
-                ajaxinfo.setOrderNo(tempOrder.getOrderNo());
-                ajaxinfo.setPayMoney(paidMoney);
-                ajaxinfo.setPaidMoney(paidMoney);
-                ajaxinfo.setSuccess(AjaxReturnInfo.TURE_RESULT);
-                ajaxinfo.setMessage("已支付成功！");
-                return ajaxinfo;
+            } else {
+                BigDecimal tradePaidMoney = new BigDecimal(paidMoney);
+                if (money.compareTo(tradePaidMoney) == 1) {
+                    // 创建未支付订单
+                    ParkBean bean = parkService.selectByPrimaryParkingId(tempOrder.getParkingId());
+                    String in_time = DateUtil.getCurrDate(DateUtil.STANDDATEFORMAT);
+                    parkService.enterinfoSyncEnter(bean, tempOrder.getOrderTrade(), tempOrder.getCarNumber(), tempOrder.getInTime(), tempOrder.getCarType(), tempOrder.getCarColor(), tempOrder.getAgreementStatus(),
+                            tempOrder.getBillingTyper(), tempOrder.getCarNumberColor(), tempOrder.getLane());
+                    ajaxinfo.setPayMoney(money.toString());
+                    ajaxinfo.setPaidMoney(paidMoney);
+                    ajaxinfo.setSuccess(AjaxReturnInfo.FALSE_RESULT);
+                    ajaxinfo.setMessage("存在超时订单未付款，请付款！");
+                    return ajaxinfo;
+                }
             }
-           
+            // 查询已经付款的车费
+            ajaxinfo.setOrderNo(tempOrder.getOrderNo());
+            ajaxinfo.setPayMoney(paidMoney);
+            ajaxinfo.setPaidMoney(paidMoney);
+            ajaxinfo.setSuccess(AjaxReturnInfo.TURE_RESULT);
+            ajaxinfo.setMessage("已支付成功！");
+            return ajaxinfo;
         }
 
         // 月卡或免费用户
@@ -749,7 +762,7 @@ public class AlipayParkController {
                 return ajaxinfo;
             }
         }
-        // 手动付款tempOrder
+        //手动付款
         if (haveNoPaid) {
         	BigDecimal money = getPayMoney(carNumber, order.getOutParkingId(), order.getInTime(), DateUtil.getCurrDate(new Date(), DateUtil.STANDDATEFORMAT),order.getCarType());// 调用接口查询费用
         	// 查询已经付款的车费
@@ -759,24 +772,6 @@ public class AlipayParkController {
             ajaxinfo.setSuccess(AjaxReturnInfo.FALSE_RESULT);
             ajaxinfo.setMessage("代扣状态未开启,请扫码到缴费页面支付！");
             return ajaxinfo;
-        } else {
-            // 显示订单信息
-            BigDecimal money = getPayMoney(carNumber, tempOrder.getOutParkingId(), tempOrder.getInTime(), DateUtil.getCurrDate(new Date(), DateUtil.STANDDATEFORMAT),tempOrder.getCarType());// 调用接口查询费用;// 调用接口查询费用
-            // 判断订单的金额是否已经超时产生费用
-            String paidMoney = orderBeanService.queryPaidWithCarNumber(tempOrder.getCarNumber());
-            BigDecimal tradePaidMoney = new BigDecimal(paidMoney);
-            if (money.compareTo(tradePaidMoney) == 1) {
-                // 创建未支付订单
-                ParkBean bean = parkService.selectByPrimaryParkingId(tempOrder.getParkingId());
-                String in_time = DateUtil.getCurrDate(DateUtil.STANDDATEFORMAT);
-                parkService.enterinfoSyncEnter(bean, tempOrder.getOrderTrade(), tempOrder.getCarNumber(), tempOrder.getInTime(), tempOrder.getCarType(), tempOrder.getCarColor(), tempOrder.getAgreementStatus(),
-                        tempOrder.getBillingTyper(), tempOrder.getCarNumberColor(), tempOrder.getLane());
-                ajaxinfo.setPayMoney(money.toString());
-                ajaxinfo.setPaidMoney(paidMoney);
-                ajaxinfo.setSuccess(AjaxReturnInfo.FALSE_RESULT);
-                ajaxinfo.setMessage("存在超时订单未付款，请付款！");
-                return ajaxinfo;
-            }
         }
         // 查询已经付款的车费
         String paidMoney = orderBeanService.queryPaidWithCarNumber(carNumber);

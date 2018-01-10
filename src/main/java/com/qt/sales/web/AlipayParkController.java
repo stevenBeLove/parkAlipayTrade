@@ -89,8 +89,9 @@ public class AlipayParkController {
     static String            VEHICLE_URL   = "https%3a%2f%2fwww.kangguole.com.cn%2fparkAlipayTrade%2falipayPark%2fgetVehicleToken";
     public static String     INTERFACE_URL = "https%3a%2f%2fwww.kangguole.com.cn%2fparkAlipayTrade%2falipayPark%2fnotify";
     public static String     NOTIFY_URL    = "https://www.kangguole.com.cn/parkAlipayTrade/parkAlipayTrade/notifyUrl";
-    public static String     PARKPRICE_URL    = "https://www.kangguole.com.cn/sharpPark/qeryParkPrice.do";
-    
+//    public static String     PARKPRICE_URL    = "https://47.104.4.207:443/sharpPark/qeryParkPrice.do";
+	public static String     PARKPRICE_URL    = "https://www.kangguole.com.cn/sharpPark/qeryParkPrice.do";
+
     
     @Resource
     private ParkService      parkService;
@@ -748,9 +749,9 @@ public class AlipayParkController {
                 return ajaxinfo;
             }
         }
-        // 手动付款
+        // 手动付款tempOrder
         if (haveNoPaid) {
-        	BigDecimal money = getPayMoney(carNumber, tempOrder.getOutParkingId(), tempOrder.getInTime(), DateUtil.getCurrDate(new Date(), DateUtil.STANDDATEFORMAT),tempOrder.getCarType());// 调用接口查询费用
+        	BigDecimal money = getPayMoney(carNumber, order.getOutParkingId(), order.getInTime(), DateUtil.getCurrDate(new Date(), DateUtil.STANDDATEFORMAT),order.getCarType());// 调用接口查询费用
         	// 查询已经付款的车费
             String paidMoney = orderBeanService.queryPaidWithCarNumber(carNumber);
         	ajaxinfo.setPayMoney(money.toString());
@@ -760,16 +761,16 @@ public class AlipayParkController {
             return ajaxinfo;
         } else {
             // 显示订单信息
-            BigDecimal money = getPayMoney(carNumber, order.getOutParkingId(), order.getInTime(), DateUtil.getCurrDate(new Date(), DateUtil.STANDDATEFORMAT),order.getCarType());// 调用接口查询费用;// 调用接口查询费用
+            BigDecimal money = getPayMoney(carNumber, tempOrder.getOutParkingId(), tempOrder.getInTime(), DateUtil.getCurrDate(new Date(), DateUtil.STANDDATEFORMAT),tempOrder.getCarType());// 调用接口查询费用;// 调用接口查询费用
             // 判断订单的金额是否已经超时产生费用
-            String paidMoney = orderBeanService.queryPaidWithCarNumber(order.getCarNumber());
+            String paidMoney = orderBeanService.queryPaidWithCarNumber(tempOrder.getCarNumber());
             BigDecimal tradePaidMoney = new BigDecimal(paidMoney);
             if (money.compareTo(tradePaidMoney) == 1) {
                 // 创建未支付订单
-                ParkBean bean = parkService.selectByPrimaryParkingId(order.getParkingId());
+                ParkBean bean = parkService.selectByPrimaryParkingId(tempOrder.getParkingId());
                 String in_time = DateUtil.getCurrDate(DateUtil.STANDDATEFORMAT);
-                parkService.enterinfoSyncEnter(bean, order.getOrderTrade(), order.getCarNumber(), order.getInTime(), order.getCarType(), order.getCarColor(), order.getAgreementStatus(),
-                        order.getBillingTyper(), order.getCarNumberColor(), order.getLane());
+                parkService.enterinfoSyncEnter(bean, tempOrder.getOrderTrade(), tempOrder.getCarNumber(), tempOrder.getInTime(), tempOrder.getCarType(), tempOrder.getCarColor(), tempOrder.getAgreementStatus(),
+                        tempOrder.getBillingTyper(), tempOrder.getCarNumberColor(), tempOrder.getLane());
                 ajaxinfo.setPayMoney(money.toString());
                 ajaxinfo.setPaidMoney(paidMoney);
                 ajaxinfo.setSuccess(AjaxReturnInfo.FALSE_RESULT);
@@ -1536,5 +1537,19 @@ public class AlipayParkController {
         }
 
     }
+
+    public static void main(String[] args) {
+//    	outParkingId=10230, inTime=2018-01-10 12:48:24, carNumber=冀J2Z8B8, vehicleType=1, outTime=2018-01-10 12:54:17
+    	Map<String, Object> paramMap = new HashMap<String, Object>();
+        paramMap.put("outParkingId", "10230");//停车场Id
+		paramMap.put("inTime", "2018-01-10 12:48:24");//进场时间
+		paramMap.put("outTime", "2018-01-10 12:54:17");//出场时间
+		paramMap.put("carNumber", "冀J2Z8B8");//车牌
+		paramMap.put("vehicleType", "1");//车类型 车辆类型0.全部 1.小型车2.
+		System.out.println("计算车费参数="+paramMap.toString());
+        String data = HttpRequestUtil.urlPost(PARKPRICE_URL, paramMap,"utf-8");
+        JSONObject json = JSONObject.parseObject(data);
+        System.out.println(json.getString("totalPrice"));
+	}
 
 }

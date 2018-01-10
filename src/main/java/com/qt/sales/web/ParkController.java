@@ -19,34 +19,24 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.alipay.api.AlipayApiException;
-import com.alipay.api.AlipayClient;
-import com.alipay.api.request.AlipayEcoMycarParkingVehicleQueryRequest;
-import com.alipay.api.request.AlipaySystemOauthTokenRequest;
-import com.alipay.api.response.AlipayEcoMycarParkingVehicleQueryResponse;
-import com.alipay.api.response.AlipaySystemOauthTokenResponse;
 import com.qt.sales.common.PropertiesUtil;
 import com.qt.sales.common.RSConsts;
 import com.qt.sales.model.OrderBean;
+import com.qt.sales.model.OrderBean.OrderSynStatus;
 import com.qt.sales.model.OrderBeanExample;
 import com.qt.sales.model.ParkBean;
 import com.qt.sales.model.ParkBeanExample;
-import com.qt.sales.model.OrderBean.OrderSynStatus;
 import com.qt.sales.service.OrderBeanService;
 import com.qt.sales.service.ParkService;
-import com.qt.sales.service.impl.ParkServiceImpl;
 import com.qt.sales.utils.DateUtil;
 import com.qt.sales.utils.HttpRequestUtil;
-import com.qt.sales.utils.LogPay;
 import com.qt.sales.utils.ResultList;
 
 /** 
@@ -306,6 +296,18 @@ public class ParkController {
         return "alipayPark/test";
     }
     
-    
+    public static void main(String[] args) {
+//    	outParkingId=10230, inTime=2018-01-10 12:48:24, carNumber=冀J2Z8B8, vehicleType=1, outTime=2018-01-10 12:54:17
+    	Map<String, Object> paramMap = new HashMap<String, Object>();
+        paramMap.put("outParkingId", "10230");//停车场Id
+		paramMap.put("inTime", "2018-01-10 12:48:24");//进场时间
+		paramMap.put("outTime", "2018-01-10 12:54:17");//出场时间
+		paramMap.put("carNumber", "冀J2Z8B8");//车牌
+		paramMap.put("vehicleType", "1");//车类型 车辆类型0.全部 1.小型车2.
+		System.out.println("计算车费参数="+paramMap.toString());
+        String data = HttpRequestUtil.urlPost(PARKPRICE_URL, paramMap,"utf-8");
+        JSONObject json = JSONObject.parseObject(data);
+        System.out.println(json.getString("totalPrice"));
+	}
 }
 

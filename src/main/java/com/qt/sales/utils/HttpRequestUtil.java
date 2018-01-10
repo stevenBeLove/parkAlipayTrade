@@ -231,7 +231,7 @@ public class HttpRequestUtil {
 
      public static void main(String[] args) {
         Map<String, Object> paramMap = new HashMap<String, Object>();
-        paramMap.put("outParkingId", "10180");//停车场Id
+        paramMap.put("outParkingId", "10230");//停车场Id
 		paramMap.put("inTime", "2017-11-18 21:00:00");//进场时间
 		paramMap.put("outTime", "2017-11-19 21:30:00");//出场时间
 		paramMap.put("carNumber", "沪A6B521");//车牌

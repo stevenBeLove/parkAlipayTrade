@@ -587,7 +587,9 @@ public class AlipayParkController {
         String jsonStr = JSON.toJSONString(data);
         return jsonStr;
     }
-
+    
+    
+  
     /**
      * 查询费用（代扣结算） 
      * 
@@ -789,7 +791,7 @@ public class AlipayParkController {
      */
     @RequestMapping(value = "/ecoMycarParkingExitinfoSync", method = { RequestMethod.GET, RequestMethod.POST })
     @ResponseBody
-    public AjaxReturnInfo ecoMycarParkingExitinfoSync(String outParkingId, String carNumber) {
+    public AjaxReturnInfo ecoMycarParkingExitinfoSync(String outParkingId, String carNumber,String billingType) {
         AjaxReturnInfo ajaxinfo = new AjaxReturnInfo();
         ParkBean parkBean = parkService.selectByPrimaryKey(outParkingId);
         OrderBeanExample example = new OrderBeanExample();
@@ -804,7 +806,8 @@ public class AlipayParkController {
             String billType = orderBean.getBillingTyper();
             boolean bill = false;
             // 判断是否为免费车辆
-            if (billingTyper.M.toString().equals(billType) || billingTyper.F.toString().equals(billType)|| billingTyper.N.toString().equals(billType)) {
+            if (billingTyper.M.toString().equals(billType) || billingTyper.F.toString().equals(billType)
+                    || billingTyper.N.toString().equals(billType)) {
                 // 更新车辆驶出订单
                 orderBean.setOutTime(out_time);
                 // 更新订单
@@ -1451,6 +1454,7 @@ public class AlipayParkController {
         OrderBeanExample.Criteria cr = example.createCriteria();
         cr.andCarNumberEqualTo(mistakeCarNumber);
         cr.andOutParkingIdEqualTo(outParkingId);
+        cr.andStatusEqualTo("0");
         List<OrderBean> orderList = orderBeanService.selectByExample(example);
         if (orderList == null || orderList.size() == 0) {
             ajaxinfo.setSuccess(AjaxReturnInfo.FALSE_RESULT);
@@ -1510,6 +1514,132 @@ public class AlipayParkController {
         return ajaxinfo;
     }
 
+    /**
+     * 车辆驶入接口-入场-进场
+     * 
+     * @param outParkingId
+     * @param carNumber
+     * @param billingType
+     *            M：月卡。F:免费。L：临时. N:无牌车
+     * @param carType
+     *            1.小型车2.中型车 3.大型车 4.摩托车 5.其他
+     * @param carNumberColor
+     *            车牌颜色
+     * @param carColor
+     *            车辆颜色
+     * @param lane
+     *            车道
+     * @return
+     */
+    @RequestMapping(value = "/enterinfoSyncAddTime", method = { RequestMethod.POST })
+    @ResponseBody
+    public AjaxReturnInfo enterinfoSyncAddTime(String outParkingId, String oldcarNumber, String newcarNumber, String billingType, String carType, 
+            String carNumberColor, String carColor,String oldlane, String newlane,String inTime) {
+        AjaxReturnInfo ajaxinfo = new AjaxReturnInfo();
+        ParkBean bean = parkService.selectByPrimaryKey(outParkingId);
+        if (StringUtils.isEmpty(bean) || StringUtils.isEmpty(bean.getAppAuthToken())) {
+            ajaxinfo.setCarNumber(oldcarNumber);
+            ajaxinfo.setSuccess(AjaxReturnInfo.FALSE_RESULT);
+            ajaxinfo.setMessage("停车场未授权！");
+            return ajaxinfo;
+        }
+        
+        OrderBeanExample example = new OrderBeanExample();
+        OrderBeanExample.Criteria cr = example.createCriteria();
+        cr.andCarNumberEqualTo(oldcarNumber);
+        cr.andOutParkingIdEqualTo(outParkingId);
+        cr.andStatusEqualTo("0");
+        List<OrderBean> orderList = orderBeanService.selectByExample(example);
+        if (orderList.size() > 1) {
+            ajaxinfo.setSuccess(AjaxReturnInfo.FALSE_RESULT);
+            ajaxinfo.setMessage("入场记录大于1条，请人工处理！");
+            return ajaxinfo;
+        }
+        // 没有找到记录，重新驶入的情况
+        if (orderList == null || orderList.size() == 0) {
+            AlipayEcoMycarParkingEnterinfoSyncRequest request = new AlipayEcoMycarParkingEnterinfoSyncRequest();
+            request.setBizContent(enterinfoSyncGetBizContent(bean.getParkingId(), newcarNumber, inTime));// 业务数据
+            request.putOtherTextParam(RSConsts.app_auth_token, bean.getAppAuthToken());
+            AlipayEcoMycarParkingEnterinfoSyncResponse response;
+            try {
+                AlipayClient alipayClient = aliPayUtil.getInstance();
+                response = alipayClient.execute(request);
+                if (response.isSuccess()) {
+                    parkService.enterinfoSyncEnter(bean, "", newcarNumber, inTime, carType, carColor, "", billingType, carNumberColor, newlane);
+                    ajaxinfo.setSuccess(AjaxReturnInfo.TURE_RESULT);
+                    ajaxinfo.setCarNumber(newcarNumber);
+                    ajaxinfo.setMessage("驶入成功");
+                } else {
+                    ajaxinfo.setSuccess(AjaxReturnInfo.FALSE_RESULT);
+                    ajaxinfo.setMessage(response.getSubMsg());
+                    logger.debug(response.getBody());
+                }
+            } catch (AlipayApiException e) {
+                logger.error(e.getMessage(), e);
+                ajaxinfo.setSuccess(AjaxReturnInfo.FALSE_RESULT);
+                ajaxinfo.setMessage(e.getErrMsg());
+            }
+            return ajaxinfo;
+            
+        }
+        //找到错误的车牌
+        OrderBean orderBean = null;
+        if(orderList != null || orderList.size() == 1){
+            orderBean = orderList.get(0);
+        }
+        orderBean.setCarNumber(newcarNumber);
+        orderBean.setLane(newlane);
+        orderBean.setInTime(inTime);
+        if (billingTyper.M.toString().equals(billingType) || billingTyper.F.toString().equals(billingType)) {
+            orderBeanService.updateByPrimaryKey(orderBean);
+            ajaxinfo.setSuccess(AjaxReturnInfo.TURE_RESULT);
+            ajaxinfo.setMessage("矫正车牌成功");
+            return ajaxinfo;
+        }
+        if (OrderSynStatus.create.getVal().equals(orderBean.getOrderSynStatus())) {
+            ParkBean parkBean = parkService.selectByPrimaryParkingId(orderBean.getParkingId());
+            String app_auth_token = parkBean.getAppAuthToken();
+            logger.debug("store.token = " + app_auth_token);
+            AlipayEcoMycarParkingEnterinfoSyncRequest request = new AlipayEcoMycarParkingEnterinfoSyncRequest();
+            request.setBizContent(enterinfoSyncGetBizContent(orderBean.getParkingId(), newcarNumber, inTime));
+            request.putOtherTextParam(RSConsts.app_auth_token, parkBean.getAppAuthToken());
+            AlipayEcoMycarParkingEnterinfoSyncResponse response;
+            try {
+                AlipayClient alipayClient = aliPayUtil.getInstance();
+                response = alipayClient.execute(request);
+                if (response.isSuccess()) {
+                    String agreement = parkService.agreementQueryRequest(newcarNumber, parkBean.getAppAuthToken());
+                    orderBean.setAgreementStatus(agreement);
+                    orderBean.setCarNumber(newcarNumber);
+                    orderBean.setLane(newlane);
+                    orderBeanService.updateByPrimaryKey(orderBean);
+                    //驶出错误的车牌
+                    exitAliPark(parkBean, newcarNumber);
+                    ajaxinfo.setSuccess(AjaxReturnInfo.TURE_RESULT);
+                    ajaxinfo.setMessage("矫正车牌成功");
+                } else {
+                    ajaxinfo.setSuccess(AjaxReturnInfo.FALSE_RESULT);
+                    ajaxinfo.setMessage(response.getSubMsg());
+                    logger.debug(response.getBody());
+                }
+            } catch (AlipayApiException e) {
+                logger.error(e.getMessage(), e);
+                ajaxinfo.setSuccess(AjaxReturnInfo.FALSE_RESULT);
+                ajaxinfo.setMessage(e.getErrMsg());
+            } catch (QTException e) {
+                logger.error(e.getMessage(), e);
+                ajaxinfo.setSuccess(AjaxReturnInfo.FALSE_RESULT);
+                ajaxinfo.setMessage("纠正出错，请联系后台人员!");
+            }
+
+        }
+        return ajaxinfo;
+    }
+
+    public void enterPark(){
+       
+    }
+    
     /*
      * 驶出阿里停车场 出场
      */

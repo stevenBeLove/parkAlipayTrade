@@ -707,8 +707,8 @@ public class AlipayParkController {
             }else if(billingTyper.N.toString().equals(billType)) {
             	 // 如果查询的订单为空，计算已付费用是否超出已缴纳费用
                 BigDecimal money = getPayMoney(carNumber, order.getOutParkingId(), order.getInTime(), DateUtil.getCurrDate(new Date(), DateUtil.STANDDATEFORMAT),order.getCarType());// 调用接口查询费用
-            	ajaxinfo.setPayMoney(money.toString());
-            	ajaxinfo.setPaidMoney("0.00");
+            	  ajaxinfo.setPayMoney(money.toString());
+            	  ajaxinfo.setPaidMoney("0.00");
                 ajaxinfo.setSuccess(AjaxReturnInfo.TURE_RESULT);
                 ajaxinfo.setMessage("无牌车辆！");
                 return ajaxinfo;
@@ -812,6 +812,8 @@ public class AlipayParkController {
                 orderBean.setOutTime(out_time);
                 // 更新订单
                 orderBeanService.updateOrderPayByOrderNo(orderBean);
+                orderBean.setPayMoney(new BigDecimal(0));
+                orderBean.setPaidMoney(new BigDecimal(0));
                 // 添加订单
                 orderBean.setBillingTyper(billType);
                 orderBeanService.insertFromOrder(orderBean);
@@ -827,6 +829,8 @@ public class AlipayParkController {
                 orderBeanService.updateOrderPayByOrderNo(orderBean);
                 // 添加订单
                 orderBean.setBillingTyper(billingTyper.F.toString());
+                orderBean.setPayMoney(new BigDecimal(0));
+                orderBean.setPaidMoney(new BigDecimal(0));
                 // 删除订单
                 orderBeanService.deleteWithOrderTrade(orderBean.getOrderTrade());
                 if(!billingTyper.N.toString().equals(billType)){
@@ -839,10 +843,44 @@ public class AlipayParkController {
                 ajaxinfo.setMessage("驶出成功！");
                 return ajaxinfo;
             }
+            //还有未付款的订单
             if (OrderSynStatus.create.getVal().equals(orderBean.getOrderSynStatus())) {
-                ajaxinfo.setSuccess(AjaxReturnInfo.FALSE_RESULT);
-                ajaxinfo.setMessage("亲！您还有未付款的订单！");
-                return ajaxinfo;
+                //W:微信  C:现金  G:强制
+                if(billingTyper.W.toString().equals(billingType)||billingTyper.C.toString().equals(billingType)||billingTyper.G.toString().equals(billingType)){
+                    orderBean.setBillingTyper(billingType);
+                    orderBean.setPaidMoney(orderBean.getPayMoney());
+                    // 更新车辆驶出订单
+                    orderBean.setOutTime(out_time);
+                    // 更新订单
+                    orderBeanService.updateOrderPayByOrderNo(orderBean);
+                    AlipayEcoMycarParkingExitinfoSyncRequest request = new AlipayEcoMycarParkingExitinfoSyncRequest();
+                    request.putOtherTextParam(RSConsts.app_auth_token, parkBean.getAppAuthToken());
+                    request.setBizContent(ecoMycarParkingExitinfoSyncContent(parkBean.getParkingId(), carNumber, out_time));// 业务数据
+                    AlipayEcoMycarParkingExitinfoSyncResponse response;
+                    try {
+                        AlipayClient alipayClient = aliPayUtil.getInstance();
+                        response = alipayClient.execute(request);
+                        if (response.isSuccess()) {
+                            // 删除订单
+                            orderBeanService.deleteWithOrderTrade(orderBean.getOrderTrade());
+                            ajaxinfo.setSuccess(AjaxReturnInfo.TURE_RESULT);
+                            ajaxinfo.setMessage("驶出成功");
+                        } else {
+                            ajaxinfo.setSuccess(AjaxReturnInfo.FALSE_RESULT);
+                            ajaxinfo.setMessage(response.getSubMsg());
+                        }
+                    } catch (AlipayApiException e) {
+                        e.printStackTrace();
+                        logger.error(e.getMessage(), e);
+                        ajaxinfo.setSuccess(AjaxReturnInfo.FALSE_RESULT);
+                        ajaxinfo.setMessage("调用失败！");
+                    }
+                            return ajaxinfo;
+                }else{
+                    ajaxinfo.setSuccess(AjaxReturnInfo.FALSE_RESULT);
+                    ajaxinfo.setMessage("亲！您还有未付款的订单！");
+                    return ajaxinfo;
+                }
             }
         }
         AlipayEcoMycarParkingExitinfoSyncRequest request = new AlipayEcoMycarParkingExitinfoSyncRequest();

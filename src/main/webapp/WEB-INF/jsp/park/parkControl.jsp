@@ -42,7 +42,8 @@ function carOut(){
 		url : ctx + "/alipayPark/ecoMycarParkingExitinfoSync",
 		data : {
 			'carNumber':$("#carNumberOut").val(),
-			'outParkingId':$("#outParkingIdOut").val()
+			'outParkingId':$("#outParkingIdOut").val(),
+			'billingType':$("#billingType").val()
 		},
 		success : function(obj) {
 			if (obj.success == 'true') {
@@ -245,6 +246,10 @@ body.bootstrap-admin-with-small-navbar {
                                                 <div class="col-lg-2">
                                                     <input type="text"  id="outParkingIdOut" value="${outParkingId }" class="form-control" />
                                                 </div>
+                                                <div class="col-lg-2">
+                                                    <input type="text"  id="billingType" class="form-control" />
+                                                </div>
+                                                
                                                 <div class="col-lg-2">
                                                 	<button id ="carOut" type="button" class="btn btn-primary" onclick="carOut();">车辆驶出</button>
                                                 </div>

@@ -251,7 +251,23 @@ public class OrderBean {
     	/**
     	 *无牌车 
     	 */
-    	N
+    	N,
+    	/**
+    	 * 支付宝
+    	 */
+    	A,
+      /**
+       * 微信
+       */
+      W,
+      /**
+       * 现金
+       */
+      C,
+      /**
+       * 强制放行
+       */
+      G
     }
     
     public enum billingType {

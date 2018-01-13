@@ -693,14 +693,14 @@ public class AlipayParkController {
         if (haveNoPaid) {
             String billType = order.getBillingTyper();
             if (billingTyper.M.toString().equals(billType)) {
-            	ajaxinfo.setPayMoney("0.00");
-            	ajaxinfo.setPaidMoney("0.00");
+              	ajaxinfo.setPayMoney("0.00");
+              	ajaxinfo.setPaidMoney("0.00");
                 ajaxinfo.setSuccess(AjaxReturnInfo.TURE_RESULT);
                 ajaxinfo.setMessage("月卡车牌！");
                 return ajaxinfo;
             } else if (billingTyper.F.toString().equals(billType)) {
-            	ajaxinfo.setPayMoney("0.00");
-            	ajaxinfo.setPaidMoney("0.00");
+              	ajaxinfo.setPayMoney("0.00");
+              	ajaxinfo.setPaidMoney("0.00");
                 ajaxinfo.setSuccess(AjaxReturnInfo.TURE_RESULT);
                 ajaxinfo.setMessage("免费车牌！");
                 return ajaxinfo;
@@ -766,10 +766,13 @@ public class AlipayParkController {
         }
         //手动付款
         if (haveNoPaid) {
-        	BigDecimal money = getPayMoney(carNumber, order.getOutParkingId(), order.getInTime(), DateUtil.getCurrDate(new Date(), DateUtil.STANDDATEFORMAT),order.getCarType());// 调用接口查询费用
-        	// 查询已经付款的车费
+          	BigDecimal money = getPayMoney(carNumber, order.getOutParkingId(), order.getInTime(), DateUtil.getCurrDate(new Date(), DateUtil.STANDDATEFORMAT),order.getCarType());// 调用接口查询费用
+          	// 查询已经付款的车费
             String paidMoney = orderBeanService.queryPaidWithCarNumber(carNumber);
-        	ajaxinfo.setPayMoney(money.toString());
+            // 更新订单
+            order.setPayMoney(money);
+            orderBeanService.updateByPrimaryKeySelective(order);
+        	  ajaxinfo.setPayMoney(money.toString());
             ajaxinfo.setPaidMoney(paidMoney);
             ajaxinfo.setSuccess(AjaxReturnInfo.FALSE_RESULT);
             ajaxinfo.setMessage("代扣状态未开启,请扫码到缴费页面支付！");
@@ -822,7 +825,7 @@ public class AlipayParkController {
                 bill = true;
             }
             //限时免费车辆
-            if ("0.00".equals(orderBean.getPaidMoney().toString())||"0".equals(orderBean.getPaidMoney().toString())) {
+            if ("0.00".equals(orderBean.getPayMoney().toString())||"0".equals(orderBean.getPayMoney().toString())) {
                 // 更新车辆驶出订单
                 orderBean.setOutTime(out_time);
                 // 更新订单
@@ -831,17 +834,13 @@ public class AlipayParkController {
                 orderBean.setBillingTyper(billingTyper.F.toString());
                 orderBean.setPayMoney(new BigDecimal(0));
                 orderBean.setPaidMoney(new BigDecimal(0));
+                orderBeanService.insertFromOrder(orderBean);
                 // 删除订单
                 orderBeanService.deleteWithOrderTrade(orderBean.getOrderTrade());
                 if(!billingTyper.N.toString().equals(billType)){
                 	 freeCarExit(parkBean,carNumber,out_time);
                 }
                 bill = true;
-            }
-            if (bill) {
-                ajaxinfo.setSuccess(AjaxReturnInfo.TURE_RESULT);
-                ajaxinfo.setMessage("驶出成功！");
-                return ajaxinfo;
             }
             //还有未付款的订单
             if (OrderSynStatus.create.getVal().equals(orderBean.getOrderSynStatus())) {
@@ -861,6 +860,7 @@ public class AlipayParkController {
                         AlipayClient alipayClient = aliPayUtil.getInstance();
                         response = alipayClient.execute(request);
                         if (response.isSuccess()) {
+                            orderBeanService.insertFromOrder(orderBean);
                             // 删除订单
                             orderBeanService.deleteWithOrderTrade(orderBean.getOrderTrade());
                             ajaxinfo.setSuccess(AjaxReturnInfo.TURE_RESULT);
@@ -881,6 +881,11 @@ public class AlipayParkController {
                     ajaxinfo.setMessage("亲！您还有未付款的订单！");
                     return ajaxinfo;
                 }
+            }
+            if (bill) {
+                ajaxinfo.setSuccess(AjaxReturnInfo.TURE_RESULT);
+                ajaxinfo.setMessage("驶出成功！");
+                return ajaxinfo;
             }
         }
         AlipayEcoMycarParkingExitinfoSyncRequest request = new AlipayEcoMycarParkingExitinfoSyncRequest();
@@ -965,6 +970,7 @@ public class AlipayParkController {
                 order.setOrderStatus(OrderStatus.sucess.getVal());
                 order.setCardNumber("*");
                 order.setOrderTime(gmt_payment);
+                order.setBillingTyper(billingTyper.A.toString());
                 order.setPayType(PayTypeStatus.insteadAlipay.getVal());
                 order.setOrderPayStatus(OrderPayStatus.success.getVal());
                 order.setOrderSynStatus(OrderSynStatus.paysucess.getVal());
@@ -1034,6 +1040,7 @@ public class AlipayParkController {
                 order.setPaidMoney(order.getPayMoney());
                 order.setOrderStatus(OrderStatus.sucess.getVal());
                 order.setCardNumber("*");
+                order.setBillingTyper(billingTyper.A.toString());
                 order.setOrderTime(gmt_payment);
                 order.setPayType(PayTypeStatus.insteadAlipay.getVal());
                 order.setOrderPayStatus(OrderPayStatus.success.getVal());

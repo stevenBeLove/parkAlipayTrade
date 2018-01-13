@@ -37,13 +37,14 @@ function carIn(){
 }
 
 function carOut(){
+	alert($("#billingType2").val());
 	$.ajax({
 		type : "POST",
 		url : ctx + "/alipayPark/ecoMycarParkingExitinfoSync",
 		data : {
 			'carNumber':$("#carNumberOut").val(),
 			'outParkingId':$("#outParkingIdOut").val(),
-			'billingType':$("#billingType").val()
+			'billingType':$("#billingType2").val()
 		},
 		success : function(obj) {
 			if (obj.success == 'true') {
@@ -242,13 +243,15 @@ body.bootstrap-admin-with-small-navbar {
                                                 <div class="col-lg-2">
                                                     <input type="text"  id="carNumberOut" class="form-control" />
                                                 </div>
+                                                <label class="col-lg-1 control-label" for="username">缴费类型</label>
+                                                <div class="col-lg-2">
+                                                    <input type="text"  id="billingType2" class="form-control" />
+                                                </div>
                                                 <label class="col-lg-1 control-label" for="username">停车场ID</label>
                                                 <div class="col-lg-2">
                                                     <input type="text"  id="outParkingIdOut" value="${outParkingId }" class="form-control" />
                                                 </div>
-                                                <div class="col-lg-2">
-                                                    <input type="text"  id="billingType" class="form-control" />
-                                                </div>
+                                               
                                                 
                                                 <div class="col-lg-2">
                                                 	<button id ="carOut" type="button" class="btn btn-primary" onclick="carOut();">车辆驶出</button>

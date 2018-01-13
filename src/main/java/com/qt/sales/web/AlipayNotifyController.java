@@ -33,6 +33,7 @@ import com.qt.sales.model.OrderBean;
 import com.qt.sales.model.OrderBean.OrderPayStatus;
 import com.qt.sales.model.OrderBean.OrderStatus;
 import com.qt.sales.model.OrderBean.OrderSynStatus;
+import com.qt.sales.model.OrderBean.billingTyper;
 import com.qt.sales.service.OrderBeanService;
 import com.qt.sales.service.ParkService;
 import com.qt.sales.utils.DateUtil;
@@ -197,6 +198,7 @@ public class AlipayNotifyController {
               orderBean.setOrderPayStatus(OrderPayStatus.success.getVal());
               orderBean.setInDuration(DateUtil.getTimeDifferMin(orderBean.getInTime(), nowTime));
               orderBean.setPaidMoney(orderBean.getPayMoney());//已支付
+              orderBean.setBillingTyper(billingTyper.A.toString());
               orderBeanService.updateByPrimaryKeySelective(orderBean);
               orderBeanService.insertFromOrder(orderBean);
           } catch (ParseException e) {

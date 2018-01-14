@@ -179,7 +179,16 @@ public class OrderBean {
         /**
          * 当面付
          */
-        facetoFacePay("3");
+        facetoFacePay("3"),
+        /**
+         * 现金
+         */
+        cash("4"),
+        /**
+         * 微信
+         */
+        weixin("5");
+        
         private String val;
 
         private PayTypeStatus(String val) {
@@ -241,10 +250,6 @@ public class OrderBean {
     	 */
     	M,
     	/**
-    	 * 临时
-    	 */
-    	L,
-    	/**
     	 * 免费
     	 */
     	F,
@@ -271,32 +276,9 @@ public class OrderBean {
     }
     
     public enum billingType {
-        /**
-         * 月卡
-         */
-        M,
-        /**
-         * 免费
-         */
-        F,
-        /**
-         *支付宝 
-         */
-        A,
-        /**
-         * 微信
-         */
-        W,
-        /**
-         * 现金
-         */
-        C,
-        /**
-         * 强制放行
-         */
-        G
         
-      } 
+        
+    } 
    
 
     /**

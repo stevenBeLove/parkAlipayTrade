@@ -6,7 +6,9 @@ package com.qt.sales.web;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
+import java.net.URLDecoder;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.HashMap;
@@ -305,7 +307,7 @@ public class AlipayNotifyController {
      */
     @RequestMapping(value = "/weixinQueryCarNumber", method = { RequestMethod.GET, RequestMethod.POST })
     @ResponseBody
-    public AjaxReturnInfo parkingConfigSet(@RequestParam("outParkingId")String outParkingId,@RequestParam("carNumber")String carNumber) {
+    public AjaxReturnInfo parkingConfigSet(String outParkingId,String carNumber) {
         AjaxReturnInfo ajaxinfo = new AjaxReturnInfo();
         Map<String, Object> dates = new  HashMap<String, Object>();
         ParkBean parkBean = parkService.selectByPrimaryKey(outParkingId);
@@ -314,10 +316,16 @@ public class AlipayNotifyController {
             ajaxinfo.setMessage("停车场未授权！");
             return ajaxinfo;
         }
+        String carNumberD = "";
+        try {
+            carNumberD = new String(carNumber.getBytes("ISO8859-1"), "utf-8");
+        } catch (UnsupportedEncodingException e1) {
+            e1.printStackTrace();
+        }
         //查询订单
         OrderBeanExample example = new OrderBeanExample();
         OrderBeanExample.Criteria cr = example.createCriteria();
-        cr.andCarNumberEqualTo(carNumber);
+        cr.andCarNumberEqualTo(carNumberD);
         cr.andOutParkingIdEqualTo(outParkingId);
         cr.andStatusEqualTo("0");
         List<OrderBean> orderList = orderBeanService.selectByExample(example);

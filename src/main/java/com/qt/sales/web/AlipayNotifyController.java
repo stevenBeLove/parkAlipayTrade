@@ -349,19 +349,19 @@ public class AlipayNotifyController {
         }
         BigDecimal money = null;
         if(order != null){//存在未付款的订单
-        	money = getPayMoney(carNumber, parkBean.getOutParkingId(), order.getInTime(), DateUtil.getCurrDate(new Date(), DateUtil.STANDDATEFORMAT),order.getCarType());// 调用接口查询费用
+        	money = getPayMoney(carNumberD, parkBean.getOutParkingId(), order.getInTime(), DateUtil.getCurrDate(new Date(), DateUtil.STANDDATEFORMAT),order.getCarType());// 调用接口查询费用
         }
         // 没有找到未付款的订单，找下已经付款的订单
         if (payOrder!=null) {
             // 判断订单的金额是否已经超时产生费用
             String paidMoney = orderBeanService.queryPaidWithCarNumber(payOrder.getCarNumber());
             BigDecimal tradePaidMoney = new BigDecimal(paidMoney);
-            money = getPayMoney(carNumber, parkBean.getOutParkingId(), payOrder.getInTime(), DateUtil.getCurrDate(new Date(), DateUtil.STANDDATEFORMAT),payOrder.getCarType());// 调用接口查询费用
+            money = getPayMoney(carNumberD, parkBean.getOutParkingId(), payOrder.getInTime(), DateUtil.getCurrDate(new Date(), DateUtil.STANDDATEFORMAT),payOrder.getCarType());// 调用接口查询费用
             if (money.compareTo(tradePaidMoney) == 1) {
                 // 创建未支付订单
-                ParkBean bean = parkService.selectByPrimaryParkingId(outParkingId);
+                ParkBean bean = parkService.selectByPrimaryKey(outParkingId);
                 String in_time = DateUtil.getCurrDate(DateUtil.STANDDATEFORMAT);
-                String outOrderNo = parkService.enterinfoSyncEnter(bean, payOrder.getOrderTrade(), carNumber, payOrder.getInTime(), payOrder.getCarType(), payOrder.getCarColor(),
+                String outOrderNo = parkService.enterinfoSyncEnter(bean, payOrder.getOrderTrade(), carNumberD, payOrder.getInTime(), payOrder.getCarType(), payOrder.getCarColor(),
                 		payOrder.getAgreementStatus(), payOrder.getBillingTyper(), payOrder.getCarNumberColor(), payOrder.getLane());
                 OrderBean noPaidOrder = orderBeanService.selectByPrimaryKey(outOrderNo);
                 order = noPaidOrder;
@@ -393,7 +393,7 @@ public class AlipayNotifyController {
 			}
 			dates.put(RSConsts.parkingName, parkBean.getParkingName());
 			dates.put(RSConsts.merchantLogo, parkBean.getMerchantLogo());
-			dates.put(RSConsts.discountMoney, getDiscountMoney(carNumber, order.getOutParkingId()));// 优惠金额
+			dates.put(RSConsts.discountMoney, getDiscountMoney(carNumberD, order.getOutParkingId()));// 优惠金额
 			dates.put(RSConsts.inTime, order.getInTime());
 			String nowTime = DateUtil.getCurrDate(DateUtil.STANDDATEFORMAT);
 			dates.put(RSConsts.timeDiffer, DateUtil.getTimeDiffer(order.getInTime(), nowTime));
@@ -407,7 +407,7 @@ public class AlipayNotifyController {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-        ajaxinfo.setCarNumber(carNumber);
+        ajaxinfo.setCarNumber(carNumberD);
         ajaxinfo.setDatas(dates);
         ajaxinfo.setSuccess(AjaxReturnInfo.TURE_RESULT);
         return ajaxinfo;

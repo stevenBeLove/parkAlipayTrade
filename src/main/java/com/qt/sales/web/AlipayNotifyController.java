@@ -41,6 +41,7 @@ import com.qt.sales.model.OrderBean;
 import com.qt.sales.model.OrderBean.OrderPayStatus;
 import com.qt.sales.model.OrderBean.OrderStatus;
 import com.qt.sales.model.OrderBean.OrderSynStatus;
+import com.qt.sales.model.OrderBean.PayTypeStatus;
 import com.qt.sales.model.OrderBean.billingTyper;
 import com.qt.sales.model.OrderBeanExample;
 import com.qt.sales.model.ParkBean;
@@ -435,5 +436,22 @@ public class AlipayNotifyController {
     public String getDiscountMoney(String carNumber, String outParkingId) {
         return "0.00";
     }
+    
+   
+    
+    /**
+     * 获取license
+     * 
+     * @return 页面路径
+     */
+    @RequestMapping(value = "/queryLicense", method = RequestMethod.POST)
+    @ResponseBody
+    public AjaxReturnInfo queryLicense(String outParkingId, String mac) {
+        AjaxReturnInfo ajaxinfo = new AjaxReturnInfo();
+        return ajaxinfo;
+    }
+
+    
+    
 
 }

@@ -43,6 +43,7 @@
 			<mapper resource="com/qt/sales/mapper/OrderBeanMapper.xml" />
 			<mapper resource="com/qt/sales/mapper/VehicleBeanMapper.xml" />
 			<mapper resource="com/qt/sales/mapper/OrderPayBeanMapper.xml" />
+			<mapper resource="com/qt/sales/mapper/parkLicenseMapper.xml" />
 		
 			<!-- <mapper resource="com/qt/sales/mapper/CustomerMapper.xml" /> 
 			<mapper resource="com/qt/sales/mapper/Qt1tblAgencyMapper.xml" /> 

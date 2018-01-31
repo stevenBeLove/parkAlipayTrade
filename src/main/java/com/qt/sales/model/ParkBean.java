@@ -78,8 +78,20 @@ public class ParkBean {
     private String refreshToken;
 
     private String merchantLogo;
+    
+    private Integer licenseCount;
+    
+    
 
-    public String getOutParkingId() {
+    public Integer getLicenseCount() {
+		return licenseCount;
+	}
+
+	public void setLicenseCount(Integer licenseCount) {
+		this.licenseCount = licenseCount;
+	}
+
+	public String getOutParkingId() {
         return outParkingId;
     }
 

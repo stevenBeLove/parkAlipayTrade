@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qt.sales.dao.parkLicenseMapper" >
+  <resultMap id="BaseResultMap" type="com.qt.sales.model.parkLicense" >
+    <result column="OUT_PARKING_ID" property="outParkingId" jdbcType="VARCHAR" />
+    <result column="PARK_MAC" property="parkMac" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    OUT_PARKING_ID, PARK_MAC
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.qt.sales.model.parkLicenseExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from TB_PARK_LICENSE
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <delete id="deleteByExample" parameterType="com.qt.sales.model.parkLicenseExample" >
+    delete from TB_PARK_LICENSE
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.qt.sales.model.parkLicense" >
+    insert into TB_PARK_LICENSE (OUT_PARKING_ID, PARK_MAC)
+    values (#{outParkingId,jdbcType=VARCHAR}, #{parkMac,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.qt.sales.model.parkLicense" >
+    insert into TB_PARK_LICENSE
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="outParkingId != null" >
+        OUT_PARKING_ID,
+      </if>
+      <if test="parkMac != null" >
+        PARK_MAC,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="outParkingId != null" >
+        #{outParkingId,jdbcType=VARCHAR},
+      </if>
+      <if test="parkMac != null" >
+        #{parkMac,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.qt.sales.model.parkLicenseExample" resultType="java.lang.Integer" >
+    select count(*) from TB_PARK_LICENSE
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update TB_PARK_LICENSE
+    <set >
+      <if test="record.outParkingId != null" >
+        OUT_PARKING_ID = #{record.outParkingId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.parkMac != null" >
+        PARK_MAC = #{record.parkMac,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update TB_PARK_LICENSE
+    set OUT_PARKING_ID = #{record.outParkingId,jdbcType=VARCHAR},
+      PARK_MAC = #{record.parkMac,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+</mapper>

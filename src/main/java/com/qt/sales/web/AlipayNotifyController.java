@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
-import java.net.URLDecoder;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.HashMap;
@@ -25,7 +24,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSON;
@@ -41,7 +39,6 @@ import com.qt.sales.model.OrderBean;
 import com.qt.sales.model.OrderBean.OrderPayStatus;
 import com.qt.sales.model.OrderBean.OrderStatus;
 import com.qt.sales.model.OrderBean.OrderSynStatus;
-import com.qt.sales.model.OrderBean.PayTypeStatus;
 import com.qt.sales.model.OrderBean.billingTyper;
 import com.qt.sales.model.OrderBeanExample;
 import com.qt.sales.model.ParkBean;
@@ -50,6 +47,7 @@ import com.qt.sales.service.ParkService;
 import com.qt.sales.utils.DateUtil;
 import com.qt.sales.utils.HttpRequestUtil;
 import com.qt.sales.utils.LogUtil;
+import com.qt.sales.utils.MD5;
 import com.qt.sales.utils.RequestUtil;
 
 /**
@@ -441,17 +439,17 @@ public class AlipayNotifyController {
     
     /**
      * 获取license
-     * 
      * @return 页面路径
      */
     @RequestMapping(value = "/queryLicense", method = RequestMethod.POST)
     @ResponseBody
     public AjaxReturnInfo queryLicense(String outParkingId, String mac) {
         AjaxReturnInfo ajaxinfo = new AjaxReturnInfo();
+        String license = MD5.md5(mac, outParkingId);
+        ajaxinfo.setSuccess(AjaxReturnInfo.TURE_RESULT);
+        ajaxinfo.setMessage(license);
         return ajaxinfo;
     }
-
-    
     
 
 }

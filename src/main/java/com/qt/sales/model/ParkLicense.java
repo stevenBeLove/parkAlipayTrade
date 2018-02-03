@@ -1,6 +1,6 @@
 package com.qt.sales.model;
 
-public class parkLicense {
+public class ParkLicense {
     private String outParkingId;
 
     private String parkMac;

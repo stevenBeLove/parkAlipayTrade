@@ -3,14 +3,14 @@ package com.qt.sales.model;
 import java.util.ArrayList;
 import java.util.List;
 
-public class parkLicenseExample {
+public class ParkLicenseExample {
     protected String orderByClause;
 
     protected boolean distinct;
 
     protected List<Criteria> oredCriteria;
 
-    public parkLicenseExample() {
+    public ParkLicenseExample() {
         oredCriteria = new ArrayList<Criteria>();
     }
 

@@ -42,6 +42,7 @@ import com.qt.sales.model.OrderBean.OrderSynStatus;
 import com.qt.sales.model.OrderBean.billingTyper;
 import com.qt.sales.model.OrderBeanExample;
 import com.qt.sales.model.ParkBean;
+import com.qt.sales.model.ParkLicense;
 import com.qt.sales.service.OrderBeanService;
 import com.qt.sales.service.ParkService;
 import com.qt.sales.utils.DateUtil;
@@ -419,13 +420,13 @@ public class AlipayNotifyController {
      * @return
      */
     public BigDecimal getPayMoney(String carNumber, String parkingId,String inTime, String outTime, String vehicleType) {
-    	Map<String, Object> paramMap = new HashMap<String, Object>();
+    	  Map<String, Object> paramMap = new HashMap<String, Object>();
         paramMap.put("outParkingId", parkingId);//停车场Id
-		paramMap.put("inTime", inTime);//进场时间
-		paramMap.put("outTime", outTime);//出场时间
-		paramMap.put("carNumber", carNumber);//车牌
-		paramMap.put("vehicleType", vehicleType);//车类型 车辆类型0.全部 1.小型车2.
-		logger.debug("计算车费参数="+paramMap.toString());
+    		paramMap.put("inTime", inTime);//进场时间
+    		paramMap.put("outTime", outTime);//出场时间
+    		paramMap.put("carNumber", carNumber);//车牌
+    		paramMap.put("vehicleType", vehicleType);//车类型 车辆类型0.全部 1.小型车2.
+    		logger.debug("计算车费参数="+paramMap.toString());
         String data = HttpRequestUtil.urlPost(AlipayParkController.PARKPRICE_URL, paramMap,"utf-8");
         JSONObject json = JSONObject.parseObject(data);
         return new BigDecimal(json.getString("totalPrice"));
@@ -441,15 +442,31 @@ public class AlipayNotifyController {
      * 获取license
      * @return 页面路径
      */
-    @RequestMapping(value = "/queryLicense", method = RequestMethod.POST)
+    @RequestMapping(value = "/queryLicense", method = { RequestMethod.GET, RequestMethod.POST })
     @ResponseBody
     public AjaxReturnInfo queryLicense(String outParkingId, String mac) {
         AjaxReturnInfo ajaxinfo = new AjaxReturnInfo();
-        String license = MD5.md5(mac, outParkingId);
-        ajaxinfo.setSuccess(AjaxReturnInfo.TURE_RESULT);
-        ajaxinfo.setMessage(license);
-        return ajaxinfo;
+        ParkBean parkBean = parkService.selectByPrimaryKey(outParkingId);
+        if (StringUtils.isEmpty(parkBean) || StringUtils.isEmpty(parkBean.getAppAuthToken())) {
+            ajaxinfo.setSuccess(AjaxReturnInfo.FALSE_RESULT);
+            ajaxinfo.setMessage("停车场未授权！");
+            return ajaxinfo;
+        }
+        Integer licenseCount = parkBean.getLicenseCount();
+        Integer tableLicenseCount = parkService.getParkLicensesCount(outParkingId);
+        if(licenseCount.intValue() > tableLicenseCount.intValue()){
+            ParkLicense  license = new ParkLicense();
+            license.setOutParkingId(outParkingId);
+            String licenseRsp = MD5.md5(mac, outParkingId);
+            license.setParkMac(licenseRsp);
+            parkService.insertParkLicense(license);
+            ajaxinfo.setSuccess(AjaxReturnInfo.TURE_RESULT);
+            ajaxinfo.setMessage(licenseRsp);
+            return ajaxinfo;
+        }else{
+            ajaxinfo.setSuccess(AjaxReturnInfo.FALSE_RESULT);
+            ajaxinfo.setMessage("停车场授权超限！");
+            return ajaxinfo;
+        }
     }
-    
-
 }

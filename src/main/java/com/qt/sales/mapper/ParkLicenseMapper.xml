@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.qt.sales.dao.parkLicenseMapper" >
-  <resultMap id="BaseResultMap" type="com.qt.sales.model.parkLicense" >
+<mapper namespace="com.qt.sales.dao.ParkLicenseMapper" >
+  <resultMap id="BaseResultMap" type="com.qt.sales.model.ParkLicense" >
     <result column="OUT_PARKING_ID" property="outParkingId" jdbcType="VARCHAR" />
     <result column="PARK_MAC" property="parkMac" jdbcType="VARCHAR" />
   </resultMap>
@@ -66,13 +66,13 @@
   <sql id="Base_Column_List" >
     OUT_PARKING_ID, PARK_MAC
   </sql>
-  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.qt.sales.model.parkLicenseExample" >
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.qt.sales.model.ParkLicenseExample" >
     select
     <if test="distinct" >
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from TB_PARK_LICENSE
+    from park.TB_PARK_LICENSE
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
@@ -80,18 +80,18 @@
       order by ${orderByClause}
     </if>
   </select>
-  <delete id="deleteByExample" parameterType="com.qt.sales.model.parkLicenseExample" >
-    delete from TB_PARK_LICENSE
+  <delete id="deleteByExample" parameterType="com.qt.sales.model.ParkLicenseExample" >
+    delete from park.TB_PARK_LICENSE
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.qt.sales.model.parkLicense" >
-    insert into TB_PARK_LICENSE (OUT_PARKING_ID, PARK_MAC)
+  <insert id="insert" parameterType="com.qt.sales.model.ParkLicense" >
+    insert into park.TB_PARK_LICENSE (OUT_PARKING_ID, PARK_MAC)
     values (#{outParkingId,jdbcType=VARCHAR}, #{parkMac,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.qt.sales.model.parkLicense" >
-    insert into TB_PARK_LICENSE
+  <insert id="insertSelective" parameterType="com.qt.sales.model.ParkLicense" >
+    insert into park.TB_PARK_LICENSE
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="outParkingId != null" >
         OUT_PARKING_ID,
@@ -109,14 +109,14 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.qt.sales.model.parkLicenseExample" resultType="java.lang.Integer" >
-    select count(*) from TB_PARK_LICENSE
+  <select id="countByExample" parameterType="com.qt.sales.model.ParkLicenseExample" resultType="java.lang.Integer" >
+    select count(*) from park.TB_PARK_LICENSE
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map" >
-    update TB_PARK_LICENSE
+    update park.TB_PARK_LICENSE
     <set >
       <if test="record.outParkingId != null" >
         OUT_PARKING_ID = #{record.outParkingId,jdbcType=VARCHAR},
@@ -130,7 +130,7 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map" >
-    update TB_PARK_LICENSE
+    update park.TB_PARK_LICENSE
     set OUT_PARKING_ID = #{record.outParkingId,jdbcType=VARCHAR},
       PARK_MAC = #{record.parkMac,jdbcType=VARCHAR}
     <if test="_parameter != null" >

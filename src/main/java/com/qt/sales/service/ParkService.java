@@ -10,6 +10,7 @@ import com.alipay.api.AlipayApiException;
 import com.qt.sales.exception.QTException;
 import com.qt.sales.model.ParkBean;
 import com.qt.sales.model.ParkBeanExample;
+import com.qt.sales.model.ParkLicense;
 import com.qt.sales.model.VehicleBean;
 
 /** 
@@ -161,5 +162,29 @@ public interface ParkService {
      * <p/>
      */
     public void updateRefreshAppToken(String outParkingId);
+    /**
+     * 【作者】: yinghui zhang .<br/>
+     * 【时间】： 2018年2月3日 下午9:54:40 .<br/>
+     * 【参数】： .<br/>
+     * @param outParkingId
+     * @return .<br/>
+     * <p>
+     * 修改记录.<br/>
+     * 修改人:  yinghui zhang 修改描述： .<br/>
+     * <p/>
+     */
+    public int getParkLicensesCount(String outParkingId);
+    
+    /**
+     * 【作者】: yinghui zhang .<br/>
+     * 【时间】： 2018年2月3日 下午10:00:18 .<br/>
+     * 【参数】： .<br/>
+     * @param parkLicense .<br/>
+     * <p>
+     * 修改记录.<br/>
+     * 修改人:  yinghui zhang 修改描述： .<br/>
+     * <p/>
+     */
+    public void insertParkLicense(ParkLicense parkLicense);
 }
 

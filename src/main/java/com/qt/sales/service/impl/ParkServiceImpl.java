@@ -9,7 +9,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -23,7 +22,6 @@ import javax.servlet.ServletContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import org.springframework.util.ResourceUtils;
 import org.springframework.util.StringUtils;
 
 import sun.misc.BASE64Encoder;
@@ -49,16 +47,19 @@ import com.qt.sales.common.PropertiesUtil;
 import com.qt.sales.common.RSConsts;
 import com.qt.sales.dao.OrderBeanMapper;
 import com.qt.sales.dao.ParkBeanMapper;
+import com.qt.sales.dao.ParkLicenseMapper;
 import com.qt.sales.dao.VehicleBeanMapper;
 import com.qt.sales.exception.QTException;
 import com.qt.sales.model.OrderBean;
-import com.qt.sales.model.OrderBeanExample;
 import com.qt.sales.model.OrderBean.OrderStatus;
 import com.qt.sales.model.OrderBean.OrderSynStatus;
+import com.qt.sales.model.OrderBeanExample;
 import com.qt.sales.model.ParkBean;
 import com.qt.sales.model.ParkBeanExample;
+import com.qt.sales.model.ParkLicense;
+import com.qt.sales.model.ParkLicenseExample;
+import com.qt.sales.model.ParkLicenseExample.Criteria;
 import com.qt.sales.model.VehicleBean;
-import com.qt.sales.service.OrderBeanService;
 import com.qt.sales.service.ParkService;
 import com.qt.sales.utils.DateUtil;
 import com.qt.sales.web.AlipayParkController;
@@ -94,6 +95,9 @@ public class ParkServiceImpl implements ParkService {
     
     @Resource
     private ServletContext servletContext;
+    
+    @Resource
+    private ParkLicenseMapper parkLicenseMapper;
     
     
     @Override
@@ -551,7 +555,26 @@ public class ParkServiceImpl implements ParkService {
         String jsonStr = JSON.toJSONString(data);
         return jsonStr; 
     }
-
     
+    
+    public int getParkLicensesCount(String outParkingId){
+        ParkLicenseExample example = new ParkLicenseExample();
+        Criteria criteria = example.createCriteria();
+        criteria.andOutParkingIdEqualTo(outParkingId);
+        int count = parkLicenseMapper.countByExample(example);
+        return count;
+    }
+
+    public void insertParkLicense(ParkLicense parkLicense){
+        ParkLicenseExample example = new ParkLicenseExample();
+        Criteria criteria = example.createCriteria();
+        criteria.andOutParkingIdEqualTo(parkLicense.getOutParkingId());
+        criteria.andParkMacEqualTo(parkLicense.getParkMac());
+        int count = parkLicenseMapper.countByExample(example);
+        if(count == 0 ){
+            parkLicenseMapper.insert(parkLicense);
+        }
+        
+    }
 }
 

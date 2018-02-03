@@ -24,7 +24,8 @@ function carIn(){
 			'outParkingId':$("#outParkingId").val(),
 			'carType':'1',
 			'carColor':'',
-			'billingType':$("#billingType").val()
+			'billingType':$("#billingType").val(),
+			'sign':'2424aasssfs24242423'
 		},
 		success : function(obj) {
 			if (obj.success == 'true') {

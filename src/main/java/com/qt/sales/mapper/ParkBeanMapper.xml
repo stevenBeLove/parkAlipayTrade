@@ -40,7 +40,7 @@
     <result column="RE_EXPIRES_IN" property="reExpiresIn" jdbcType="VARCHAR" />
     <result column="REFRESH_TOKEN" property="refreshToken" jdbcType="VARCHAR" />
     <result column="MERCHANT_LOGO" property="merchantLogo" jdbcType="VARCHAR" />
-    <result column="LICENSE_COUNT" property="licenseCount" jdbcType="Integer" />
+    <result column="LICENSE_COUNT" property="licenseCount" jdbcType="DECIMAL" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >

@@ -6,6 +6,7 @@ package com.qt.sales.web;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.HashMap;
@@ -72,6 +73,8 @@ import com.qt.sales.service.ParkService;
 import com.qt.sales.utils.DateUtil;
 import com.qt.sales.utils.HttpRequestUtil;
 import com.qt.sales.utils.LogPay;
+import com.qt.sales.utils.Md5Util;
+import com.qt.sales.utils.RequestUtil;
 
 /**
  * 类名: AlipayParkController <br/>
@@ -534,8 +537,16 @@ public class AlipayParkController {
      */
     @RequestMapping(value = "/enterinfoSync", method = { RequestMethod.POST })
     @ResponseBody
-    public AjaxReturnInfo enterinfoSync(String outParkingId, String carNumber, String billingType, String carType, String carNumberColor, String carColor, String lane) {
+    public AjaxReturnInfo enterinfoSync(HttpServletRequest req, String outParkingId, String carNumber, String billingType, String carType, String carNumberColor, String carColor, String lane) {
         AjaxReturnInfo ajaxinfo = new AjaxReturnInfo();
+        try {
+            verifySign(req);
+        } catch (Exception e1) {
+            logger.error(e1.getMessage(),e1);
+            ajaxinfo.setSuccess(AjaxReturnInfo.FALSE_RESULT);
+            ajaxinfo.setMessage("验签失败！");
+            return ajaxinfo;
+        }
         String in_time = DateUtil.getCurrDate(DateUtil.STANDDATEFORMAT);
         ParkBean bean = parkService.selectByPrimaryKey(outParkingId);
         if (StringUtils.isEmpty(bean) || StringUtils.isEmpty(bean.getAppAuthToken())) {
@@ -597,8 +608,16 @@ public class AlipayParkController {
      */
     @RequestMapping(value = "/queryCarFee", method = { RequestMethod.POST })
     @ResponseBody
-    public AjaxReturnInfo queryCarFee(String outParkingId, String carNumber) {
+    public AjaxReturnInfo queryCarFee(HttpServletRequest req, String outParkingId, String carNumber) {
         AjaxReturnInfo ajaxinfo = new AjaxReturnInfo();
+        try {
+            verifySign(req);
+        } catch (Exception e1) {
+            logger.error(e1.getMessage(),e1);
+            ajaxinfo.setSuccess(AjaxReturnInfo.FALSE_RESULT);
+            ajaxinfo.setMessage("验签失败！");
+            return ajaxinfo;
+        }
         ajaxinfo.setCarNumber(carNumber);
         ParkBean parkBean = parkService.selectByPrimaryKey(outParkingId);
         if (StringUtils.isEmpty(parkBean.getAppAuthToken())) {
@@ -794,8 +813,16 @@ public class AlipayParkController {
      */
     @RequestMapping(value = "/ecoMycarParkingExitinfoSync", method = { RequestMethod.GET, RequestMethod.POST })
     @ResponseBody
-    public AjaxReturnInfo ecoMycarParkingExitinfoSync(String outParkingId, String carNumber,String billingType) {
+    public AjaxReturnInfo ecoMycarParkingExitinfoSync(HttpServletRequest req, String outParkingId, String carNumber,String billingType) {
         AjaxReturnInfo ajaxinfo = new AjaxReturnInfo();
+        try {
+            verifySign(req);
+        } catch (Exception e1) {
+            logger.error(e1.getMessage(),e1);
+            ajaxinfo.setSuccess(AjaxReturnInfo.FALSE_RESULT);
+            ajaxinfo.setMessage("验签失败！");
+            return ajaxinfo;
+        }
         ParkBean parkBean = parkService.selectByPrimaryKey(outParkingId);
         OrderBeanExample example = new OrderBeanExample();
         OrderBeanExample.Criteria cr = example.createCriteria();
@@ -1707,19 +1734,35 @@ public class AlipayParkController {
         }
 
     }
+    
+    //验签
+    private void verifySign(HttpServletRequest request) throws AlipayApiException, NoSuchAlgorithmException{
+      Map<String, String> params = RequestUtil.getRequestParams(request);
+      String sign = params.get("sign");
+      params.remove("sign");
+      String signValue = Md5Util.sortMapByKey(params);
+      String nsign = Md5Util.getMd5(signValue+"abc1234");
+      if(!sign.equals(nsign)){
+          throw new AlipayApiException("verify sign fail."); 
+      }
+    }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws NoSuchAlgorithmException {
 //    	outParkingId=10230, inTime=2018-01-10 12:48:24, carNumber=冀J2Z8B8, vehicleType=1, outTime=2018-01-10 12:54:17
-    	Map<String, Object> paramMap = new HashMap<String, Object>();
-        paramMap.put("outParkingId", "10230");//停车场Id
-		paramMap.put("inTime", "2018-01-10 12:48:24");//进场时间
-		paramMap.put("outTime", "2018-01-10 12:54:17");//出场时间
-		paramMap.put("carNumber", "冀J2Z8B8");//车牌
-		paramMap.put("vehicleType", "1");//车类型 车辆类型0.全部 1.小型车2.
-		System.out.println("计算车费参数="+paramMap.toString());
-        String data = HttpRequestUtil.urlPost(PARKPRICE_URL, paramMap,"utf-8");
-        JSONObject json = JSONObject.parseObject(data);
-        System.out.println(json.getString("totalPrice"));
+  	Map<String, String> paramMap = new HashMap<String, String>();
+    paramMap.put("outParkingId", "10230");//停车场Id
+//		paramMap.put("inTime", "2018-01-10 12:48:24");//进场时间
+//		paramMap.put("outTime", "2018-01-10 12:54:17");//出场时间
+		paramMap.put("carNumber", "皖HF2571");//车牌
+		
+		String signValue = Md5Util.sortMapByKey(paramMap);
+    String nsign = Md5Util.getMd5(signValue+"abc1234");
+		System.out.println(nsign);
+//		paramMap.put("vehicleType", "1");//车类型 车辆类型0.全部 1.小型车2.
+//		System.out.println("计算车费参数="+paramMap.toString());
+//    String data = HttpRequestUtil.urlPost(PARKPRICE_URL, paramMap,"utf-8");
+//    JSONObject json = JSONObject.parseObject(data);
+//    System.out.println(json.getString("totalPrice"));
 	}
 
 }

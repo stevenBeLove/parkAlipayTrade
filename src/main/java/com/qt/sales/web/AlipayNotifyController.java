@@ -469,4 +469,17 @@ public class AlipayNotifyController {
             return ajaxinfo;
         }
     }
+    
+    /**
+     * @return 页面路径
+     */
+    @RequestMapping(value = "/login", method = { RequestMethod.GET, RequestMethod.POST })
+    @ResponseBody
+    public AjaxReturnInfo login() {
+        AjaxReturnInfo ajaxinfo = new AjaxReturnInfo();
+	    ajaxinfo.setSuccess(AjaxReturnInfo.FALSE_RESULT);
+	    ajaxinfo.setMessage("停车场数据！");
+	    return ajaxinfo;
+    }
+    
 }

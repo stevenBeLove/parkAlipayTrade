@@ -852,22 +852,24 @@ public class AlipayParkController {
                 bill = true;
             }
             //限时免费车辆
-            if ("0.00".equals(orderBean.getPayMoney().toString())||"0".equals(orderBean.getPayMoney().toString())) {
-                // 更新车辆驶出订单
-                orderBean.setOutTime(out_time);
-                // 更新订单
-                orderBeanService.updateOrderPayByOrderNo(orderBean);
-                // 添加订单
-                orderBean.setBillingTyper(billingTyper.F.toString());
-                orderBean.setPayMoney(new BigDecimal(0));
-                orderBean.setPaidMoney(new BigDecimal(0));
-                orderBeanService.insertFromOrder(orderBean);
-                // 删除订单
-                orderBeanService.deleteWithOrderTrade(orderBean.getOrderTrade());
-                if(!billingTyper.N.toString().equals(billType)){
-                	 freeCarExit(parkBean,carNumber,out_time);
+            if(orderBean.getPayMoney()!= null){
+                if ("0.00".equals(orderBean.getPayMoney().toString())||"0".equals(orderBean.getPayMoney().toString())) {
+                    // 更新车辆驶出订单
+                    orderBean.setOutTime(out_time);
+                    // 更新订单
+                    orderBeanService.updateOrderPayByOrderNo(orderBean);
+                    // 添加订单
+                    orderBean.setBillingTyper(billingTyper.F.toString());
+                    orderBean.setPayMoney(new BigDecimal(0));
+                    orderBean.setPaidMoney(new BigDecimal(0));
+                    orderBeanService.insertFromOrder(orderBean);
+                    // 删除订单
+                    orderBeanService.deleteWithOrderTrade(orderBean.getOrderTrade());
+                    if(!billingTyper.N.toString().equals(billType)){
+                       freeCarExit(parkBean,carNumber,out_time);
+                    }
+                    bill = true;
                 }
-                bill = true;
             }
             //还有未付款的订单
             if (OrderSynStatus.create.getVal().equals(orderBean.getOrderSynStatus())) {

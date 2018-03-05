@@ -5,6 +5,7 @@
 package com.qt.sales.web;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
@@ -1738,8 +1739,9 @@ public class AlipayParkController {
     }
     
     //验签
-    private void verifySign(HttpServletRequest request) throws AlipayApiException, NoSuchAlgorithmException{
+    private void verifySign(HttpServletRequest request) throws AlipayApiException, NoSuchAlgorithmException, IOException{
       Map<String, String> params = RequestUtil.getRequestParams(request);
+      logger.debug("验签参数="+params.toString());
       String sign = params.get("sign");
       params.remove("sign");
       String signValue = Md5Util.sortMapByKey(params);

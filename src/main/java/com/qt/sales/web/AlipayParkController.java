@@ -1755,7 +1755,7 @@ public class AlipayParkController {
     paramMap.put("outParkingId", "10230");//停车场Id
 //		paramMap.put("inTime", "2018-01-10 12:48:24");//进场时间
 //		paramMap.put("outTime", "2018-01-10 12:54:17");//出场时间
-		paramMap.put("carNumber", "皖HF2571");//车牌
+		paramMap.put("carNumber", "冀J2Z8B8");//车牌
 		
 		String signValue = Md5Util.sortMapByKey(paramMap);
     String nsign = Md5Util.getMd5(signValue+"abc1234");
